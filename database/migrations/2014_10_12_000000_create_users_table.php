@@ -22,6 +22,12 @@ class CreateUsersTable extends Migration
             $table->rememberToken();
             $table->timestamps();
         });
+
+        Schema::create('profiles', function (Blueprint $table) {
+            $table->bigIncrements('id');
+
+            $table->timestamps();
+        });
     }
 
     /**
@@ -32,5 +38,7 @@ class CreateUsersTable extends Migration
     public function down()
     {
         Schema::dropIfExists('users');
+        Schema::dropIfExists('profiles');
+
     }
 }
