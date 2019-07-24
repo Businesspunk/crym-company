@@ -1,4 +1,8 @@
-<?php $isRegisterError = $errors->register->count() > 0; ?>
+<?php 
+	$isRegisterError = $errors->register->count() > 0;
+	$isLoginError = $errors->has('loginerror');
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -95,13 +99,13 @@
                                 </div>
                                 <div class="menu_account">
                                     <div class="wrap_menu_account">
-                                        <a href="my-posts.php" class="item ">
+                                        <a href="{{ route('my-posts') }}" class="item ">
                                             <span class="icon">
                                                 <img src="{{ asset('img/icons/report.png') }}" alt="">
                                             </span>
                                             <span class="menu_item">Мои объявления</span>
                                         </a>
-                                        <a href="my-messages.php" class="item ">
+                                        <a href="{{ route('my-messages') }}" class="item ">
                                             <span class="icon">
                                                 <img src="{{ asset('img/icons/message.png') }}" alt="">
                                             </span>
@@ -109,19 +113,19 @@
                                                 Мои сообщения
                                             </span>
                                         </a>
-                                        <a href="my-bookmarks.php" class="item ">
+                                        <a href="{{ route('my-bookmarks') }}" class="item ">
                                             <span class="icon">
                                             <img src="{{ asset('img/icons/love.png') }}" alt="">
                                             </span>
                                             <span class="menu_item">Закладки</span>
                                         </a>
-                                        <a href="my-settings.php" class="item ">
+                                        <a href="{{ route('my-settings') }}" class="item ">
                                             <span class="icon">
                                                 <img src="{{ asset('img/icons/settings.png') }}" alt="">
                                             </span>
                                             <span class="menu_item">Настройки</span>
                                         </a>
-                                        <a href="my-support.php" class="item ">
+                                        <a href="{{ route('my-support') }}" class="item ">
                                             <span class="icon">
                                                 <img src="{{ asset('img/icons/help.png') }}" alt="">
                                             </span>
@@ -216,32 +220,31 @@
 				</div>
 			</div>
 		</footer>
-
-
 	@guest
 		<div class="popup_f">
-            <div class="overlay">
-                <div class='modal2' id='modal-entire'>
+            <div class="overlay @if($isLoginError) open @endif">
+                <div class='modal2 @if($isLoginError) open @endif' id='modal-entire'>
                     <a class='btn close-modal' data-modal="#modal-entire" href="#">
                         <i class="fa fa-times" aria-hidden="true"></i>
                     </a>
                     <div class='content'>
-                        <form action="">
+                        <form action="{{ route('loginPost') }}" method="POST" >
+							@csrf
                             <div class="top">
                                 <div class="h4">Вход</div>
                             </div>
                             <div class="body">
                                 <div class="sm_c" >
                                     <div class="wrap_inp">
-                                        <input placeholder="Телефон или Электронная почта" type="text" class="firm_inp">
+                                        <input name="email" placeholder="Электронная почта" type="text" class="firm_inp">
                                     </div>
                                     <div class="wrap_inp">
-                                        <input placeholder="Пароль" type="password" class="firm_inp">
+                                        <input name="password" placeholder="Пароль" type="password" class="firm_inp">
                                     </div>
                                     <div class="add_panel">
                                         <div class="remember_me">
                                             <label class="wrap_checkbox">
-                                                <input type="checkbox">
+                                                <input name="remember" type="checkbox">
                                                 <span class="icon">
                                                     <i class="fa fa-check" aria-hidden="true"></i>
                                                 </span>
@@ -249,11 +252,18 @@
                                             </label>
                                         </div>
                                         <div class="reset_pas">
-                                            <a href="#" class="open-modal" data-modal="#reset-password-by-phone">Забыли пароль?</a>
+                                            <a href="#" class="open-modal" data-modal="#reset-password-by-email">Забыли пароль?</a>
                                         </div>
                                     </div>
                                 </div>
                                 <input type="submit" class="firm_btn" value="Войти">
+								@if($isLoginError)
+									@foreach( $errors->get('message') as $error )
+										<div class="alert alert-danger" role="alert">
+											{{ $error }}
+										</div>
+									@endforeach
+								@endif
                                 <div class="orGo">или продолжить через</div>
                                 <div class="social">
                                     <a href="#"><img src="{{ asset('img/icons/facebook.png') }}" alt=""></a>
@@ -318,54 +328,27 @@
 		</div>
 
 		<div class="popup_f">
-			<div class='modal2' id='reset-password-by-phone'>
-				<a class='btn close-modal' data-modal="#reset-password-by-phone" href="#">
-					<i class="fa fa-times" aria-hidden="true"></i>
-				</a>
-				<div class='content'>
-					<form action="">
-						<div class="top">
-							<div class="h4">Восстановление пароля</div>
-						</div>
-						<div class="body">
-							<div class="sm_c" >
-								<div class="wrap_inp">
-									<input placeholder="Введите телефон" type="text" class="firm_inp">
-								</div>
+			<div class="overlay">
+				<div class='modal2' id='reset-password-by-email'>
+					<a class='btn close-modal' data-modal="#reset-password-by-email" href="#">
+						<i class="fa fa-times" aria-hidden="true"></i>
+					</a>
+					<div class='content'>
+						<form action="">
+							<div class="top">
+								<div class="h4">Восстановление пароля</div>
 							</div>
-							<input type="submit" class="firm_btn" value="Сбросить пароль">
-						</div>
-						<div class="bottom">
-							<a class="open-modal" data-modal="#reset-password-by-email" href="#">Восстановить по электронной почте</a>
-						</div>
-					</form>
-				</div>	
-			</div>
-		</div>
-
-		<div class="popup_f">
-			<div class='modal2' id='reset-password-by-email'>
-				<a class='btn close-modal' data-modal="#reset-password-by-email" href="#">
-					<i class="fa fa-times" aria-hidden="true"></i>
-				</a>
-				<div class='content'>
-					<form action="">
-						<div class="top">
-							<div class="h4">Восстановление пароля</div>
-						</div>
-						<div class="body">
-							<div class="sm_c" >
-								<div class="wrap_inp">
-									<input placeholder="Введите электронную почту" type="text" class="firm_inp">
+							<div class="body">
+								<div class="sm_c" >
+									<div class="wrap_inp">
+										<input placeholder="Введите электронную почту" type="text" class="firm_inp">
+									</div>
 								</div>
+								<input type="submit" class="firm_btn" value="Сбросить пароль">
 							</div>
-							<input type="submit" class="firm_btn" value="Сбросить пароль">
-						</div>
-						<div class="bottom">
-							<a class="open-modal" data-modal="#reset-password-by-phone" href="#">Восстановить по номеру телефона</a>
-						</div>
-					</form>
-				</div>	
+						</form>
+					</div>	
+				</div>
 			</div>
 		</div>
     @endguest

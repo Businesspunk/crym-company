@@ -1,7 +1,9 @@
-<?php include 'components/header.php'; ?>
+@extends('components.layout')
+
+@section('content')
 <main>
 	<?php $activePage = 'my-posts.php'; ?>
-	<?php include 'components/profile-menu.php'; ?>
+	@include('components.profile-menu')
 	<section class="my-posts">
 		<div class="container">
 			<div class="toggle_button">
@@ -18,14 +20,14 @@
 				<div class="active">
 					<div class="wrap_g">
 						<?php for($i = 0; $i < 2; $i++): ?>
-							<?php include 'components/post-2.php'; ?>
+								@include('components.post-2')
 						<?php endfor; ?>
 					</div>
 				</div>
 				<div class="close">
 					<div class="wrap_g">
 						<?php for($i = 0; $i < 7; $i++): ?>
-							<?php include 'components/post-2.php'; ?>
+								@include('components.post-2')
 						<?php endfor; ?>
 					</div>
 				</div>
@@ -33,4 +35,4 @@
 		</div>
 	</section>
 </main>
-<?php include 'components/footer.php'; ?>
+@endsection

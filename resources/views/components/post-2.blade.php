@@ -1,6 +1,6 @@
 <div class="item">
 	<div class="photo">
-		<img src="img/tests/two.png" alt="">
+		<img src="{{ asset('img/tests/two.png') }}" alt="">
 	</div>
 	<div class="title">
 		<a href="single-post.php">Частный дом 1</a>

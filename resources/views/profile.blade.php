@@ -1,10 +1,12 @@
-<?php include 'components/header.php'; ?>
+@extends('components.layout')
+
+@section('content')
 <main>
-	<?php include 'components/category.php'; ?>
+	@include('components.category')
 	<section class="profile">
 		<div class="container">
 			<div class="left">
-				<?php include 'components/people.php'; ?>
+				@include('components.people')
 			</div>
 			<div class="right">
 				<div class="head">
@@ -23,14 +25,14 @@
 					<div class="in-sale active hiddable">
 						<div class="items objects">
 							<?php for($i = 0; $i < 2; $i++): ?>
-								<?php include 'components/post.php'; ?>
+									@include('components.post')
 							<?php endfor; ?>
 						</div>
 					</div>
 					<div class="from-sale hidden hiddable">
 						<div class="items objects">
 							<?php for($i = 0; $i < 2; $i++): ?>
-								<?php include 'components/post.php'; ?>
+									@include('components.post')
 							<?php endfor; ?>
 						</div>
 					</div>
@@ -39,4 +41,4 @@
 		</div>
 	</section>
 </main>
-<?php include 'components/footer.php'; ?>
+@endsection

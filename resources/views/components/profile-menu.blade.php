@@ -1,17 +1,16 @@
 <?php $profilePages = [
-	'my-posts.php'	=> 'Мои объявления',
-	'my-messages.php' => 'Мои сообщения',
-	'my-bookmarks.php' => 'Закладки',
-	'my-settings.php' => 'Настройки',
-	'my-support.php' => 'Помощь'
+		'my-posts.php'	=> 'Мои объявления',
+		'my-messages.php' => 'Мои сообщения',
+		'my-bookmarks.php' => 'Закладки',
+		'my-settings.php' => 'Настройки',
+		'my-support.php' => 'Помощь'
 	]
-
-
  ?>
+ 
 <section class="profile-menu">
 	<div class="container">
 		<div class="left">
-			<img src="img/logo.png" alt="" class="logo_photo">
+			<img src="{{ asset('img/logo.png') }}" alt="" class="logo_photo">
 		</div>
 		<div class="right">
 			<div class="links">

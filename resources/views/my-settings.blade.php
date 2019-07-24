@@ -1,8 +1,10 @@
-<?php include 'components/header.php'; ?>
+@extends('components.layout')
+
+@section('content')
 <main>
 	<?php $activePage = 'my-settings.php'; ?>
-	<?php include "components/profile-menu.php"; ?>
-
+	
+	@include('components.profile-menu')
 	<section class="my-settings">
 		<div class="container">
 			<form>
@@ -26,7 +28,7 @@
 				<div class="wrap photo_y int">
 					<div class="left">Фотография</div>
 					<div class="right">
-						<img src="img/tests/account.jpg" alt="">
+						<img src="{{ asset('img/tests/account.jpg') }}" alt="">
 						<label><input class="file" type="file">
 							<span class="text">Загрузить</span>
 						</label>
@@ -48,4 +50,4 @@
 		</div>
 	</section>
 </main>
-<?php include 'components/footer.php' ?>
+@endsection

@@ -1,18 +1,20 @@
-<?php include "components/header.php"; ?>
+@extends('components.layout')
+
+@section('content')
 <main>
 	<?php $activePage = 'my-messages.php'; ?>
-	<?php include 'components/profile-menu.php'; ?>
+	
+	@include('components.profile-menu')
 	<section class="my-messages">
 		<div class="container">
 			<div class="h4">Диалоги</div>
-
 			<div class="dialog">
 				<div class="left">
 					<div class="spacer"></div>
 					<?php for( $i = 0; $i < 4; $i++ ): ?>
 						<a class="itemDialogMenu" data-eq="<?= $i; ?>" href="#">
 							<div class="photo">
-								<img src="img/tests/account.jpg" alt="">
+								<img src="{{ asset('img/tests/account.jpg') }}" alt="">
 							</div>
 							<div class="info">
 								<div class="name">
@@ -26,7 +28,7 @@
 								Вчера, 20:15
 							</div>
 							<div class="img">
-								<img src="img/tests/two.png" alt="">
+								<img src="{{ asset('img/tests/two.png') }}" alt="">
 							</div>	
 						</a>
 					<?php endfor; ?>
@@ -40,7 +42,7 @@
 									<div class="message">
 										<div class="head">
 											<div class="photo">
-												<img src="img/tests/two.png" alt="">
+												<img src="{{ asset('img/tests/two.png') }}" alt="">
 											</div>
 											<div class="info">
 												<div class="title">
@@ -63,13 +65,13 @@
 														<div class="text">Здравсвуйте, можно узнать по подробнее о квартире? </div>
 														<div class="time">19:58</div>
 													</div>
-													<img class="acc_img" src="img/tests/account.jpg" alt="">
+													<img class="acc_img" src="{{ asset('img/tests/account.jpg') }}" alt="">
 												</div>
 											</div>
 									
 											<div class="other mes">
 												<div class="mes_wrap">
-													<img class="acc_img" src="img/tests/account.jpg" alt="">
+													<img class="acc_img" src="{{ asset('img/tests/account.jpg') }}" alt="">
 													<div class="info">
 														<div class="text">
 															Здравсвуйте, да ,конечно, можно созвониться и я вам расскажу обо всем, что вас интересует 
@@ -105,4 +107,4 @@
 		</div>
 	</section>
 </main>
-<?php include "components/footer.php"; ?>
+@endsection

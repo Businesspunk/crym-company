@@ -1,7 +1,9 @@
-<?php include 'components/header.php'; ?>
+@extends('components.layout')
+
+@section('content')
 <main>
 	<?php $activePage = 'my-support.php'; ?>
-	<?php include "components/profile-menu.php"; ?>
+	@include('components.profile-menu')
 
 	<section class="my-support">
 		<div class="container">
@@ -30,4 +32,4 @@
 		</div>
 	</section>
 </main>
-<?php include 'components/footer.php' ?>
+@endsection

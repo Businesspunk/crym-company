@@ -23,10 +23,20 @@ class CreateUsersTable extends Migration
             $table->timestamps();
         });
 
+
         Schema::create('profiles', function (Blueprint $table) {
             $table->bigIncrements('id');
-
+            $table->bigInteger('user_id')->unsigned();
+            $table->string('city', 255)->nullable();
+            $table->string('number', 255)->nullable();
+            $table->string('photo', 255)->nullable();
             $table->timestamps();
+        });
+
+        Schema::table('profiles', function (Blueprint $table) { 
+            $table->foreign('user_id')
+                ->references('id')->on('users')
+                ->onDelete('cascade');
         });
     }
 
