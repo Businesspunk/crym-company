@@ -22,7 +22,14 @@ Route::post('/login', 'Auth\LoginController@login')->name('loginPost');
 Route::middleware(['auth'])->group(function () {
 
     Route::get('/profile', "IndexController@profile")->name('my-profile');
+    
     Route::get('/settings', "IndexController@settings")->name('my-settings');
+    Route::post('/settings', "ProfileController@saveSettings");
+    Route::post('/settings/avatarPermanent', "ProfileController@permanentUpload")->name('permanentUploadAvatar');
+    Route::post('/settings/updateAvatar', "ProfileController@updateAvatar")->name('updateAvatar');
+
+
+
     Route::get('/support', "IndexController@support")->name('my-support');
     Route::get('/bookmarks', "IndexController@bookmarks")->name('my-bookmarks');
     Route::get('/messages', "IndexController@messages")->name('my-messages');

@@ -2,13 +2,13 @@
 	$isRegisterError = $errors->register->count() > 0;
 	$isLoginError = $errors->has('loginerror');
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 	<title>Недвижимость</title>
+	<meta name="csrf-token" content="{{ csrf_token() }}">
 	<meta name="msapplication-TileColor" content="#FFFFFF" />
 	<meta name="msapplication-TileImage" content="{{ asset('img/favicons/mstile-144x144.png') }}" />
 	<meta name="msapplication-square70x70logo" content="{{ asset('img/favicons/mstile-70x70.png') }}" />
@@ -42,6 +42,7 @@
 	<link rel="stylesheet" href="{{ asset('slick/slick-theme.css') }}">
 	<link rel="stylesheet" href="{{ asset('slick/slick.css') }}">
 	<link rel="stylesheet" href="{{ asset('style.css?v=3') }}">
+	
     @yield('after_css')
 </head> 
 <body>
@@ -95,7 +96,7 @@
                         @auth
                             <div class="right">
                                 <div class="account">
-                                    <img src="{{ asset('img/tests/account.jpg') }}" alt="">
+                                    <img src="{{ getAvatarSrc( $user ) }}" alt="">
                                 </div>
                                 <div class="menu_account">
                                     <div class="wrap_menu_account">
@@ -354,6 +355,13 @@
     @endguest
 
 	<script src="{{ asset('jquery-ui/external/jquery/jquery.js') }}"></script>
+	<script>
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+    </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 	<script src="{{ asset('jquery-ui/jquery-ui.min.js') }}"></script>
