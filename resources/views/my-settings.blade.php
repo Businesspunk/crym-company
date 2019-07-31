@@ -123,10 +123,11 @@
 @section('after_js')
 	<script src="{{ asset('js/cropper.js') }}" ></script>
 	<script>
+		
+
 		$(document).ready(function(){
 			var cropper;
 			$('#pemanentUpload').change(function(){
-
 				$imageInRedactor = $('#image');
 				$('#preloader').fadeIn(200);
 

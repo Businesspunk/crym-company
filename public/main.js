@@ -1,4 +1,9 @@
+function isObject (value) {
+	return typeof value === 'object';
+}
 $(document).ready(function(){
+
+	
 
 	$('.single_home .right .sticky').css( 'top' , $('header').height() + 20);
 

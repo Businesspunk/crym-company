@@ -1,28 +1,15 @@
-<?php $profilePages = [
-		'my-posts.php'	=> 'Мои объявления',
-		'my-messages.php' => 'Мои сообщения',
-		'my-bookmarks.php' => 'Закладки',
-		'my-settings.php' => 'Настройки',
-		'my-support.php' => 'Помощь'
-	]
- ?>
- 
-<section class="profile-menu">
+ <section class="profile-menu">
 	<div class="container">
 		<div class="left">
 			<img src="{{ asset('img/logo.png') }}" alt="" class="logo_photo">
 		</div>
 		<div class="right">
 			<div class="links">
-				<?php foreach( $profilePages as $url => $title ): ?>
-					<a
-					<?php if( isset($activePage) &&  $activePage == $url ): ?>
-						class="active"
-					<?php endif; ?> 
-						href="<?= $url; ?>">
-						<?= $title; ?>
-					</a>
-				<?php endforeach; ?>
+				<a href="{{ route('my-posts') }}">Мои объявления</a>
+				<a href="{{ route('my-messages') }}">Мои сообщения</a>
+				<a href="{{ route('my-bookmarks') }}">Закладки</a>
+				<a href="{{ route('my-settings') }}">Настройки</a>
+				<a href="{{ route('my-support') }}">Помощь</a>
 			</div>
 		</div>
 	</div>

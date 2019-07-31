@@ -69,7 +69,7 @@
 				</div>
 				<div class="th5">
                     @auth
-                        <a href="add.php" class="firm_btn btn_blue put">
+                        <a href="{{ route('addPost') }}" class="firm_btn btn_blue put">
                             Подать объявление
                         </a>
                     @endauth
@@ -171,36 +171,14 @@
 			<div class="container">
 				<div class="main">
 					<div class="items">
-						<div class="item">
-							<div class="title">Недвижимость</div>
-							<a href="#">Квартиры</a>
-							<a href="#">Комнаты</a>
-							<a href="#">Дома, дачи, коттеджи</a>
-							<a href="#">Земельный участки</a>
-							<a href="#">Гаражи и машиноместа</a>
-							<a href="#">Коммерческая недвижимость</a>
-							<a href="#">Недвижимость за рубежом</a>
-						</div>
-						<div class="item">
-							<div class="title">Недвижимость</div>
-							<a href="#">Квартиры</a>
-							<a href="#">Комнаты</a>
-							<a href="#">Дома, дачи, коттеджи</a>
-							<a href="#">Земельный участки</a>
-							<a href="#">Гаражи и машиноместа</a>
-							<a href="#">Коммерческая недвижимость</a>
-							<a href="#">Недвижимость за рубежом</a>
-						</div>
-						<div class="item">
-							<div class="title">Недвижимость</div>
-							<a href="#">Квартиры</a>
-							<a href="#">Комнаты</a>
-							<a href="#">Дома, дачи, коттеджи</a>
-							<a href="#">Земельный участки</a>
-							<a href="#">Гаражи и машиноместа</a>
-							<a href="#">Коммерческая недвижимость</a>
-							<a href="#">Недвижимость за рубежом</a>
-						</div>
+						@foreach( $maincategories as $maincat )
+							<div class="item">
+								<div class="title category">{{ $maincat->name }}</div>
+									@foreach( $maincat->categories as $cat )
+										<a class="category" href="#">{{ $cat->name }}</a>
+									@endforeach
+							</div>
+						@endforeach
 					</div>
 				</div>
 				<div class="bottom">

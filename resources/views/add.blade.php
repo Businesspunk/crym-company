@@ -1,11 +1,28 @@
-<?php include "components/header.php"; ?>
+@extends('components.layout')
+
+@section('after_css')
+<style>
+	#map {
+        width: 100%; height: 300px; padding: 0; margin: 0;
+	}
+	.alert_geo{
+		display: none;
+	}
+	.alert{
+		font-size: 13px;
+	}
+</style>
+@endsection
+
+@section('content')
 <main>
-<form class="added_post" action="">
+<form class="added_post" method="POST">
+	@csrf
 	<section class="add">
 		<div class="container">
 				<div class="header">
 					<div class="left">
-						<img class="logo_photo" src="img/logo.png" alt="">
+						<img class="logo_photo" src="{{ asset('img/logo.png') }}" alt="">
 					</div>
 					<div class="right">Новое объявление</div>
 				</div>
@@ -14,97 +31,20 @@
 					<div class="second_container">
 						<div class="wrap left_s">
 							<div class="left ui_shadow">
+								@foreach( $maincategories as $maincat )
 								<ul>
-									<li class="title">Недвижимость</li>
+									<li class="title category">{{ $maincat->name }}</li>
+									@foreach( $maincat->categories as $cat )
 									<li class="select">
 										<label>
-											<input type="radio" name="added_main_cat" id="">
-											<div class="text">Продажа</div>
+											<input type="radio" name="category" value="{{ $cat->id }}">
+											<div class="text category">{{ $cat->name }}</div>
 										</label>
 									</li>
-									<li class="select">
-										<label>
-											<input type="radio" name="added_main_cat" id="">
-											<div class="text">Аренда / Сдам</div>
-										</label>
-									</li>
-									<li class="select">
-										<label>
-											<input type="radio" name="added_main_cat" id="">
-											<div class="text">Аренда / Сниму</div>
-										</label>
-									</li>
+									@endforeach
 								</ul>
-								<ul>
-									<li class="title">Ремонт и строительство</li>
-									<li class="select">
-										<label>
-											<input type="radio" name="added_main_cat" id="">
-											<div class="text">Продажа</div>
-										</label>
-									</li>
-									<li class="select">
-										<label>
-											<input type="radio" name="added_main_cat" id="">
-											<div class="text">Аренда</div>
-										</label>
-									</li>
-									<li class="select">
-										<label>
-											<input type="radio" name="added_main_cat" id="">
-											<div class="text">Услуги</div>
-										</label>
-									</li>
-								</ul>
-								<ul>
-									<li class="title">Ландшафт, озеленение, благоустройство</li>
-									<li class="select">
-										<label>
-											<input type="radio" name="added_main_cat" id="">
-											<div class="text">Продажа</div>
-										</label>
-									</li>
-									<li class="select">
-										<label>
-											<input type="radio" name="added_main_cat" id="">
-											<div class="text">Услуги</div>
-										</label>
-									</li>
-								</ul>
-							</div>
-							<div class="right ui_shadow">
-								<ul>
-									<li class="select">
-										<label>
-											<input type="radio" name="second_main_cat" id="">
-											<div class="text">Квартиру ( 1,2,3,4 и более)</div>
-										</label>
-									</li>
-									<li class="select">
-										<label>
-											<input type="radio" name="second_main_cat" id="">
-											<div class="text">Комнату </div>
-										</label>
-									</li>
-									<li class="select">
-										<label>
-											<input type="radio" name="second_main_cat" id="">
-											<div class="text">Дома, дачи, коттеджи, земельный участок </div>
-										</label>
-									</li>
-									<li class="select">
-										<label>
-											<input type="radio" name="second_main_cat" id="">
-											<div class="text">Гараж и машиноместа  </div>
-										</label>
-									</li>
-									<li class="select">
-										<label>
-											<input type="radio" name="second_main_cat" id="">
-											<div class="text">Коммерческая недвижимость</div>
-										</label>
-									</li>
-								</ul>
+								@endforeach
+
 							</div>
 						</div>
 						<div class="right_s"></div>
@@ -121,11 +61,11 @@
 				<div class="right">
 					<div class="choosen">
 						<label>
-							<input type="radio" name="choose" id="">
+							<input type="radio" name="owner" value="Собственник" id="">
 							<div class="text">Собственник</div>
 						</label>
 						<label>
-							<input type="radio" name="choose" id="">
+							<input type="radio" name="owner" value="Агенство" id="">
 							<div class="text">Агенство</div>
 						</label>
 					</div>
@@ -136,7 +76,7 @@
 					Срок владения
 				</div>
 				<div class="right">
-					<input type="text">
+					<input name="ownTime" type="text">
 				</div>
 			</div>
 			<div class="wrap local">
@@ -145,12 +85,16 @@
 				</div>
 				<div class="right">
 					<div class="second_wr">
-						<input type="text" placeholder="Введите адрес">
-						<i class="fa fa-search" aria-hidden="true"></i>
+						<div class="alert alert_find alert-warning" role="alert">
+							Найдите свой объект
+						</div>
+						<div class="alert alert_geo alert-success" role="alert">
+							Геопозиция добавлена
+						</div>
 					</div>
-					<div class="map_block">
-						<script type="text/javascript" charset="utf-8" async src="https://api-maps.yandex.ru/services/constructor/1.0/js/?um=constructor%3A30be4394b4264e223f7e0dcd4bdd6de0cedfaf554feeffbc39281ca1fd71c784&amp;width=100%25&amp;height=300&amp;lang=ru_RU&amp;scroll=false"></script>
-					</div>
+					<input type="hidden" name="coord_x">
+					<input type="hidden" name="coord_y">
+					<div id="map" class="map_block"></div>
 				</div>
 			</div>
 			<div class="wrap name">
@@ -177,228 +121,17 @@
 					<input type="text" placeholder="Введите телефон">
 				</div>
 			</div>
-			<div class="wrap type_connection">
-				<div class="left">
-					Способ связи
-				</div>
-				<div class="right">
-					<label class="ui_radio">
-						<input name="type_of_connection" type="radio">
-						<span class="ch">
-							<span class="active"></span>
-						</span>
-						<span class="text">По телефону и в сообщениях</span>
-					</label>
-					<label class="ui_radio" >
-						<input name="type_of_connection" type="radio">
-						<span class="ch">
-							<span class="active"></span>
-						</span>
-						<span class="text">По телефону</span>
-					</label>
-					<label class="ui_radio">
-						<input name="type_of_connection" type="radio">
-						<span class="ch"><span class="active"></span></span>
-						<span class="text">В сообщениях</span>
-					</label>
-				</div>
-			</div>
 			<div class="wrap desc">
 				<div class="left">
 					Описание
 				</div>
 				<div class="right">
-					<textarea placeholder="Опишите объект" rows="10"></textarea>
+					<textarea name="description" placeholder="Опишите объект" rows="10"></textarea>
 				</div>
 			</div>
 		</div>
 	</section>
 	<section class="add_choose">
-		<div class="divider"> <div class="line"></div> </div>
-		<div class="container">
-		<div class="title">Параметры дома</div>
-		<div class="subtitle">Основные</div>
-			<div class="wrap typeHouse">
-				<div class="left">
-					Тип квартиры
-				</div>
-				<div class="right">
-					<select class="add_post">
-						<option value="">Не выбрано</option>
-						<option value="">Не выбрано 2</option>
-						<option value="">Не выбрано 3</option>
-						<option value="">Не выбрано 4</option>
-					</select>
-				</div>
-			</div>
-			<div class="wrap yearsOfBuilding">
-				<div class="left">
-					Год постройки
-				</div>
-				<div class="right">
-					<input type="text">
-				</div>
-			</div>
-			<div class="wrap typeBuilding">
-				<div class="left">
-					Тип дома
-				</div>
-				<div class="right">
-					<select class="add_post">
-						<option value="">Не выбрано</option>
-						<option value="">Не выбрано 2</option>
-						<option value="">Не выбрано 3</option>
-						<option value="">Не выбрано 4</option>
-					</select>
-				</div>
-			</div>
-			<div class="wrap lifts">
-				<div class="left">
-					Лифты
-				</div>
-				<div class="right">
-					<select class="add_post">
-						<option value="">Не выбрано</option>
-						<option value="">Не выбрано 2</option>
-						<option value="">Не выбрано 3</option>
-						<option value="">Не выбрано 4</option>
-					</select>
-				</div>
-			</div>
-
-			<div class="subtitle">Дополнительные</div>
-			<div class="wrap infr">
-				<div class="left">
-					Инфраструктура
-				</div>
-				<div class="right">
-					<select class="add_post">
-						<option value="">Не выбрано</option>
-						<option value="">Не выбрано 2</option>
-						<option value="">Не выбрано 3</option>
-						<option value="">Не выбрано 4</option>
-					</select>
-				</div>
-			</div>
-		</div>
-		<div class="divider"> <div class="line"></div> </div>
-		<div class="container">
-			<div class="title">Параметры квартиры</div>
-			<div class="subtitle">Основные</div>
-
-			<div class="wrap rooms">
-				<div class="left">
-					Комнат в квартире
-				</div>
-				<div class="right">
-					<select class="add_post">
-						<option value="">Не выбрано</option>
-						<option value="">Не выбрано 2</option>
-						<option value="">Не выбрано 3</option>
-						<option value="">Не выбрано 4</option>
-					</select>
-				</div>
-			</div>
-
-			<div class="wrap floor">
-				<div class="left">
-					Этаж
-				</div>
-				<div class="right">
-					<input type="text">
-				</div>
-			</div>
-
-			<div class="wrap floors">
-				<div class="left">
-					Этажность дома
-				</div>
-				<div class="right">
-					<input type="text">
-				</div>
-			</div>
-
-			<div class="subtitle">Площадь</div>
-			
-			<div class="wrap square">
-				<div class="left">
-					Общая площадь
-				</div>
-				<div class="right">
-					<input type="text">
-					<div class="sup">м<sup>2</sup> </div>
-				</div>
-			</div>
-			<div class="wrap square">
-				<div class="left">
-					Жилая площадь
-				</div>
-				<div class="right">
-					<input type="text">
-					<div class="sup">м<sup>2</sup> </div>
-
-				</div>
-			</div>
-			<div class="wrap square">
-				<div class="left">
-					Площадь кухни
-				</div>
-				<div class="right">
-					<input type="text">
-					<div class="sup">м<sup>2</sup> </div>
-
-				</div>
-			</div>
-			<div class="subtitle">Дополнительные</div>
-			<div class="wrap height">
-				<div class="left">
-					Высота потолка
-				</div>
-				<div class="right">
-					<input type="text">
-				</div>
-			</div>
-			<div class="wrap update">
-				<div class="left">
-					Ремонт
-				</div>
-				<div class="right">
-					<select class="add_post">
-						<option value="">Не выбрано</option>
-						<option value="">Не выбрано 2</option>
-						<option value="">Не выбрано 3</option>
-						<option value="">Не выбрано 4</option>
-					</select>
-				</div>
-			</div>
-			<div class="wrap update">
-				<div class="left">
-					Санузлы
-				</div>
-				<div class="right">
-					<select class="add_post">
-						<option value="">Не выбрано</option>
-						<option value="">Не выбрано 2</option>
-						<option value="">Не выбрано 3</option>
-						<option value="">Не выбрано 4</option>
-					</select>
-				</div>
-			</div>
-			<div class="wrap update">
-				<div class="left">
-					Балкон
-				</div>
-				<div class="right">
-					<select class="add_post">
-						<option value="">Не выбрано</option>
-						<option value="">Не выбрано 2</option>
-						<option value="">Не выбрано 3</option>
-						<option value="">Не выбрано 4</option>
-					</select>
-				</div>
-			</div>
-
-		</div>
 		<div class="divider"> <div class="line"></div> </div>
 		<div class="container">
 			<div class="wrap photo">
@@ -770,9 +503,6 @@
 						</div>
 					</div>
 				</div>
-
-
-
 			</div>
 			<div class="total">
 				<div class="btn">
@@ -786,4 +516,46 @@
 	</section>
 </form>
 </main>
-<?php include 'components/footer.php'; ?>
+@endsection
+
+@section('after_js')
+	<script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&amp;apikey=dc3fa49b-c3d3-4e3c-aba7-20e78aa1167b" type="text/javascript"></script>
+	<script>
+		function init() {
+			var myMap = new ymaps.Map('map', {
+				center: [55.74, 37.58],
+				zoom: 13,
+				controls: []
+			});
+			
+			var searchControl = new ymaps.control.SearchControl({
+				options: {
+					provider: 'yandex#search',
+				}
+			});
+
+			var mySearchResults = new ymaps.GeoObjectCollection(null, {
+				hintContentLayout: ymaps.templateLayoutFactory.createClass('$[properties.name]')
+			});
+
+			myMap.controls.add(searchControl);
+			myMap.geoObjects.add(mySearchResults);
+
+			searchControl.events.add('resultselect', function (e) {
+				var result = searchControl.getResult(0);
+				result.then(function (res) {
+					var coordinates = res.geometry.getCoordinates();
+					$('[name="coord_x"]').val( coordinates[0] );
+					$('[name="coord_y"]').val( coordinates[1] );
+
+					$('.alert_find').slideUp( 300 );
+					$('.alert_geo').slideDown( 300 );
+				}, function (err) {
+					console.log("Ошибка");
+				});
+			});
+		}
+
+		ymaps.ready(init);
+	</script>
+@endsection

@@ -6,41 +6,58 @@ use Illuminate\Http\Request;
 
 class IndexController extends Controller
 {
-    public function mainPage()
+    public function mainPage( Request $request )
     {
-        return view('index');
-    }
-
-    public function profile()
-    {
-        return view('profile');        
-    }
-
-    public function settings( Request $request )
-    {
-        return view('my-settings' , [
+        return view('index' , [
             'user' => $request->user()
         ]);
     }
 
-    public function support()
+    public function profile( Request $request )
     {
-        return view('my-support');
+        return view('profile', [
+            'user' => $request->user()
+        ]);        
     }
 
-    public function bookmarks()
+    public function settings( Request $request )
     {
-        return view('my-bookmarks');
+        return view('my-settings', [
+            'user' => $request->user()
+        ]);
     }
 
-    public function messages()
+    public function support( Request $request )
     {
-        return view('my-messages');
+        return view('my-support', [
+            'user' => $request->user()
+        ]);
+    }
+
+    public function bookmarks( Request $request )
+    {
+        return view('my-bookmarks', [
+            'user' => $request->user()
+        ]);
+    }
+
+    public function messages( Request $request )
+    {
+        return view('my-messages', [
+            'user' => $request->user()
+        ]);
     }
 
     public function posts( Request $request )
     {
         return view('my-posts', [
+            'user' => $request->user()
+        ]);
+    }
+
+    public function add( Request $request )
+    {
+        return view('add', [
             'user' => $request->user()
         ]);
     }

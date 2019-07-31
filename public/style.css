@@ -1582,11 +1582,6 @@ section.add_choose .choosen input[type=radio] {
 section.add_choose .choosen input[type=radio]:checked + .text {
   color: #00ace5;
 }
-section.add_choose .local .second_wr {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-}
 section.add_choose .local .second_wr i {
   margin-left: -5%;
 }
@@ -2841,4 +2836,10 @@ section.profile .right .body .hidden {
 /* added after compile */
 header .second .container .left{
   padding: 8px 0;
+}
+.category:first-letter {
+  text-transform: uppercase;  
+}
+.choose_cat label{
+  width: 100%;
 }
