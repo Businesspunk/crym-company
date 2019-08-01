@@ -1959,12 +1959,12 @@ section.add_choose .total {
     width: 100%;
   }
 }
-section.add_choose .total a {
+section.add_choose .total input[type=submit] {
   display: inline-flex;
   align-items: center;
   color: #fff;
   font-weight: 700;
-  padding: 12px 25px;
+  padding: 10px 55px;
   border-radius: 20px;
   border: 1px solid #00ace5;
   background-color: #00ace5;

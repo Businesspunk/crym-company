@@ -37,7 +37,7 @@
 									@foreach( $maincat->categories as $cat )
 									<li class="select">
 										<label>
-											<input type="radio" name="category" value="{{ $cat->id }}">
+											<input type="radio" name="category_id" value="{{ $cat->id }}">
 											<div class="text category">{{ $cat->name }}</div>
 										</label>
 									</li>
@@ -102,23 +102,7 @@
 					Название объявления
 				</div>
 				<div class="right">
-					<input type="text" placeholder="Название">
-				</div>
-			</div>
-			<div class="wrap email">
-				<div class="left">
-					Электронная почта
-				</div>
-				<div class="right">
-					<input type="text" placeholder="@">
-				</div>
-			</div>
-			<div class="wrap tel">
-				<div class="left">
-					Телефон
-				</div>
-				<div class="right">
-					<input type="text" placeholder="Введите телефон">
+					<input name="title" type="text" placeholder="Название">
 				</div>
 			</div>
 			<div class="wrap desc">
@@ -158,11 +142,11 @@
 					Видео с YouTube
 				</div>
 				<div class="right">
-					<input type="text" placeholder="Вставьте ссылку">
+					<input name="youtube" type="text" placeholder="Вставьте ссылку">
 				</div>
 			</div>
 		</div>
-		<div class="divider"> <div class="line"></div> </div>
+		<div class="divider"><div class="line"></div></div>
 		<div class="container service">
 			<div class="title">Услуги продвижения</div>
 			<div class="desc">Сравните и выберите услуги продвижения, если вы хотите ускорить продажу</div>
@@ -197,7 +181,7 @@
 				<div class="row">
 					<div class="button">
 						<label class="ui_radio">
-							<input checked name="typePR" type="radio">
+							<input name="typeOfPromote" value="1" type="radio">
 							<span class="ch"><span class="active"></span></span>
 						</label>
 					</div>
@@ -215,7 +199,7 @@
 				<div class="row">
 					<div class="button">
 						<label class="ui_radio">
-							<input name="typePR" type="radio">
+							<input name="typeOfPromote" value="2" type="radio">
 							<span class="ch"><span class="active"></span></span>
 						</label>
 					</div>
@@ -237,7 +221,7 @@
 				<div class="row">
 					<div class="button">
 						<label class="ui_radio">
-							<input name="typePR" type="radio">
+							<input name="typeOfPromote" value="3" type="radio">
 							<span class="ch"><span class="active"></span></span>
 						</label>
 					</div>
@@ -257,7 +241,7 @@
 				<div class="row">
 					<div class="button">
 						<label class="ui_radio">
-							<input name="typePR" type="radio">
+							<input name="typeOfPromote" value="4" type="radio">
 							<span class="ch"><span class="active"></span></span>
 						</label>
 					</div>
@@ -280,7 +264,7 @@
 				<div class="row">
 					<div class="button">
 						<label class="ui_radio">
-							<input name="typePR" type="radio">
+							<input name="typeOfPromote" value="5" type="radio">
 							<span class="ch"><span class="active"></span></span>
 						</label>
 					</div>
@@ -306,7 +290,7 @@
 				<div class="row">
 					<div class="button">
 						<label class="ui_radio">
-							<input checked name="typePR" type="radio">
+							<input name="typeOfPromote" value="1" type="radio">
 							<span class="ch"><span class="active"></span></span>
 						</label>
 					</div>
@@ -332,11 +316,10 @@
 					</div>
 				</div>
 
-
 				<div class="row">
 					<div class="button">
 						<label class="ui_radio">
-							<input name="typePR" type="radio">
+							<input name="typeOfPromote" value="2" type="radio">
 							<span class="ch"><span class="active"></span></span>
 						</label>
 					</div>
@@ -372,11 +355,10 @@
 					</div>
 				</div>
 
-
 				<div class="row">
 					<div class="button">
 						<label class="ui_radio">
-							<input name="typePR" type="radio">
+							<input name="typeOfPromote" value="3" type="radio">
 							<span class="ch"><span class="active"></span></span>
 						</label>
 					</div>
@@ -412,12 +394,10 @@
 					</div>
 				</div>
 
-
-
 				<div class="row">
 					<div class="button">
 						<label class="ui_radio">
-							<input name="typePR" type="radio">
+							<input name="typeOfPromote" value="4" type="radio">
 							<span class="ch"><span class="active"></span></span>
 						</label>
 					</div>
@@ -433,7 +413,6 @@
 					<div class="icon_wrap">
 						<i class="fa fa-angle-up" aria-hidden="true"></i>
 					</div>
-
 				</div>
 				<div class="added_info">
 					<div class="item">
@@ -453,14 +432,10 @@
 						</div>
 					</div>
 				</div>
-
-
-
-
 				<div class="row">
 					<div class="button">
 						<label class="ui_radio">
-							<input name="typePR" type="radio">
+							<input name="typeOfPromote" value="5" type="radio">
 							<span class="ch"><span class="active"></span></span>
 						</label>
 					</div>
@@ -506,10 +481,7 @@
 			</div>
 			<div class="total">
 				<div class="btn">
-					<a href="#">Далее <span class="line"></span></a>
-				</div>
-				<div class="cost">
-					Итого: <div class="num">0 руб.</div>
+					<input type="submit" value="Далее">
 				</div>
 			</div>
 		</div>

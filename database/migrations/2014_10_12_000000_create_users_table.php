@@ -38,19 +38,19 @@ class CreateUsersTable extends Migration
                 ->references('id')->on('users')
                 ->onDelete('cascade');
         });
-
-        Schema::create('maincategories', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('name');
-            $table->string('slug');
-        });
-
+        
         Schema::create('posts', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('title');
             $table->bigInteger('user_id')->unsigned();
             $table->bigInteger('category_id')->unsigned();
-            $table->string('slug');
+            $table->text('description');
+            $table->string('youtube');
+            $table->string('owner');
+            $table->string('ownTime');
+            $table->string('coord_x');
+            $table->string('coord_y');
+            $table->integer('typeOfPromote');
             $table->timestamps();
         });
 
@@ -70,7 +70,6 @@ class CreateUsersTable extends Migration
     {
         Schema::dropIfExists('users');
         Schema::dropIfExists('profiles');
-        Schema::dropIfExists('maincategories');
         Schema::dropIfExists('posts');
     }
 }

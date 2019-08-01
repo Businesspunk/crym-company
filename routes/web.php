@@ -35,8 +35,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/posts', "IndexController@posts")->name('my-posts');
 
     Route::get('/add', "IndexController@add")->name('addPost');
-
-
+    Route::post('/add', "PostController@post");
 
 });
 

@@ -13,6 +13,12 @@ class Second extends Migration
      */
     public function up()
     {
+        Schema::create('maincategories', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->string('name');
+            $table->string('slug');
+        });
+
         Schema::create('categories', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('maincategories_id')->unsigned();
@@ -25,6 +31,12 @@ class Second extends Migration
                 ->references('id')->on('maincategories')
                 ->onDelete('cascade');
         });
+
+        Schema::table('posts', function (Blueprint $table) { 
+            $table->foreign('category_id')
+                ->references('id')->on('categories')
+                ->onDelete('cascade');
+        });
     }
 
     /**
@@ -35,5 +47,7 @@ class Second extends Migration
     public function down()
     {
         Schema::dropIfExists('categories');
+        Schema::dropIfExists('maincategories');
+
     }
 }
