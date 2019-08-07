@@ -36,6 +36,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/add', "IndexController@add")->name('addPost');
     Route::post('/add', "PostController@post");
+    Route::post('/add/images/ajax', "PostController@ajaxUploadImages")->name('ajaxUploadImages');
 
 });
 

@@ -11,6 +11,29 @@
 	.alert{
 		font-size: 13px;
 	}
+	#uploadPhotos, #uploadMainPhoto{
+		display: none;
+	}
+	.spinner-border{
+		display: none;
+	}
+	.preloader_photos, .preloader_main_photo{
+		position: absolute;
+		top: 0;
+		left: 0;
+	}
+	section.add_choose .photo .notice.notice_second{
+		margin-top: 40px;
+	}
+	section.add_choose .photo .wrap_main_photo .wrap_m{
+		grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+	}
+	.wrap_for_photos{
+		position: relative;
+	}
+	.hidden{
+		display: none;
+	}
 </style>
 @endsection
 
@@ -54,31 +77,6 @@
 	</section>
 	<section class="add_choose">
 		<div class="container">
-			<div class="wrap">
-				<div class="left">
-					Кто разместил
-				</div>
-				<div class="right">
-					<div class="choosen">
-						<label>
-							<input type="radio" name="owner" value="Собственник" id="">
-							<div class="text">Собственник</div>
-						</label>
-						<label>
-							<input type="radio" name="owner" value="Агенство" id="">
-							<div class="text">Агенство</div>
-						</label>
-					</div>
-				</div>
-			</div>
-			<div class="wrap period">
-				<div class="left">
-					Срок владения
-				</div>
-				<div class="right">
-					<input name="ownTime" type="text">
-				</div>
-			</div>
 			<div class="wrap local">
 				<div class="left">
 					Месторасположение
@@ -110,7 +108,7 @@
 					Описание
 				</div>
 				<div class="right">
-					<textarea name="description" placeholder="Опишите объект" rows="10"></textarea>
+					<textarea name="description" placeholder="Опишите объявление" rows="10"></textarea>
 				</div>
 			</div>
 		</div>
@@ -123,17 +121,36 @@
 					Фотографии
 				</div>
 				<div class="right">
-					<div class="notice">Перетащите фото сюда или <span class="blue">выберите их на своем компьютере</span></div>
-					<div class="wrap_m">
-						<div class="item">
-							<i class="fa fa-camera" aria-hidden="true"></i>
-							<div class="text">Добавить</div>
+					<div class="notice">Загрузите главную фотографию объявления</div>
+					<div class="wrap_main_photo">
+						<div class="wrap_m">
+							<label for="uploadMainPhoto" class="item uploadMainPhotoWrap">
+								<div class="spinner-border preloader_main_photo text-primary" role="status">
+									<span class="sr-only">Loading...</span>
+								</div>
+								<i class="fa fa-camera" aria-hidden="true"></i>
+								<div class="text">Добавить</div>
+							</label>
+							<input type="file" name="photos" id="uploadMainPhoto">
+						</div>
+						<div class="main_photo">
+
 						</div>
 					</div>
+					<div class="notice notice_second">Загрузите дополнительные фотографии объявления</span></div>
+						<div class="wrap_m wrap_for_photos">
+							<label for="uploadPhotos" class="item">
+								<div class="spinner-border preloader_photos text-primary" role="status">
+									<span class="sr-only">Loading...</span>
+								</div>
+								<i class="fa fa-camera" aria-hidden="true"></i>
+								<div class="text">Добавить</div>
+							</label>
+						</div>
+					<input type="file" name="photos" multiple id="uploadPhotos">
 					<div class="desc">
-						Первое фото будет отображаться в результатах поиска, выберите наиболее удачное.
 						Вы можете загрузить до 20 фотографий в формате JPG или PNG.
-						Максимальный размер фото — 25MB.
+						Максимальный размер фото — 10MB.
 					</div>
 				</div>
 			</div>
@@ -529,5 +546,70 @@
 		}
 
 		ymaps.ready(init);
+
+		$('#uploadPhotos').change(function(){
+				$preloader = $('.preloader_photos');
+				$files = $('#uploadPhotos')[0].files;
+				var count = $files.length;
+				for( $i = count - 1; $i >= 0; $i-- ){
+					var formData = new FormData();
+					formData.append('photo', $files[$i]);
+					$preloader.fadeIn();
+						$.ajax({
+							url: "{{ route('ajaxUploadImages') }}",
+							type: 'POST',
+							data: formData,
+							cache: false,
+							processData: false, 
+							contentType: false,
+							success: function (data) {
+								$preloader.fadeOut();
+								$elem = $(data.block);
+								$elem.appendTo( $('.wrap_for_photos') );
+								$elem.removeClass('hidden');
+							}
+						});
+				} 
+			})
+
+			$uploadMainWrap = $('.uploadMainPhotoWrap');
+			$('#uploadMainPhoto').change(function(){
+				$preloader = $('.preloader_main_photo');
+				$files = $('#uploadMainPhoto')[0].files;
+					var formData = new FormData();
+					formData.append('photo', $files[0]);
+					$preloader.fadeIn();
+					$.ajax({
+						url: "{{ route('ajaxUploadImages') }}",
+						type: 'POST',
+						data: formData,
+						cache: false,
+						processData: false, 
+						contentType: false,
+						success: function (data) {
+							$preloader.fadeOut();
+							$uploadMainWrap.fadeOut(300, function(){
+								$elem = $(data.block);
+								$elem.appendTo( $('.main_photo') );
+								$elem.removeClass('hidden');
+							});
+						}
+					});
+			})
+
+			$(document).click(function(e){
+				$t = $(e.target);
+				if( $t.is('.deleteImage') ){
+					$item = $t.closest('.item');
+					$item.fadeOut(300, function(){
+						if( $item.closest('.main_photo').length ){
+							$uploadMainWrap.fadeIn(300);
+						}
+						$item.remove();
+						
+					})
+				}
+			})
+
 	</script>
 @endsection

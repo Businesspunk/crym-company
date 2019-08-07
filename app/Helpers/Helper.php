@@ -19,7 +19,7 @@ if(!function_exists('photoSaver')){
             })->save( $path );
         }
         else{
-            $image->fit(700, 500)->save( $path , 70 );
+            $image->fit(700, 500)->save( $path , 80 );
         }
         
         return $pathForDB;

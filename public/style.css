@@ -1759,7 +1759,7 @@ section.add_choose .photo {
   margin-top: 40px;
 }
 section.add_choose .photo .right {
-  width: 70%;
+  width: 90%;
 }
 @media (max-width: 500px) {
   section.add_choose .photo .right {
@@ -1782,15 +1782,28 @@ section.add_choose .photo .wrap_m {
   grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
 }
 section.add_choose .photo .item {
-  padding: 20px 0;
   border-radius: 5px;
   background-color: #dbdbdb;
   text-align: center;
-  cursor: pointer;
+  position: relative;
 }
-section.add_choose .photo .item i {
-  color: #939393;
+section.add_choose .photo label.item{
+  padding: 30px 0;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+section.add_choose .photo .item i{
   font-size: 25px;
+}
+section.add_choose .photo div.item i {
+  color: #e53935;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  cursor: pointer;
 }
 section.add_choose .photo .item .text {
   font-size: 13px;
