@@ -33,7 +33,7 @@
 	
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-	<link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
+	<link rel="stylesheet" href="{{ asset('font-awesome/css/font-awesome.min.css') }} ">
 	<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700&display=swap" rel="stylesheet">
 	<link rel="stylesheet" href="{{ asset('jquery-ui/jquery-ui.structure.min.css') }}">
 	<link rel="stylesheet" href="{{ asset('jquery-ui/jquery-ui.min.css') }}">
@@ -175,7 +175,7 @@
 							<div class="item">
 								<div class="title category">{{ $maincat->name }}</div>
 									@foreach( $maincat->categories as $cat )
-										<a class="category" href="#">{{ $cat->name }}</a>
+										<a class="category" href="{{ route('category', $cat->slug) }}">{{ $cat->name }}</a>
 									@endforeach
 							</div>
 						@endforeach

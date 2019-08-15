@@ -42,12 +42,14 @@ class CreateUsersTable extends Migration
         Schema::create('posts', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('title');
+            $table->string('main_photo');
+            $table->integer('isVip')->nullable();
+            $table->integer('views')->nullable();
+            $table->bigInteger('cost');
             $table->bigInteger('user_id')->unsigned();
             $table->bigInteger('category_id')->unsigned();
             $table->text('description');
-            $table->string('youtube');
-            $table->string('owner');
-            $table->string('ownTime');
+            $table->string('youtube')->nullable();
             $table->string('coord_x');
             $table->string('coord_y');
             $table->integer('typeOfPromote');

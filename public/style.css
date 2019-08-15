@@ -1,3 +1,11 @@
+input[name=cost]::-webkit-outer-spin-button,
+input[name=cost]::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+
 sub,
 sup {
   /* Specified in % so that the sup/sup is the right size relative to the surrounding text */
@@ -858,9 +866,6 @@ section.fourth .wrap_grid {
     grid-template-columns: 1fr;
   }
 }
-section.fourth .wrap_grid .items {
-  margin-top: 30px;
-}
 section.fourth .wrap_grid .right .btn {
   width: 100%;
   border-radius: 50px;
@@ -1195,10 +1200,6 @@ section.single_home .container .left .fifth_line .item .de {
   margin-right: 10px;
 }
 section.single_home .container .left .six_line {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
   margin-top: 10px;
   padding: 10px;
   padding-bottom: 5px;
@@ -1625,6 +1626,7 @@ section.add_choose .type_connection .right .ui_radio .ch {
   margin-right: 7px;
 }
 section.add_choose .desc textarea {
+  line-height: 20px;
   width: 70%;
   padding: 15px;
   font-size: 14px;
@@ -2850,7 +2852,10 @@ section.profile .right .body .hidden {
 header .second .container .left{
   padding: 8px 0;
 }
-.category:first-letter {
+.category:first-letter, section.fourth .main_title span:first-letter{
+  text-transform: uppercase;  
+}
+section.fourth .wrap_grid .left .named:first-letter{
   text-transform: uppercase;  
 }
 .choose_cat label{

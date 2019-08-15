@@ -24,6 +24,7 @@ class PostsPhotos extends Migration
                 ->references('id')->on('posts')
                 ->onDelete('cascade');
         });
+
     }
 
     /**

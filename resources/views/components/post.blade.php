@@ -1,12 +1,11 @@
 <div class="item">
 	<div class="photo">
 		<i class="fa fa-heart" aria-hidden="true"></i>
-		<img src="img/tests/two.png" alt="">
+		<img src="{{ getSavedPhoto( $post->main_photo ) }}" alt="">
 	</div>
 	<div class="title">
-		<a href="single-post.php">Частный дом 1</a>
+		<a href="{{ route('post', $post->id) }}">{{ $post->title }}</a>
 	</div>
-	<div class="cost">1 200 000 рублей</div>
-	<div class="desc">Lorem ipsum dolor sit amet, consectetur</div>
-	<div class="time">Сегодня в 07:32</div>
+	<div class="cost">{{ get_price($post->cost) }}</div>
+	<div class="time">{{ $post->created_at->diffForHumans() }}</div>
 </div>

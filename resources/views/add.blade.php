@@ -111,6 +111,12 @@
 					<textarea name="description" placeholder="Опишите объявление" rows="10"></textarea>
 				</div>
 			</div>
+			<div class="wrap name">
+				<div class="left">Цена</div>
+				<div class="right">
+					<input name="cost" type="number" placeholder="руб.">
+				</div>
+			</div>
 		</div>
 	</section>
 	<section class="add_choose">
@@ -121,10 +127,11 @@
 					Фотографии
 				</div>
 				<div class="right">
-					<div class="notice">Загрузите главную фотографию объявления</div>
+					<div class="notice">Загрузите главную фотографию объявления. </div>
 					<div class="wrap_main_photo">
 						<div class="wrap_m">
 							<label for="uploadMainPhoto" class="item uploadMainPhotoWrap">
+								<input type="hidden" name="main_photo">
 								<div class="spinner-border preloader_main_photo text-primary" role="status">
 									<span class="sr-only">Loading...</span>
 								</div>
@@ -133,12 +140,13 @@
 							</label>
 							<input type="file" name="photos" id="uploadMainPhoto">
 						</div>
-						<div class="main_photo">
+						<div id="main_photo" class="main_photo">
 
 						</div>
 					</div>
 					<div class="notice notice_second">Загрузите дополнительные фотографии объявления</span></div>
 						<div class="wrap_m wrap_for_photos">
+							<input type="hidden" name="images">
 							<label for="uploadPhotos" class="item">
 								<div class="spinner-border preloader_photos text-primary" role="status">
 									<span class="sr-only">Loading...</span>
@@ -150,7 +158,7 @@
 					<input type="file" name="photos" multiple id="uploadPhotos">
 					<div class="desc">
 						Вы можете загрузить до 20 фотографий в формате JPG или PNG.
-						Максимальный размер фото — 10MB.
+						Максимальный размер всех фотографий — 20MB.
 					</div>
 				</div>
 			</div>
@@ -508,7 +516,7 @@
 @endsection
 
 @section('after_js')
-	<script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&amp;apikey=dc3fa49b-c3d3-4e3c-aba7-20e78aa1167b" type="text/javascript"></script>
+	<script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&amp;apikey={{ env('Yandex_API_Key') }}" type="text/javascript"></script>
 	<script>
 		function init() {
 			var myMap = new ymaps.Map('map', {
@@ -563,6 +571,14 @@
 							processData: false, 
 							contentType: false,
 							success: function (data) {
+								$input = $('.wrap_for_photos').find('[name=images]');
+								if( !$input.val() ){
+									$input.val( JSON.stringify([]) );
+								}
+								$res = JSON.parse( $input.val() );
+								$res.push(data.paths);
+								$input.val( JSON.stringify( $res ) );
+
 								$preloader.fadeOut();
 								$elem = $(data.block);
 								$elem.appendTo( $('.wrap_for_photos') );
@@ -587,6 +603,7 @@
 						processData: false, 
 						contentType: false,
 						success: function (data) {
+							$uploadMainWrap.find('[name=main_photo]').val( data.paths );
 							$preloader.fadeOut();
 							$uploadMainWrap.fadeOut(300, function(){
 								$elem = $(data.block);
@@ -606,7 +623,6 @@
 							$uploadMainWrap.fadeIn(300);
 						}
 						$item.remove();
-						
 					})
 				}
 			})

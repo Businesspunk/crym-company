@@ -38,9 +38,9 @@
 				<div class="left">
 					<div class="h4">VIP-объявления</div>
 					<div class="items objects">
-					@for($i = 0; $i < 2; $i++)
-						@include('components/post')
-					@endfor
+					<!-- for($i = 0; $i < 2; $i++)
+						include('components/post')
+					endfor -->
 					</div>
 					<div class="btn">Показать еще объявления</div>
 				</div>
@@ -59,9 +59,9 @@
 				<div class="left">
 					<div class="h4">Новые объявления</div>
 					<div class="items objects">
-						@for($i = 0; $i < 12; $i++)
-							@include('components/post')
-						@endfor
+						<!-- for($i = 0; $i < 12; $i++)
+							include('components/post')
+						endfor -->
 					</div>
 					<div class="btn">Показать еще объявления</div>
 				</div>

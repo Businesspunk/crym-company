@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Category;
+use App\Models\Post;
+
 
 class IndexController extends Controller
 {
@@ -59,6 +62,26 @@ class IndexController extends Controller
     {
         return view('add', [
             'user' => $request->user()
+        ]);
+    }
+
+    public function category( $slug, Request $request )
+    {   
+        $category = Category::where(['slug' => $slug])->firstOrFail();
+
+        return view('category', [
+            'user' => $request->user(),
+            'category' => $category,
+        ]);
+    }
+
+    public function post( $id, Request $request )
+    {
+        $post = Post::findOrFail( $id );
+
+        return view('post', [
+            'user' => $request->user(),
+            'post' => $post,
         ]);
     }
 }

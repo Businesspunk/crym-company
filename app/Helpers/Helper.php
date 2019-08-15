@@ -45,3 +45,43 @@ if (!function_exists('getAvatarSrc')) {
         return $photo;
     }
 }
+
+if (!function_exists('getImageName')) {
+    function getImageName( $path )
+    {   
+        $elements = explode( '/', $path );
+        $elem = $elements[ count($elements) - 1 ];
+        return $elem;
+    }
+}
+
+if (!function_exists('get_price')) {
+    function get_price( $number )
+    {   
+        return number_format( $number, 0, ',', ' ' ) . "руб.";
+    }
+}
+
+if (!function_exists('get_geocode')) {
+    function get_geocode( $post )
+    {   
+        $res = [$post->coord_y, $post->coord_x];
+        return implode(',', $res);
+    }
+}
+
+if (!function_exists('getNameByGeoResponse')) {
+    function getNameByGeoResponse( $response )
+    {   
+        return json_decode($response)->response->GeoObjectCollection->featureMember[0]->GeoObject->metaDataProperty->GeocoderMetaData->text;
+    }
+}
+
+
+if (!function_exists('getNameByGeo')) {
+    function getNameByGeo( $post )
+    {   
+        $geocode = file_get_contents('http://geocode-maps.yandex.ru/1.x/?format=json&geocode='. get_geocode($post) .'&key='. env('Yandex_API_Key') );
+        return getNameByGeoResponse($geocode);
+    }
+}
