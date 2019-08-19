@@ -22,6 +22,7 @@
 							<a href="" class="like">
 								<i class="fa fa-heart" aria-hidden="true"></i>
 							</a>
+							
 						</div>
 						<div class="second_line">
 							Размещено {{ $post->created_at->diffForHumans() }}
@@ -29,7 +30,7 @@
 						<div class="third_line cost">{{ get_price($post->cost) }}</div>
 						<div class="fourth_line views">
 							<i class="fa fa-eye"></i>
-							<div class="number">{{ $post->views }}</div>
+							<div class="number">{{ views($post)->unique()->count() }}</div>
 						</div>
 						<div class="big_photo">
 							<a href="{{ getSavedPhoto($post->main_photo) }}" data-toggle="lightbox" data-gallery="example-gallery">
@@ -56,6 +57,19 @@
 								{!! $post->description !!}
 							</div>
 						</div>
+						@auth
+							@if( ( Auth::user() )->can('delete', $post) )
+							<div class="seven_line post_manage">
+								<div class="left">
+									<a href="#" class="btn btn-primary">Редактировать</a>
+									<a href="#" class="btn btn-danger" data-toggle="modal" data-target="#delete">Удалить</a>
+								</div>
+								<div class="right_t">
+									<a href="#" class="btn btn-success" data-toggle="modal" data-target="#close">Закрыть объявление</a>
+								</div>
+							</div>		
+							@endif
+						@endauth
 					</div>
 				</div>
 					<div class="right">
@@ -80,23 +94,7 @@
 							</div>
 							<div class="simmilar_posts">
 								<div class="h4">Похожие объявления</div>
-								<div class="items objects">
-								<?php for($i = 0; $i < 1; $i++): ?>
-									<div class="item">
-										<div class="photo">
-											<i class="fa fa-heart" aria-hidden="true"></i>
-											<img src="img/tests/two.png" alt="">
-										</div>
-										<div class="title">
-											<a href="single-post.php">Частный дом 1</a>
-										</div>
-										<div class="cost">1 200 000 рублей</div>
-										<div class="desc">Lorem ipsum dolor sit amet, consectetur</div>
-										<div class="time">Сегодня в 07:32</div>
-									</div>
-								<?php endfor; ?>
-								</div>
-								<div class="btn">Показать еще объявления</div>
+								{!! $relatedPosts !!}
 							</div>
 						</div>
 					</div>
@@ -107,6 +105,47 @@
 				
 			</div>
 		</section>
+		<div class="modal fade" id="delete" tabindex="-1" role="dialog"  aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Удалить объявление?</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-footer">
+					<form method="POST" action="{{ route('post.delete', $post->id) }}">
+						@csrf
+						<button type="submit" class="btn btn-danger">Удалить</button>	
+					</form>
+
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+				</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="modal fade" id="close" tabindex="-1" role="dialog"  aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Закрыть объявление?</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-footer">
+					<form method="POST" action="{{ route('post.close', $post->id) }}">
+						@csrf
+						<button type="submit" class="btn btn-success">Закрыть</button>	
+					</form>
+
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+				</div>
+				</div>
+			</div>
+		</div>
 	</main>
 @endsection
 

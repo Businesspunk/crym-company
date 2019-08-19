@@ -18,18 +18,16 @@
 							</span>
 						</a>
 					</div>
-					<?php for($i = 0; $i < 10; $i++): ?>
-		
-						<div class="item">
-							<a href="category.php">
-								<img src="{{ asset('img/tests/one.png') }}" alt="">
-								<span class="text">
-									Недвижимость
-								</span>
-							</a>
-						</div>
-					
-					<?php endfor; ?>
+					@foreach( $maincategories as $maincat )
+						@foreach( $maincat->categories as $cat )
+							<div class="item">
+								<a href="{{ route('category', $cat->slug) }}">
+									<img src="{{ asset('img/tests/one.png') }}" alt="">
+									<span class="text">{{ $cat->name }}</span>
+								</a>
+							</div>
+						@endforeach
+					@endforeach
 				</div>
 			</div>
 		</section>
@@ -37,12 +35,7 @@
 			<div class="container wrap_grid">
 				<div class="left">
 					<div class="h4">VIP-объявления</div>
-					<div class="items objects">
-					<!-- for($i = 0; $i < 2; $i++)
-						include('components/post')
-					endfor -->
-					</div>
-					<div class="btn">Показать еще объявления</div>
+					{!! $vipposts !!}
 				</div>
 				<div class="right">
 					<div class="h4">Сервисы и услуги</div>
@@ -58,12 +51,7 @@
 			<div class="container wrap_grid">
 				<div class="left">
 					<div class="h4">Новые объявления</div>
-					<div class="items objects">
-						<!-- for($i = 0; $i < 12; $i++)
-							include('components/post')
-						endfor -->
-					</div>
-					<div class="btn">Показать еще объявления</div>
+					{!! $newest !!}
 				</div>
 				<div class="right">
 					<div class="items">

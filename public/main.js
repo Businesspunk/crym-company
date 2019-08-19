@@ -1,10 +1,34 @@
 function isObject (value) {
 	return typeof value === 'object';
 }
+function getPosts(page, type, place, btn){
+	var res;
+	$.ajax({
+		type: "get",
+		data: {
+			page: page,
+			type: type
+		},
+		success: function(e){
+			place.append(e.content);
+			if( !e.hasMorePages ){
+				btn.slideUp();
+			}
+		}
+	});
+	
+}
 $(document).ready(function(){
 
+		$('.showMorePosts').click(function(e){
+			e.preventDefault();
+			$btn = $(this);
+			var page = $btn.data('page');
+			var type = $btn.data('type');
+			getPosts( page, type, $btn.prev('.items.objects'), $btn);
+			++$btn.data().page;
+		})
 	
-
 	$('.single_home .right .sticky').css( 'top' , $('header').height() + 20);
 
 

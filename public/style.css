@@ -4,7 +4,18 @@ input[name=cost]::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
 }
-
+.post_manage{
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+.post_manage a{
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+html a:hover{
+  text-decoration: none;
+}
 
 sub,
 sup {
@@ -194,6 +205,7 @@ footer {
 }
 .objects.items .photo {
   position: relative;
+  display: block;
 }
 .objects.items .photo img {
   width: 100%;
@@ -768,6 +780,9 @@ section.first .second .item .text {
   color: #2a2a2a;
   margin-top: 10px;
 }
+section.first .second .item .text::first-letter{
+  text-transform: uppercase;
+}
 section.second .content,
 section.third .content {
   margin-top: 30px;
@@ -1076,6 +1091,7 @@ section.single_home .container .right .btn {
   border-radius: 20px;
   box-sizing: border-box;
   text-align: center;
+  line-height: unset;
 }
 @media (max-width: 1500px) {
   section.single_home .container .right .btn {

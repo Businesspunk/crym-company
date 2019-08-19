@@ -175,8 +175,8 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Barryvdh\Debugbar\ServiceProvider::class,
-        Intervention\Image\ImageServiceProvider::class
-
+        Intervention\Image\ImageServiceProvider::class,
+        CyrildeWit\EloquentViewable\EloquentViewableServiceProvider::class,
     ],
 
     /*

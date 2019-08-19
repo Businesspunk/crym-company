@@ -44,3 +44,6 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/category/{slug}', 'IndexController@category')->name('category');
 Route::get('/posts/{id}', 'IndexController@post')->name('post');
+
+Route::post('/posts/{id}/delete', 'PostController@delete')->name('post.delete');
+Route::post('/posts/{id}/close', 'PostController@close')->name('post.close');

@@ -41,7 +41,7 @@
 	<link rel="stylesheet" href="{{ asset('styles/reset.css') }}">
 	<link rel="stylesheet" href="{{ asset('slick/slick-theme.css') }}">
 	<link rel="stylesheet" href="{{ asset('slick/slick.css') }}">
-	<link rel="stylesheet" href="{{ asset('style.css?v=3') }}">
+	<link rel="stylesheet" href="{{ asset('style.css?v=4') }}">
 	
     @yield('after_css')
 </head> 
@@ -96,7 +96,7 @@
                         @auth
                             <div class="right">
                                 <div class="account">
-                                    <img src="{{ getAvatarSrc( $user ) }}" alt="">
+                                    <img src="{{ getAvatarSrc( Auth::user() ) }}" alt="">
                                 </div>
                                 <div class="menu_account">
                                     <div class="wrap_menu_account">

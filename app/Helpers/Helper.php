@@ -85,3 +85,34 @@ if (!function_exists('getNameByGeo')) {
         return getNameByGeoResponse($geocode);
     }
 }
+
+if (!function_exists('getPaginatedPosts')) {
+    function getPaginatedPosts( $request, $posts, $postsPerPage )
+    {   
+        $page = $request->page;
+        
+        $posts = $posts->paginate($postsPerPage, ['*'], 'page', $page);
+
+        return response()
+                ->json( 
+                    ['content' => view('components/posts-ajax', compact('posts') )->render(), 
+                    'hasMorePages' => $posts->hasMorePages(),
+                    ] 
+                );
+    }
+}
+
+if (!function_exists('deletePost')) {
+    function deletePost( $post)
+    {   
+        $result = [];
+        $photos = $post->photos;
+
+        foreach ($photos as $photo) {
+            $result[] = $photo['url'];
+        }
+        $result[] = $post->main_photo;
+        Storage::delete( $result );
+        $post->delete();        
+    }
+}

@@ -55,4 +55,22 @@ class PostController extends Controller
 
         return response()->json($response);
     }
+
+    public function delete( $id, Request $request )
+    {
+        $post = Post::findOrFail( $id );
+        $this->authorize('delete', $post);
+        deletePost( $post );
+        return redirect()->route('main');
+    }
+    public function close($id, Request $request)
+    {   
+        $post = Post::findOrFail( $id );
+        $this->authorize('close', $post);
+
+        $post->update([
+            'isClose' => 1
+        ]);
+        return redirect()->route('main');
+    }
 }

@@ -53,6 +53,7 @@ class CreateUsersTable extends Migration
             $table->string('coord_x');
             $table->string('coord_y');
             $table->integer('typeOfPromote');
+            $table->integer('isClose')->nullable();
             $table->timestamps();
         });
 

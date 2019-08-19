@@ -3,10 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use CyrildeWit\EloquentViewable\Viewable;
+use CyrildeWit\EloquentViewable\Contracts\Viewable as ViewableContract;
 
-class Post extends Model
+class Post extends Model implements ViewableContract
 {
-    public $fillable = ['title', 'cost', 'user_id', 'category_id', 'description', 'youtube', 'coord_x', 'coord_y', 'typeOfPromote', 'main_photo', 'isVip'];
+    use Viewable;
+
+    public $fillable = ['title', 'cost', 'user_id', 'category_id', 'description', 'youtube', 'coord_x', 'coord_y', 'typeOfPromote', 'main_photo', 'isVip', 'isClose'];
 
     public function photos()
     {
@@ -16,5 +20,10 @@ class Post extends Model
     public function category()
     {
         return $this->belongsTo('App\Models\Category');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo('App\User');
     }
 }

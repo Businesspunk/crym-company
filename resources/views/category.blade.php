@@ -7,7 +7,7 @@
 			<div class="container">
 				<div class="main_title">
 					<span>{{ $category->name }}</span>
-					<span class="number">{{ $category->posts->count() }}</span>
+					<span class="number">{{ $count }}</span>
 				</div>
 			</div>
 			<div class="container wrap_grid">
@@ -31,16 +31,7 @@
 					</div>
 				</div>
 				<div class="right">
-					<div class="items objects">
-						@forelse( $category->posts as $post )
-							@include('components/post')
-						@empty
-							Актуальных объявлений на данную категорию нет.
-						@endforelse
-					</div>
-					@if( $category->posts->count() )
-						<div class="btn">Показать еще объявления</div>
-					@endif
+					{!! $posts !!}
 				</div>
 			</div>
 		</section>

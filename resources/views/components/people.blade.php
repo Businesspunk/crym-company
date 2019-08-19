@@ -1,25 +1,22 @@
 <div class="people">
 	<div class="line_1">
 		<div class="left_2">
-			<img src="img/tests/people.png" alt="">
+			<img src="{{ getAvatarSrc($post->user) }}" alt="">
 		</div>
 		<div class="right_2">
 			<div class="line_11">
-				<div class="name">Оксана</div>
+				<div class="name">{{ $post->user->name }}</div>
 				<div class="isOnline">Онлайн</div>
 			</div>
-			<div class="line_22">
-				Частное лицо
-			</div>
 			<div class="line_33">
-				(1 объявление)
+				( {{ trans_choice('messages.posts', $post->user->posts->count(),  ['count' => $post->user->posts->count()]) }} )
 			</div>
 		</div>
 	</div>
 	<div class="line_2">
 		Адрес:
 		<div class="address">
-			Санкт-Петербург, улица Орджоникидзе, 10
+			{{ getNameByGeo($post) }}
 		</div>
 	</div>
 </div>

@@ -1,8 +1,8 @@
 <div class="item">
-	<div class="photo">
+	<a href="{{ route('post', $post->id) }}" class="photo">
 		<i class="fa fa-heart" aria-hidden="true"></i>
 		<img src="{{ getSavedPhoto( $post->main_photo ) }}" alt="">
-	</div>
+	</a>
 	<div class="title">
 		<a href="{{ route('post', $post->id) }}">{{ $post->title }}</a>
 	</div>
