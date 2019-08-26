@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Seeder;
 use App\User;
+use App\Models\Role;
 use App\Models\Profile;
 
 class userSeed extends Seeder
@@ -23,6 +24,16 @@ class userSeed extends Seeder
 
         Profile::create([
             'user_id' => $user->id
+        ]);
+
+        Role::create([
+            'name' => 'admin'
+        ]);
+        Role::create([
+            'name' => 'moderator'
+        ]);
+        Role::create([
+            'name' => 'vip'
         ]);
     }
 }

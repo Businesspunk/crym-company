@@ -17,6 +17,7 @@ class PostController extends Controller
         $photos = json_decode( $data['images'] );
 
         $main_photo = getImageName( $data['main_photo'] );
+        
         Storage::move('temp/'.$main_photo, 'posts/'.$main_photo );
 
         $data['main_photo'] = 'posts/'.$main_photo;
@@ -48,7 +49,7 @@ class PostController extends Controller
         $path = photoSaver( $request->file('photo'), 'temp');
 
         $response = [
-            'block' => view('components/newPhoto', ['src' => getSavedPhoto( $path ) ])->render(),
+            'block' => view('components/newPhoto', ['src' => getSavedPhoto( $path ), 'deletePath' => $path ])->render(),
             'error' => false,
             'paths' => $path
         ];
@@ -73,4 +74,64 @@ class PostController extends Controller
         ]);
         return redirect()->route('main');
     }
+
+    public function edit($id, Request $request)
+    {
+        $post = Post::findOrFail( $id );
+        $this->authorize('edit', $post);
+
+        return view('edit', [
+            'post' => $post
+        ]);
+
+    }
+
+    public function update($id, Request $request)
+    {
+        $post = Post::findOrFail( $id );
+        $this->authorize('edit', $post);
+
+        $data = $request->all();
+        $photos = json_decode( $data['images'] );
+
+        $main_photo = getImageName( $data['main_photo'] );
+        $old_main_photo = getImageName( $post->main_photo );
+
+        if( $main_photo != $old_main_photo ){
+            Storage::delete('temp/'.$old_main_photo);
+        }
+        if( isExistsPhoto('temp/'.$main_photo) ){
+            Storage::move('temp/'.$main_photo, 'posts/'.$main_photo );
+        }
+
+        $data['main_photo'] = 'posts/'.$main_photo;
+        $data['user_id'] = Auth::id();
+
+        $post->update($data);
+
+        $old_images_name = $post->photos;
+        $new_images_name = getPhotoNames($photos);
+
+        foreach($old_images_name as $old_img){
+            if( !in_array( getImageName($old_img->url) , $new_images_name) ){
+                Storage::delete($old_img->url);
+                $old_img->delete();
+            }
+        }
+        
+        foreach( $photos as $photo ){
+            $img = getImageName( $photo );
+            if( isExistsPhoto('temp/'.$img) ){
+                Storage::move('temp/'.$img, 'posts/'.$img );
+                PostsPhoto::create([
+                    'post_id' => $post->id,
+                    'url' => 'posts/'.$img
+                ]);
+            }
+            
+        }
+        
+        return redirect()->route('main');
+    }
+
 }

@@ -19,10 +19,7 @@
 					<div class="main">
 						<div class="first_line">
 							<div class="title">{{ $post->title }}</div>
-							<a href="" class="like">
-								<i class="fa fa-heart" aria-hidden="true"></i>
-							</a>
-							
+								<i data-favorite-id="{{ $post->id }}" class="fa like-link fa-heart @if( in_array($post->id, $favorites) ) active @endif" aria-hidden="true"></i>
 						</div>
 						<div class="second_line">
 							Размещено {{ $post->created_at->diffForHumans() }}
@@ -58,17 +55,22 @@
 							</div>
 						</div>
 						@auth
-							@if( ( Auth::user() )->can('delete', $post) )
 							<div class="seven_line post_manage">
 								<div class="left">
-									<a href="#" class="btn btn-primary">Редактировать</a>
-									<a href="#" class="btn btn-danger" data-toggle="modal" data-target="#delete">Удалить</a>
+									@if( ( Auth::user() )->can('edit', $post) )
+									<a href="{{ route('post.edit', $post->id) }}" class="btn btn-primary">Редактировать</a>
+									@endif
+
+									@if( ( Auth::user() )->can('delete', $post) )
+										<a href="#" class="btn btn-danger" data-toggle="modal" data-target="#delete">Удалить</a>
+									@endif									
 								</div>
 								<div class="right_t">
-									<a href="#" class="btn btn-success" data-toggle="modal" data-target="#close">Закрыть объявление</a>
+									@if( ( Auth::user() )->can('close', $post) )
+										<a href="#" class="btn btn-success" data-toggle="modal" data-target="#close">Закрыть объявление</a>
+									@endif
 								</div>
 							</div>		
-							@endif
 						@endauth
 					</div>
 				</div>
@@ -93,8 +95,12 @@
 								</div>
 							</div>
 							<div class="simmilar_posts">
+								@if($relatedPosts->count())
 								<div class="h4">Похожие объявления</div>
-								{!! $relatedPosts !!}
+									@foreach($relatedPosts as $post)
+										@include('components/post')
+									@endforeach
+								@endif
 							</div>
 						</div>
 					</div>
@@ -164,16 +170,10 @@
         }),
 
         myGeoObject = new ymaps.GeoObject({
-            // Описание геометрии.
             geometry: {
                 type: "Point",
                 coordinates: [{{ $post->coord_x }}, {{ $post->coord_y }}]
             },
-            // Свойства.
-            properties: {
-                //iconContent: 'Я тащусь',
-                //hintContent: 'Ну давай уже тащи'
-            }
         }, {
             preset: 'islands#icon',
             iconColor: '#0095b6'

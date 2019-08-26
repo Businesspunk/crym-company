@@ -17,6 +17,12 @@ html a:hover{
   text-decoration: none;
 }
 
+section.my-posts .close{
+  float: unset;
+  opacity: unset;
+
+}
+
 sub,
 sup {
   /* Specified in % so that the sup/sup is the right size relative to the surrounding text */
@@ -2085,6 +2091,7 @@ section.my-posts .wrap_g {
 }
 section.my-posts .wrap_g .photo {
   position: relative;
+  display: block;
 }
 section.my-posts .wrap_g .photo img {
   width: 100%;
@@ -2876,4 +2883,13 @@ section.fourth .wrap_grid .left .named:first-letter{
 }
 .choose_cat label{
   width: 100%;
+}
+.like-link{
+  cursor: pointer;
+}
+.like-link.fa-heart.active{
+  color: #f44336 !important;
+}
+.wrap_main_photo{
+  width: 70%;
 }

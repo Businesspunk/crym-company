@@ -1,7 +1,9 @@
  <section class="profile-menu">
 	<div class="container">
 		<div class="left">
-			<img src="{{ asset('img/logo.png') }}" alt="" class="logo_photo">
+			<a href="{{ route('main') }}">
+				<img src="{{ asset('img/logo.png') }}" alt="" class="logo_photo">
+			</a>
 		</div>
 		<div class="right">
 			<div class="links">

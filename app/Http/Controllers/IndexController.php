@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\Post;
+use App\User;
 
 
 class IndexController extends Controller
@@ -28,10 +29,17 @@ class IndexController extends Controller
         ]);
     }
 
-    public function profile( Request $request )
+    public function profile( $id, Request $request )
     {
+        $user = User::findOrFail($id);
+        
+        $activePosts = $user->posts()->where('isClose', '=', null)->get();
+        $closedPosts = $user->posts()->where('isClose', '!=', null)->get();
+
         return view('profile', [
-            'user' => $request->user()
+            'user' => $user,
+            'activePosts' => $activePosts,
+            'closedPosts' => $closedPosts
         ]);        
     }
 
@@ -50,31 +58,40 @@ class IndexController extends Controller
     }
 
     public function bookmarks( Request $request )
-    {
+    {   
+        $cookie = [];
+        
+        if( isset($_COOKIE['favorite']) ){
+            $cookie = json_decode($_COOKIE['favorite']);
+        }
+        $bookmarks = Post::find( $cookie );
+
         return view('my-bookmarks', [
-            'user' => $request->user()
+            'bookmarks' => $bookmarks,
         ]);
     }
 
     public function messages( Request $request )
     {
-        return view('my-messages', [
-            'user' => $request->user()
-        ]);
+        return view('my-messages');
     }
 
-    public function posts( Request $request )
+    public function myposts( Request $request )
     {
+        $user = $request->user();
+        
+        $activePosts = $user->posts()->where('isClose', '=', null)->get();
+        $closedPosts = $user->posts()->where('isClose', '!=', null)->get();
+
         return view('my-posts', [
-            'user' => $request->user()
+            'activePosts' => $activePosts,
+            'closedPosts' => $closedPosts
         ]);
     }
 
     public function add( Request $request )
     {
-        return view('add', [
-            'user' => $request->user()
-        ]);
+        return view('add');
     }
 
     public function category( $slug, Request $request )
@@ -104,14 +121,12 @@ class IndexController extends Controller
                             ->paginate(10);
 
         $relatedPosts->forget($id);
-
+        
         return view('post', [
-            'user' => $request->user(),
+            'user' => $post->user,
             'post' => $post,
-            'relatedPosts' => view('components/posts', [ 'posts' => $relatedPosts ]),
-       
-            ]);
+            'relatedPosts' => $relatedPosts,
+        ]);
     }
 
-    
 }

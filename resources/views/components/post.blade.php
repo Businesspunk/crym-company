@@ -1,6 +1,6 @@
 <div class="item">
 	<a href="{{ route('post', $post->id) }}" class="photo">
-		<i class="fa fa-heart" aria-hidden="true"></i>
+		<i data-favorite-id="{{ $post->id }}" class="fa fa-heart like-link @if( in_array($post->id, $favorites) ) active @endif" aria-hidden="true"></i>
 		<img src="{{ getSavedPhoto( $post->main_photo ) }}" alt="">
 	</a>
 	<div class="title">

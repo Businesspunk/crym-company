@@ -21,8 +21,6 @@ Route::post('/login', 'Auth\LoginController@login')->name('loginPost');
 
 Route::middleware(['auth'])->group(function () {
 
-    Route::get('/profile', "IndexController@profile")->name('my-profile');
-    
     Route::post('/settings', "ProfileController@saveSettings");
     Route::post('/settings/avatarPermanent', "ProfileController@permanentUpload")->name('permanentUploadAvatar');
     Route::post('/settings/updateAvatar', "ProfileController@updateAvatar")->name('updateAvatar');
@@ -32,12 +30,16 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/support', "IndexController@support")->name('my-support');
     Route::get('/bookmarks', "IndexController@bookmarks")->name('my-bookmarks');
     Route::get('/messages', "IndexController@messages")->name('my-messages');
-    Route::get('/posts', "IndexController@posts")->name('my-posts');
+    Route::get('/my-posts', "IndexController@myposts")->name('my-posts');
 
     Route::get('/add', "IndexController@add")->name('addPost');
     Route::post('/add', "PostController@post");
     Route::post('/add/images/ajax', "PostController@ajaxUploadImages")->name('ajaxUploadImages');
 
+    Route::get('/posts/{id}/edit', 'PostController@edit')->name('post.edit');
+    Route::post('/posts/{id}/edit', 'PostController@update')->name('post.update');
+    Route::post('/posts/{id}/delete', 'PostController@delete')->name('post.delete');
+    Route::post('/posts/{id}/close', 'PostController@close')->name('post.close');
 });
 
 Route::get('/home', 'HomeController@index')->name('home');
@@ -45,5 +47,6 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/category/{slug}', 'IndexController@category')->name('category');
 Route::get('/posts/{id}', 'IndexController@post')->name('post');
 
-Route::post('/posts/{id}/delete', 'PostController@delete')->name('post.delete');
-Route::post('/posts/{id}/close', 'PostController@close')->name('post.close');
+
+
+Route::get('/profile/{id}', 'IndexController@profile')->name('profile.other');

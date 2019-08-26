@@ -116,3 +116,64 @@ if (!function_exists('deletePost')) {
         $post->delete();        
     }
 }
+
+if (!function_exists('num_decline')) {
+
+    function num_decline( $number, $titles, $param2 = '', $param3 = '' ){
+
+        if( $param2 )
+            $titles = [ $titles, $param2, $param3 ];
+
+        if( is_string($titles) )
+            $titles = preg_split( '/, */', $titles );
+
+        if( empty($titles[2]) )
+            $titles[2] = $titles[1]; // когда указано 2 элемента
+
+        $cases = [ 2, 0, 1, 1, 1, 2 ];
+
+        $intnum = abs( intval( strip_tags( $number ) ) );
+
+        return "$number ". $titles[ ($intnum % 100 > 4 && $intnum % 100 < 20) ? 2 : $cases[min($intnum % 10, 5)] ];
+    }
+}
+
+if (!function_exists('getPhotoSrc')) {
+    function getPhotoSrc($src){
+        if( !isExistsPhoto($src) ){
+            return asset('img/image-notfound.jpg');
+        }
+        return getSavedPhoto($src);
+    }
+}
+
+if (!function_exists('isExistsPhoto')) {
+    function isExistsPhoto($src){
+        if( $src == null || $src == '' || !Storage::exists($src) ){
+            return false;
+        }
+        return true;
+    }
+}
+
+if (!function_exists('issetCoord')) {
+    function issetCoord($post){
+        $x = $post->coord_x;
+        $y = $post->coord_y;
+        if( $x != null && $x != '' && $y != null && $y != '' ){
+            return true;
+        }
+        return false;
+    }
+
+}
+
+if (!function_exists('getPhotoNames')) {
+    function getPhotoNames($arr){
+        $result = [];
+        foreach ($arr as $item) {
+            $result[] = getImageName($item);
+        }
+        return $result;
+    }
+}

@@ -1,16 +1,21 @@
 @extends('components.layout')
 
-@section('main')
+@section('content')
 <main>
-	<?php $activePage = 'my-bookmarks.php'; ?>
-	@include('components.profile-menu')
+	@auth
+		@include('components.profile-menu')
+	@endauth
 	<section class="my-bookmarks">
 		<div class="container">
+			@if( $bookmarks->count() > 0 )
 			<div class="items objects">
-			<?php for($i = 0; $i < 5; $i++): ?>
-				@include('components.post')
-			<?php endfor; ?>
+				@foreach( $bookmarks as $post )
+					@include('components/post')
+				@endforeach
 			</div>
+			@else
+				В ваших закладках ничего нет
+			@endif
 		</div>
 	</section>
 </main>

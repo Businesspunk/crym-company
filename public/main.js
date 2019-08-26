@@ -1,6 +1,18 @@
 function isObject (value) {
 	return typeof value === 'object';
 }
+
+function removeA(arr) {
+	var what, a = arguments, L = a.length, ax;
+	while (L > 1 && arr.length) {
+		what = a[--L];
+		while ((ax= arr.indexOf(what)) !== -1) {
+			arr.splice(ax, 1);
+		}
+	}
+	return arr;
+}
+
 function getPosts(page, type, place, btn){
 	var res;
 	$.ajax({
@@ -18,7 +30,41 @@ function getPosts(page, type, place, btn){
 	});
 	
 }
+
+function removeA(arr) {
+	var what, a = arguments, L = a.length, ax;
+	while (L > 1 && arr.length) {
+		what = a[--L];
+		while ((ax= arr.indexOf(what)) !== -1) {
+			arr.splice(ax, 1);
+		}
+	}
+	return arr;
+  }
+  
 $(document).ready(function(){
+
+	$('.like-link').click(function(e){
+		$btn = $(this);
+		e.preventDefault();
+
+		var id = $(this).data('favorite-id');
+		
+		var res = Cookies.getJSON('favorite');
+		res = res ? res : [];
+	
+		if( res.includes(id) ){
+			removeA(res, id);
+		}else{
+			res.push(id);
+		}
+		
+		Cookies.set('favorite', res, { expires: 180 });
+		var count = res.length;
+		
+		$('[data-favorite-id='+id+']').toggleClass('active');
+	
+	})
 
 		$('.showMorePosts').click(function(e){
 			e.preventDefault();
@@ -241,11 +287,10 @@ $(document).ready(function(){
                 var needClass = $(this).data('target');
                 $act = $('section.profile .container .right .body').find(needClass);
 
-                $('section.profile .container .right .body .hiddable').fadeOut(200);
+                $('section.profile .container .right .body .hiddable').fadeOut(50, function(){
+                    $act.fadeIn(50);					
+				});
 
-                setTimeout(function(){
-                    $act.fadeIn(200);
-                }, 200)
             })
 
     // /My Profile

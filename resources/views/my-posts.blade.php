@@ -19,16 +19,16 @@
 			<div class="contt">
 				<div class="active">
 					<div class="wrap_g">
-						<?php for($i = 0; $i < 2; $i++): ?>
-								@include('components.post-2')
-						<?php endfor; ?>
+						@foreach($activePosts as $post)
+							@include('components.post')
+						@endforeach
 					</div>
 				</div>
 				<div class="close">
 					<div class="wrap_g">
-						<?php for($i = 0; $i < 7; $i++): ?>
-								@include('components.post-2')
-						<?php endfor; ?>
+						@foreach($closedPosts as $post)
+							@include('components.post')
+						@endforeach
 					</div>
 				</div>
 			</div>

@@ -29,10 +29,19 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+
         $mainCat = MainCategory::with('categories')->get()->sortBy(function($cat){
             return $cat->categories->count() * -1;
         });
         
         View::share('maincategories', $mainCat );
+        
+        $cookie = [];
+        
+        if( isset($_COOKIE['favorite']) ){
+            $cookie = json_decode($_COOKIE['favorite']);
+        }
+
+        View::share('favorites', $cookie );
     }
 }

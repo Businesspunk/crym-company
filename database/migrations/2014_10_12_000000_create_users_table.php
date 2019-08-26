@@ -45,14 +45,14 @@ class CreateUsersTable extends Migration
             $table->string('main_photo');
             $table->integer('isVip')->nullable();
             $table->integer('views')->nullable();
-            $table->bigInteger('cost');
+            $table->bigInteger('cost')->nullable();
             $table->bigInteger('user_id')->unsigned();
             $table->bigInteger('category_id')->unsigned();
             $table->text('description');
             $table->string('youtube')->nullable();
-            $table->string('coord_x');
-            $table->string('coord_y');
-            $table->integer('typeOfPromote');
+            $table->string('coord_x')->nullable();
+            $table->string('coord_y')->nullable();
+            $table->integer('promotion_id')->default(1)->unsigned();
             $table->integer('isClose')->nullable();
             $table->timestamps();
         });
@@ -60,6 +60,12 @@ class CreateUsersTable extends Migration
         Schema::table('posts', function (Blueprint $table) { 
             $table->foreign('user_id')
                 ->references('id')->on('users')
+                ->onDelete('cascade');
+        });
+
+        Schema::table('posts', function (Blueprint $table) { 
+            $table->foreign('promotion_id')
+                ->references('id')->on('promotions')
                 ->onDelete('cascade');
         });
     }

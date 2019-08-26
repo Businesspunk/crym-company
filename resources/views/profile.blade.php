@@ -24,16 +24,16 @@
 				<div class="body">
 					<div class="in-sale active hiddable">
 						<div class="items objects">
-							<?php for($i = 0; $i < 2; $i++): ?>
-									@include('components.post')
-							<?php endfor; ?>
+							@foreach( $activePosts as $post )
+								@include('components/post')
+							@endforeach
 						</div>
 					</div>
 					<div class="from-sale hidden hiddable">
 						<div class="items objects">
-							<?php for($i = 0; $i < 2; $i++): ?>
-									@include('components.post')
-							<?php endfor; ?>
+							@foreach( $closedPosts as $post )
+								@include('components/post')
+							@endforeach
 						</div>
 					</div>
 				</div>

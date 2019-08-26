@@ -47,10 +47,10 @@
 					<div class="left">
 						<img class="logo_photo" src="{{ asset('img/logo.png') }}" alt="">
 					</div>
-					<div class="right">Новое объявление</div>
+					<div class="right">Редактировать объявление</div>
 				</div>
 				<div class="choose_cat">
-					<div class="title_m">Выберите категорию</div>
+					<div class="title_m">Изменить категорию</div>
 					<div class="second_container">
 						<div class="wrap left_s">
 							<div class="left ui_shadow">
@@ -60,7 +60,7 @@
 									@foreach( $maincat->categories as $cat )
 									<li class="select">
 										<label>
-											<input type="radio" name="category_id" value="{{ $cat->id }}">
+											<input type="radio" @if( $cat->id == $post->category_id ) checked @endif name="category_id" value="{{ $cat->id }}">
 											<div class="text category">{{ $cat->name }}</div>
 										</label>
 									</li>
@@ -83,11 +83,17 @@
 				</div>
 				<div class="right">
 					<div class="second_wr">
-						<div class="alert alert_find alert-warning" role="alert">
-							Найдите свой объект
-						</div>
+                        @if( issetCoord($post) )
+                            <div class="alert alert_find alert-success" role="alert">
+                                {{ getNameByGeo($post) }}
+                            </div>
+                        @else
+                            <div class="alert alert_find alert-warning" role="alert">
+                                Найдите свой объект
+                            </div>
+                        @endif
 						<div class="alert alert_geo alert-success" role="alert">
-							Геопозиция добавлена
+							Геопозиция обновлена
 						</div>
 					</div>
 					<input type="hidden" name="coord_x">
@@ -100,7 +106,7 @@
 					Название объявления
 				</div>
 				<div class="right">
-					<input name="title" type="text" placeholder="Название">
+					<input name="title" value="{{ $post->title }}" type="text" placeholder="Название">
 				</div>
 			</div>
 			<div class="wrap desc">
@@ -108,13 +114,13 @@
 					Описание
 				</div>
 				<div class="right">
-					<textarea name="description" placeholder="Опишите объявление" rows="10"></textarea>
+					<textarea name="description" placeholder="Опишите объявление" rows="10">{{ $post->description }}</textarea>
 				</div>
 			</div>
 			<div class="wrap name">
 				<div class="left">Цена</div>
 				<div class="right">
-					<input name="cost" type="number" placeholder="руб.">
+					<input name="cost" value="{{ $post->cost }}" type="number" placeholder="руб.">
 				</div>
 			</div>
 		</div>
@@ -130,8 +136,8 @@
 					<div class="notice">Загрузите главную фотографию объявления. </div>
 					<div class="wrap_main_photo">
 						<div class="wrap_m">
-							<label for="uploadMainPhoto" class="item uploadMainPhotoWrap">
-								<input type="hidden" name="main_photo">
+							<label for="uploadMainPhoto" class="item uploadMainPhotoWrap" @if( isExistsPhoto($post->main_photo) ) style="display: none;" @endif>
+								<input type="hidden" name="main_photo" value="{{ $post->main_photo }}">
 								<div class="spinner-border preloader_main_photo text-primary" role="status">
 									<span class="sr-only">Loading...</span>
 								</div>
@@ -141,12 +147,22 @@
 							<input type="file" id="uploadMainPhoto">
 						</div>
 						<div id="main_photo" class="main_photo">
-							
+                            @if( isExistsPhoto($post->main_photo) )
+                            {!! view('components/newPhoto', [
+                                    'src' => getPhotoSrc( $post->main_photo ),
+                                    'deletePath' => $post->main_photo,
+                                    'show' => 1,
+                                ])->render() !!}
+                            @endif
 						</div>
 					</div>
 					<div class="notice notice_second">Загрузите дополнительные фотографии объявления</span></div>
 						<div class="wrap_m wrap_for_photos">
-							<input type="hidden" name="images">
+							<input type="hidden" name="images"
+                                @if( $post->photos->count() > 0 )
+                                    value={{ json_encode( $post->photos->pluck('url')->toArray() ) }}
+                                @endif
+                            >
 							<label for="uploadPhotos" class="item">
 								<div class="spinner-border preloader_photos text-primary" role="status">
 									<span class="sr-only">Loading...</span>
@@ -154,6 +170,13 @@
 								<i class="fa fa-camera" aria-hidden="true"></i>
 								<div class="text">Добавить</div>
 							</label>
+                            @foreach( $post->photos as $photo )
+                                {!! view('components/newPhoto', [
+                                    'src' => getPhotoSrc( $photo->url ),
+                                    'deletePath' => $photo->url,
+                                    'show' => 1,
+                                ])->render() !!}
+                            @endforeach
 						</div>
 					<input type="file" name="photos" multiple id="uploadPhotos">
 					<div class="desc">
@@ -167,7 +190,7 @@
 					Видео с YouTube
 				</div>
 				<div class="right">
-					<input name="youtube" type="text" placeholder="Вставьте ссылку">
+					<input name="youtube" value="{{ $post->youtube }}" type="text" placeholder="Вставьте ссылку" value="{{ $post->youtube }}">
 				</div>
 			</div>
 		</div>
@@ -519,12 +542,34 @@
 	<script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&amp;apikey={{ env('Yandex_API_Key') }}" type="text/javascript"></script>
 	<script>
 		function init() {
-			var myMap = new ymaps.Map('map', {
-				center: [55.74, 37.58],
-				zoom: 13,
-				controls: []
-			});
-			
+            @if( issetCoord($post) )
+                var myMap = new ymaps.Map('map', {
+                    center:  [{{ $post->coord_x }}, {{ $post->coord_y }}],
+                    zoom: 13,
+                    controls: []
+                });
+                myGeoObject = new ymaps.GeoObject({
+                    geometry: {
+                        type: "Point",
+                        coordinates: [{{ $post->coord_x }}, {{ $post->coord_y }}]
+                    },
+                }, {
+                    preset: 'islands#icon',
+                    iconColor: '#0095b6'
+                });
+
+                myMap.geoObjects.add(myGeoObject);
+
+            @else
+                var myMap = new ymaps.Map('map', {
+                    center: [55.74, 37.58],
+                    zoom: 13,
+                    controls: []
+                });
+            @endif
+            // edit
+            
+            //edit
 			var searchControl = new ymaps.control.SearchControl({
 				options: {
 					provider: 'yandex#search',
@@ -620,7 +665,7 @@
 					$item = $t.closest('.item');
 					$item.fadeOut(300, function(){
 						if( $item.closest('.main_photo').length ){
-							$uploadMainWrap.fadeIn(300);
+                            $uploadMainWrap.fadeIn(300);
 							$uploadMainWrap.find('[name=main_photo]').val('');                            
 						}
 						if( $item.closest('.wrap_for_photos').length ){
