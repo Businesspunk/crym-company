@@ -67,4 +67,21 @@ class ProfileController extends Controller
 
         return response()->json($response);
    }
+   public function deleteUser( $id , Request $request )
+   {
+        $user = User::findOrFail($id);
+        $this->authorize('delete', $user);
+        $posts = $user->posts;
+
+        foreach( $posts as $post ){
+            deletePost($post);
+        }
+        $photo = $user->profile->photo;
+
+        if( isExistsPhoto($photo) ){
+            Storage::delete($photo);
+        }
+
+        return redirect()->route('main');
+   }
 }

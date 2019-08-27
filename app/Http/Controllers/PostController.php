@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Post;
 use App\Models\PostsPhoto;
+use App\Models\Promotion;
 
 class PostController extends Controller
 {
@@ -81,7 +82,8 @@ class PostController extends Controller
         $this->authorize('edit', $post);
 
         return view('edit', [
-            'post' => $post
+            'post' => $post,
+            'promotions' => Promotion::all()
         ]);
 
     }
@@ -98,7 +100,7 @@ class PostController extends Controller
         $old_main_photo = getImageName( $post->main_photo );
 
         if( $main_photo != $old_main_photo ){
-            Storage::delete('temp/'.$old_main_photo);
+            Storage::delete('posts/'.$old_main_photo);
         }
         if( isExistsPhoto('temp/'.$main_photo) ){
             Storage::move('temp/'.$main_photo, 'posts/'.$main_photo );

@@ -18,6 +18,8 @@ Auth::routes();
 Route::post('/register', 'Auth\RegisterController@register')->name('registerPost');
 Route::post('/login', 'Auth\LoginController@login')->name('loginPost');
 
+Route::get('/message-to-support', "IndexController@messageToSupport")->name('messageToSupport');
+Route::post('/message-to-support', "MailController@messageToAdmin");
 
 Route::middleware(['auth'])->group(function () {
 
@@ -30,6 +32,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/support', "IndexController@support")->name('my-support');
     Route::get('/bookmarks', "IndexController@bookmarks")->name('my-bookmarks');
     Route::get('/messages', "IndexController@messages")->name('my-messages');
+    
+
+
     Route::get('/my-posts', "IndexController@myposts")->name('my-posts');
 
     Route::get('/add', "IndexController@add")->name('addPost');
@@ -40,6 +45,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/posts/{id}/edit', 'PostController@update')->name('post.update');
     Route::post('/posts/{id}/delete', 'PostController@delete')->name('post.delete');
     Route::post('/posts/{id}/close', 'PostController@close')->name('post.close');
+
+    Route::post('/profiles/{id}/delete', 'ProfileController@deleteUser')->name('user.delete');
 });
 
 Route::get('/home', 'HomeController@index')->name('home');

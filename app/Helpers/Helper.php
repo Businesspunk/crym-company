@@ -177,3 +177,10 @@ if (!function_exists('getPhotoNames')) {
         return $result;
     }
 }
+if (!function_exists('getVideoId')) {
+    function getVideoId( $link ){
+        $r = explode('?v=', $link);
+        return $r[ count($r) - 1 ];
+    }
+}
+

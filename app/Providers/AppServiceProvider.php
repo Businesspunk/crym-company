@@ -40,6 +40,8 @@ class AppServiceProvider extends ServiceProvider
         
         if( isset($_COOKIE['favorite']) ){
             $cookie = json_decode($_COOKIE['favorite']);
+        }else{
+            $cookie = [];
         }
 
         View::share('favorites', $cookie );

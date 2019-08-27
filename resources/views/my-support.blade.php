@@ -2,7 +2,6 @@
 
 @section('content')
 <main>
-	<?php $activePage = 'my-support.php'; ?>
 	@include('components.profile-menu')
 
 	<section class="my-support">
@@ -26,7 +25,7 @@
 					</div>
 				</div>
 				<div class="btn">
-					<a href="message-to-support.php">Задать вопрос</a>
+					<a href="{{ route('messageToSupport') }}">Задать вопрос</a>
 				</div>
 			</div>
 		</div>

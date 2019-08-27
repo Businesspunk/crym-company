@@ -7,6 +7,14 @@
 			height: 200px;
 			margin-top: 20px; 
 		}
+		.hidden{
+			display: none;
+			text-align: center;
+		}
+		.phone a{
+			font-size: 20px;
+			color: #333;
+		}
 	</style>
 @endsection
 
@@ -41,19 +49,26 @@
 								</a>
 							@endforeach
 						</div>
-						<div class="six_line">
-							<div class="addr">
-								<div class="de">Адрес:</div>
-								<div class="info">{{ getNameByGeo($post) }}</div>
+						@if( issetCoord($post) )
+							<div class="six_line">
+								<div class="addr">
+									<div class="de">Адрес:</div>
+									<div class="info">{{ getNameByGeo($post) }}</div>
+								</div>
+								<div id="map"></div>
 							</div>
-							<div id="map"></div>
-						</div>
+						@endif
 						<div class="seven_line">
 							<div class="de">Описание:</div>
 							<div class="info">
 								{!! $post->description !!}
 							</div>
 						</div>
+						@if($post->youtube)
+							<div class="seven_line">
+								<iframe width="100%" height="300" src="https://www.youtube.com/embed/{{ getVideoId($post->youtube) }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+							</div>
+						@endif
 						@auth
 							<div class="seven_line post_manage">
 								<div class="left">
@@ -76,7 +91,10 @@
 				</div>
 					<div class="right">
 						<div class="sticky">
-							<a href="#" class="blue_btn btn">Показать телефон</a>
+							<a href="#" id="showPhone" class="blue_btn btn">Показать телефон</a>
+							<div class="phone hidden">
+								<a href="tel:{{ $post->user->profile->number }}">{{ $post->user->profile->number }}</a>	
+							</div>
 							<a href="#" class="gray_btn btn">Написать сообщение</a>
 							@include('components/people')
 						</div>
@@ -91,7 +109,7 @@
 									<a href="#"><img src="{{ asset('img/icons/facebook.svg') }}" alt=""></a>
 								</div>
 								<div class="report">
-									<a href="#" class="info">Пожаловаться</a>
+									<a href="{{ route('messageToSupport') }}" class="info">Пожаловаться</a>
 								</div>
 							</div>
 							<div class="simmilar_posts">
@@ -158,34 +176,42 @@
 @section('after_js')
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.min.js"></script>
 	<script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&amp;apikey={{ env('Yandex_API_Key') }}" type="text/javascript"></script>
-	<script>
-	ymaps.ready(init);
-	function init() {
+	@if( issetCoord($post) )	
+		<script>
+		ymaps.ready(init);
+		function init() {
 
-    var myMap = new ymaps.Map("map", {
-            center: [{{ $post->coord_x }}, {{ $post->coord_y }}],
-            zoom: 12
-        }, {
-            searchControlProvider: 'yandex#search'
-        }),
+			var myMap = new ymaps.Map("map", {
+					center: [{{ $post->coord_x }}, {{ $post->coord_y }}],
+					zoom: 12
+				}, {
+					searchControlProvider: 'yandex#search'
+				}),
 
-        myGeoObject = new ymaps.GeoObject({
-            geometry: {
-                type: "Point",
-                coordinates: [{{ $post->coord_x }}, {{ $post->coord_y }}]
-            },
-        }, {
-            preset: 'islands#icon',
-            iconColor: '#0095b6'
-        });
+				myGeoObject = new ymaps.GeoObject({
+					geometry: {
+						type: "Point",
+						coordinates: [{{ $post->coord_x }}, {{ $post->coord_y }}]
+					},
+				}, {
+					preset: 'islands#icon',
+					iconColor: '#0095b6'
+				});
 
-    myMap.geoObjects.add(myGeoObject);
-}
-	</script>
+			myMap.geoObjects.add(myGeoObject);
+		}
+		</script>
+	@endif
 	<script>
 		$(document).on('click', '[data-toggle="lightbox"]', function(event) {
 			event.preventDefault();
 			$(this).ekkoLightbox();
 		});
+		$('#showPhone').click(function(e){
+			e.preventDefault();
+			$(this).slideUp(200, function(){
+				$('.hidden.phone').fadeIn(200);
+			})
+		})
 	</script>
 @endsection

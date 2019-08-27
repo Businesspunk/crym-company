@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\Post;
+use App\Models\Promotion;
 use App\User;
 
 
@@ -91,7 +92,9 @@ class IndexController extends Controller
 
     public function add( Request $request )
     {
-        return view('add');
+        return view('add', [
+            'promotions' => Promotion::all()            
+        ]);
     }
 
     public function category( $slug, Request $request )
@@ -127,6 +130,11 @@ class IndexController extends Controller
             'post' => $post,
             'relatedPosts' => $relatedPosts,
         ]);
+    }
+    
+    public function messageToSupport()
+    {
+        return view('message-to-support');
     }
 
 }
