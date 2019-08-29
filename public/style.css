@@ -2893,3 +2893,7 @@ section.fourth .wrap_grid .left .named:first-letter{
 .wrap_main_photo{
   width: 70%;
 }
+.senior img{
+  width: 100px;
+  margin-left: 10px;
+}

@@ -23,7 +23,7 @@ class Second extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('maincategories_id')->unsigned();
             $table->string('name');
-            $table->string('fullname');
+            $table->string('fullname')->default(2);
             $table->string('slug');
         });
 

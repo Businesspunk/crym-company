@@ -88,10 +88,9 @@
 									<div class="rise"></div>
 								</div>
 							</div>
-							<a href="#">Объявления</a>
-							<a href="#">Магазины</a>
-							<a href="#">Бизнес</a>
+							<a href="{{ route('posts') }}">Объявления</a>
 							<a href="#">Помощь</a>
+							<a href="#">Недвижимость на особых условиях</a>
 						</div>
                         @auth
                             <div class="right">
@@ -151,10 +150,9 @@
 			<div class="close_mob_menu">
 				<i class="fa fa-times" aria-hidden="true"></i>
 			</div>
-				<a href="#">Объявления</a>
-				<a href="#">Магазины</a>
-				<a href="#">Бизнес</a>
+				<a href="{{ route('posts') }}">Объявления</a>
 				<a href="#">Помощь</a>
+				<a href="#">Недвижимость на особых условиях</a>
 				<a href="#" class="firm_btn btn_blue put">
 					Подать объявление
 				</a>
@@ -193,8 +191,8 @@
 						<a href="#"><img src="{{ asset('img/icons/twitter.png') }}" alt=""></a>
 						<a href="#"><img src="{{ asset('img/icons/vk.png') }}" alt=""></a>
 					</div>
-					<div class="website">
-						Сайт разработан командой Web-Marketing
+					<div class="website senior">
+						Разработка сайта <img src="{{ asset('img/senior.png') }}" alt="">
 					</div>
 				</div>
 			</div>

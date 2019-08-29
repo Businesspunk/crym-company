@@ -49,6 +49,7 @@ class CreateUsersTable extends Migration
             $table->bigInteger('user_id')->unsigned();
             $table->bigInteger('category_id')->unsigned();
             $table->text('description');
+            $table->string('city')->nullable();
             $table->string('youtube')->nullable();
             $table->string('coord_x')->nullable();
             $table->string('coord_y')->nullable();

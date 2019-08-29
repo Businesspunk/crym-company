@@ -184,3 +184,9 @@ if (!function_exists('getVideoId')) {
     }
 }
 
+if (!function_exists('getCity')) {
+    function getCity($y, $x){
+        $geocode = file_get_contents('http://geocode-maps.yandex.ru/1.x/?kind=locality&format=json&geocode='. $y .','. $x .'&key='. env('Yandex_API_Key') );
+        return mb_convert_case(json_decode($geocode)->response->GeoObjectCollection->featureMember[0]->GeoObject->name, MB_CASE_LOWER, "UTF-8");
+    }
+}

@@ -6,7 +6,13 @@
 		<section class="fourth section--margin-top">
 			<div class="container">
 				<div class="main_title">
-					<span>{{ $category->name }}</span>
+					<span>
+						@if( isset( $catalog ) )
+							Объявления
+						@else
+							{{ $category->name }}
+						@endif
+					</span>
 					<span class="number">{{ $count }}</span>
 				</div>
 			</div>
@@ -14,7 +20,11 @@
 				<div class="left">
 					<div class="items">
 						<div class="item named">
-						{{ $category->name }}
+						@if( isset($catalog) )
+							Объявления
+						@else
+							{{ $category->name }}
+						@endif
 						</div>
 						<div class="item filter">
 							<div class="name">Цена</div>

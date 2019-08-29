@@ -13,11 +13,14 @@
 							<div class="line_1">
 								<div>
 								    <select name="category" id="salutation">
-								      <option disabled selected>Любая категория</option>
-								      <option>Любая категория</option>
-								      <option>Любая категория</option>
-								      <option>Любая категория</option>
-								      <option>Любая категория</option>
+								      <option selected>Все категории</option>
+									  
+								      @foreach($maincategories as $maincat)
+										@foreach($maincat->categories as $cat)									  	
+											<option value="{{ $cat->slug }}" >{{ $cat->name }}</option>
+										@endforeach
+									  @endforeach
+
 								    </select>
 								</div>
 								<div class="wrap_input">
@@ -25,11 +28,10 @@
 								</div>
 								<div>
 									<select name="geography" id="salutation_2">
-								      <option disabled selected>По всей России</option>
-								      <option>По всей России</option>
-								      <option>По всей России</option>
-								      <option>По всей России</option>
-								      <option>По всей России</option>
+								      <option selected>Крым</option>
+									  @foreach($cities as $city)
+										<option value="{{ $city->slug }}" >{{ $city->name }}</option>
+									  @endforeach
 								    </select>
 								</div>
 								<div class="search">

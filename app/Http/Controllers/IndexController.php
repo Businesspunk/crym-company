@@ -13,9 +13,10 @@ class IndexController extends Controller
 {
     public function mainPage( Request $request )
     {
+        
         $vipposts = Post::where( 'isVip', 1 )->orderBy('created_at');
         $newest = Post::where('isClose', null)->orderBy('created_at');
-
+        
         if( $request->ajax() ){
             if( $request->type == 'vip' ){
                 return getPaginatedPosts( $request, $vipposts, 1 );
@@ -135,6 +136,20 @@ class IndexController extends Controller
     public function messageToSupport()
     {
         return view('message-to-support');
+    }
+
+    public function posts(Request $request)
+    {
+        $posts = Post::where('isClose', null);
+
+        if( $request->ajax() ){
+            return getPaginatedPosts( $request, $posts, 1 );
+        }
+        return view('category', [
+            'catalog' => true,
+            'count' => $posts->count(),
+            'posts' => view('components/posts', [ 'posts' => $posts->paginate(1), 'type' => 'catalog' ]),
+        ]);
     }
 
 }

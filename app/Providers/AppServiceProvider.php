@@ -5,6 +5,8 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use App\Models\MainCategory;
+use App\Models\City;
+use Illuminate\Support\Facades\Schema;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -29,21 +31,29 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-
-        $mainCat = MainCategory::with('categories')->get()->sortBy(function($cat){
-            return $cat->categories->count() * -1;
-        });
-        
-        View::share('maincategories', $mainCat );
-        
-        $cookie = [];
-        
-        if( isset($_COOKIE['favorite']) ){
-            $cookie = json_decode($_COOKIE['favorite']);
-        }else{
+        if( Schema::hasTable('cities') ){
+            
+            $mainCat = MainCategory::with('categories')->get()->sortBy(function($cat){
+                return $cat->categories->count() * -1;
+            });
+            
+            View::share('maincategories', $mainCat );
+            
             $cookie = [];
+            
+            if( isset($_COOKIE['favorite']) ){
+                $cookie = json_decode($_COOKIE['favorite']);
+            }else{
+                $cookie = [];
+            }
+
+            View::share('favorites', $cookie );
+
+            $cities = City::all();
+            View::share('cities', $cities );
+
         }
 
-        View::share('favorites', $cookie );
+
     }
 }

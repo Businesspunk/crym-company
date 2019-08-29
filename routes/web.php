@@ -30,7 +30,6 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/settings', "IndexController@settings")->name('my-settings');
     Route::get('/support', "IndexController@support")->name('my-support');
-    Route::get('/bookmarks', "IndexController@bookmarks")->name('my-bookmarks');
     Route::get('/messages', "IndexController@messages")->name('my-messages');
     
 
@@ -49,9 +48,13 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/profiles/{id}/delete', 'ProfileController@deleteUser')->name('user.delete');
 });
 
+Route::get('/bookmarks', "IndexController@bookmarks")->name('my-bookmarks');
+
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/category/{slug}', 'IndexController@category')->name('category');
+Route::get('/posts', 'IndexController@posts')->name('posts');
+
 Route::get('/posts/{id}', 'IndexController@post')->name('post');
 
 
