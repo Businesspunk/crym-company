@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Storage;
+use App\Helpers\Images\PhotoManager;
 
 
 class ProfileController extends Controller
@@ -14,11 +13,8 @@ class ProfileController extends Controller
     public function saveSettings( Request $request )
     {   
         $user = $request->user();
-        $profile = $user->profile;
+        $user->updateOne( $request );
 
-        $user->update( $request->all() ); 
-        $profile->update( $request->except(['user_id']) );
-        
         return redirect()->back();
     }
 
@@ -31,8 +27,8 @@ class ProfileController extends Controller
             return response()->json([ 'error'=> true ]);
         }
 
-        $path = photoSaver( $request->file('avatar'), 'temp', 'avatarPermanent');
-
+        $path = PhotoManager::savePhoto( $request->file('avatar'), 'temp', 'avatarPermanent' );
+       
         $response = [
             'src' => getSavedPhoto( $path ),
             'error' => false
@@ -51,14 +47,7 @@ class ProfileController extends Controller
         }
         
         $user = $request->user();
-        $profile = $user->profile;
-        $path = photoSaver( $request->file('avatar'), 'avatars', 'avatarUpload');
-
-        if( $profile->photo ){
-            Storage::delete( $profile->photo );
-        }
-        $profile->photo = $path;
-        $profile->save();
+        $path = $user->updateAvatar($request);
         
         $response = [
             'file' => getSavedPhoto( $path ),
@@ -71,16 +60,7 @@ class ProfileController extends Controller
    {
         $user = User::findOrFail($id);
         $this->authorize('delete', $user);
-        $posts = $user->posts;
-
-        foreach( $posts as $post ){
-            deletePost($post);
-        }
-        $photo = $user->profile->photo;
-
-        if( isExistsPhoto($photo) ){
-            Storage::delete($photo);
-        }
+        $user->deleteOne();
 
         return redirect()->route('main');
    }

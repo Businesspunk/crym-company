@@ -4,6 +4,7 @@ use Illuminate\Database\Seeder;
 use App\User;
 use App\Models\Role;
 use App\Models\Profile;
+use App\Models\RoleUser;
 
 class userSeed extends Seeder
 {
@@ -34,6 +35,10 @@ class userSeed extends Seeder
         ]);
         Role::create([
             'name' => 'vip'
+        ]);
+        RoleUser::create([
+            'user_id' => 1,
+            'role_id' => 1
         ]);
     }
 }

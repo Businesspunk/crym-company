@@ -2,6 +2,9 @@
 
 namespace App;
 
+use Illuminate\Support\Facades\Storage;
+use App\Models\PhotoManager;
+
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -48,5 +51,52 @@ class User extends Authenticatable
     public function roles()
     {
         return $this->belongsToMany('App\Models\Role')->using('App\Models\RoleUser');
+    }
+
+    public function deleteOne()
+    {
+        $user = $this;
+        $posts = $user->posts;
+
+        foreach( $posts as $post ){
+            $post->deleteOne();
+        }
+        $photo = $user->profile->photo;
+
+        if( isExistsPhoto($photo) ){
+            Storage::delete($photo);
+        }
+        
+        $user->delete();
+    }
+    public function updateOne( Request $request )
+    {
+        $user = $this;
+        $profile = $user->profile;
+        $user->update( $request->all() ); 
+        $profile->update( $request->except(['user_id']) );
+        
+    }
+
+    public function updateAvatar( Request $request )
+    {
+        $user = $this;
+        $profile = $user->profile;
+        $path = PhotoManager::savePhoto( $request->file('avatar'), 'avatars', 'avatarUpload' );
+        Storage::delete( $profile->photo );
+        $profile->photo = $path;
+        $profile->save();
+
+        return $path;
+    }
+
+    public function getActivePosts()
+    {
+        return $this->posts()->where('isClose', '=', null)->get();
+    }
+
+    public function getClosedPosts()
+    {
+        return $this->posts()->where('isClose', '!=', null)->get();
     }
 }

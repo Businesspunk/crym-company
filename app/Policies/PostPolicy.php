@@ -16,13 +16,13 @@ class PostPolicy
             return true;
         }
 
-        $collection = $user->roles->keyBy('id');
-        if( $collection->get(1) != null ){
+        if( $user->roles->where('id', 1)->count() == 1 ){
             return true;
         }
-        if( $collection->get(2) != null ){
+        elseif( $user->roles->where('id', 2)->count() == 1 ){
             return true;
         }
+        
         return false;
     }
 
@@ -34,6 +34,11 @@ class PostPolicy
     public function edit(User $user, Post $post)
     {
         return $user->id === $post->user_id;
+    }
+
+    public function vipPosting(User $user, Post $post)
+    {
+        return $user->roles->where('id', 1)->count() == 3;
     }
 
 }

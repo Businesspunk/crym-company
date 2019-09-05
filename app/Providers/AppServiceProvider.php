@@ -39,14 +39,7 @@ class AppServiceProvider extends ServiceProvider
             
             View::share('maincategories', $mainCat );
             
-            $cookie = [];
-            
-            if( isset($_COOKIE['favorite']) ){
-                $cookie = json_decode($_COOKIE['favorite']);
-            }else{
-                $cookie = [];
-            }
-
+            $cookie = getFavorite();
             View::share('favorites', $cookie );
 
             $cities = City::all();

@@ -31,7 +31,9 @@
 	<link rel="icon" type="image/png" href="{{ asset('img/favicons/favicon-128.png')}}" sizes="128x128" />
 	<meta name="application-name" content="&nbsp;"/>
 	
-
+    <style>
+        .preloader{position: absolute;top: 0;left: 0;width: 100%;height: 200%;background: #fff;z-index: 999;}
+    </style>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 	<link rel="stylesheet" href="{{ asset('font-awesome/css/font-awesome.min.css') }} ">
 	<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700&display=swap" rel="stylesheet">
@@ -44,8 +46,10 @@
 	<link rel="stylesheet" href="{{ asset('style.css?v=4') }}">
 	
     @yield('after_css')
+    
 </head> 
 <body>
+    <div class="preloader"></div>
 	<header>
 		<div class="header_container">
 			<div class="first">
@@ -346,5 +350,12 @@
 	<script src="{{ asset('slick/slick.min.js') }}"></script>
 	<script src="{{ asset('main.js?s=3') }}"></script>
     @yield('after_js')
+    <script>
+        $(window).on('load',function() {
+            $(".preloader").delay(50).fadeOut(300, function(){
+                $(".preloader").remove();
+            });    
+        });
+    </script>
 </body>
 </html>

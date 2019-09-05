@@ -115,9 +115,11 @@
 							<div class="simmilar_posts">
 								@if($relatedPosts->count())
 								<div class="h4">Похожие объявления</div>
-									@foreach($relatedPosts as $post)
-										@include('components/post')
-									@endforeach
+									<div class="items objects">
+										@foreach($relatedPosts as $post)
+											@include('components/post')
+										@endforeach
+									</div>
 								@endif
 							</div>
 						</div>

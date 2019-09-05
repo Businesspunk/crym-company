@@ -1,31 +1,5 @@
 <?php
 
-if(!function_exists('photoSaver')){
-    function photoSaver( $photo, $folder, $solution = null ){
-        $ext = $photo->getClientOriginalExtension();
-        $ext = $ext ? $ext : "png";
-        $pathForDB = $folder."/". uniqid().".". $ext;
-        $path = storage_path( 'app/public/' . $pathForDB );
-        $image = Image::make( $photo );
-
-        if( $solution == "avatarPermanent" ){
-            $image->resize(500, 500, function ($constraint) {
-                $constraint->aspectRatio();
-            })->save( $path , 85 );
-        }
-        elseif( $solution == "avatarUpload" ){
-            $image->resize(300, 300, function ($constraint) {
-                $constraint->aspectRatio();
-            })->save( $path );
-        }
-        else{
-            $image->fit(700, 500)->save( $path , 80 );
-        }
-        
-        return $pathForDB;
-    }
-}
-
 if(!function_exists('getSavedPhoto')){
     function getSavedPhoto( $dbPath ){        
         return asset( 'storage/'. $dbPath );
@@ -86,37 +60,6 @@ if (!function_exists('getNameByGeo')) {
     }
 }
 
-if (!function_exists('getPaginatedPosts')) {
-    function getPaginatedPosts( $request, $posts, $postsPerPage )
-    {   
-        $page = $request->page;
-        
-        $posts = $posts->paginate($postsPerPage, ['*'], 'page', $page);
-
-        return response()
-                ->json( 
-                    ['content' => view('components/posts-ajax', compact('posts') )->render(), 
-                    'hasMorePages' => $posts->hasMorePages(),
-                    ] 
-                );
-    }
-}
-
-if (!function_exists('deletePost')) {
-    function deletePost( $post)
-    {   
-        $result = [];
-        $photos = $post->photos;
-
-        foreach ($photos as $photo) {
-            $result[] = $photo['url'];
-        }
-        $result[] = $post->main_photo;
-        Storage::delete( $result );
-        $post->delete();        
-    }
-}
-
 if (!function_exists('num_decline')) {
 
     function num_decline( $number, $titles, $param2 = '', $param3 = '' ){
@@ -128,7 +71,7 @@ if (!function_exists('num_decline')) {
             $titles = preg_split( '/, */', $titles );
 
         if( empty($titles[2]) )
-            $titles[2] = $titles[1]; // когда указано 2 элемента
+            $titles[2] = $titles[1];
 
         $cases = [ 2, 0, 1, 1, 1, 2 ];
 
@@ -166,6 +109,16 @@ if (!function_exists('issetCoord')) {
         return false;
     }
 
+}
+
+if (!function_exists('getFavorite')) {
+    function getFavorite(){
+        $cookie = [];
+        if( isset($_COOKIE['favorite']) ){
+            $cookie = json_decode($_COOKIE['favorite']);
+        }
+        return $cookie;
+    }
 }
 
 if (!function_exists('getPhotoNames')) {

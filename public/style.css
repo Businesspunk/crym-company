@@ -2897,3 +2897,6 @@ section.fourth .wrap_grid .left .named:first-letter{
   width: 100px;
   margin-left: 10px;
 }
+.ui-selectmenu-menu li::first-letter{
+  text-transform: uppercase;
+}

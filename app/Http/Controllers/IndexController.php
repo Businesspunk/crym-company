@@ -7,27 +7,28 @@ use App\Models\Category;
 use App\Models\Post;
 use App\Models\Promotion;
 use App\User;
+use Illuminate\Support\Facades\Storage;
+
 
 
 class IndexController extends Controller
 {
     public function mainPage( Request $request )
     {
-        
-        $vipposts = Post::where( 'isVip', 1 )->orderBy('created_at');
-        $newest = Post::where('isClose', null)->orderBy('created_at');
+        $vipposts = Post::getVip();
+        $newest = Post::getUnclosed();
         
         if( $request->ajax() ){
             if( $request->type == 'vip' ){
-                return getPaginatedPosts( $request, $vipposts, 1 );
+                return Post::getPaginatedPosts( $request, $vipposts );
             }else if( $request->type == 'new' ){
-                return getPaginatedPosts( $request, $newest, 1 );                
+                return Post::getPaginatedPosts( $request, $newest );
             }
         }
 
         return view('index', [
-            'vipposts' => view('components/posts', [ 'posts' => $vipposts->paginate(1), 'type' => 'vip' ]),
-            'newest' => view('components/posts', [ 'posts' => $newest->paginate(1), 'type' => 'new' ]),
+            'vipposts' => view('components/posts', [ 'posts' => $vipposts->paginate(10), 'type' => 'vip' ]),
+            'newest' => view('components/posts', [ 'posts' => $newest->paginate(10), 'type' => 'new' ]),
         ]);
     }
 
@@ -35,8 +36,8 @@ class IndexController extends Controller
     {
         $user = User::findOrFail($id);
         
-        $activePosts = $user->posts()->where('isClose', '=', null)->get();
-        $closedPosts = $user->posts()->where('isClose', '!=', null)->get();
+        $activePosts = $user->getActivePosts();
+        $closedPosts = $user->getClosedPosts();
 
         return view('profile', [
             'user' => $user,
@@ -61,11 +62,7 @@ class IndexController extends Controller
 
     public function bookmarks( Request $request )
     {   
-        $cookie = [];
-        
-        if( isset($_COOKIE['favorite']) ){
-            $cookie = json_decode($_COOKIE['favorite']);
-        }
+        $cookie = getFavorite();
         $bookmarks = Post::find( $cookie );
 
         return view('my-bookmarks', [
@@ -82,8 +79,8 @@ class IndexController extends Controller
     {
         $user = $request->user();
         
-        $activePosts = $user->posts()->where('isClose', '=', null)->get();
-        $closedPosts = $user->posts()->where('isClose', '!=', null)->get();
+        $activePosts = $user->getActivePosts();
+        $closedPosts = $user->getClosedPosts();
 
         return view('my-posts', [
             'activePosts' => $activePosts,
@@ -101,10 +98,10 @@ class IndexController extends Controller
     public function category( $slug, Request $request )
     {   
         $category = Category::where(['slug' => $slug])->firstOrFail();
-        $posts = $category->posts()->where('isClose', null);
+        $posts = $category->getActivePosts();
 
         if( $request->ajax() ){
-            return getPaginatedPosts( $request, $posts, 1 );
+            return Post::getPaginatedPosts( $request, $posts, 1 );
         }
 
         return view('category', [
@@ -117,14 +114,8 @@ class IndexController extends Controller
     public function post( $id, Request $request )
     {
         $post = Post::findOrFail( $id );
-        
         views($post)->record();
-
-        $relatedPosts = Post::where('category_id', $post->category_id)
-                            ->where('id', '!=', $id )
-                            ->paginate(10);
-
-        $relatedPosts->forget($id);
+        $relatedPosts = $post->getRelatedPosts();
         
         return view('post', [
             'user' => $post->user,
@@ -140,10 +131,10 @@ class IndexController extends Controller
 
     public function posts(Request $request)
     {
-        $posts = Post::where('isClose', null);
-
+        $posts = Post::getUnclosed();
+        
         if( $request->ajax() ){
-            return getPaginatedPosts( $request, $posts, 1 );
+            return Post::getPaginatedPosts( $request, $posts, 1 );
         }
         return view('category', [
             'catalog' => true,
