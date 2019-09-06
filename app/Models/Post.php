@@ -34,7 +34,7 @@ class Post extends Model implements ViewableContract
     protected static function addCity( $city )
     {
         $statement = City::where('name', $city)->count();
-        if( $statement == 0 ){
+        if( $statement == 0 && $city ){
             City::create([
                 'name' => $city,
                 'slug' => str_slug($city)
@@ -70,15 +70,23 @@ class Post extends Model implements ViewableContract
 
     public static function addOne( Request $request )
     {
+        $user = $request->user();
         $data = $request->all();
+        $data['isVip'] = null;
+
         $photos = json_decode( $data['images'] ) ?? [];
         $main_photo = getImageName( $data['main_photo'] );
 
-        $data['city'] = getCity( $data['coord_y'], $data['coord_x'] );
+        if( $data['coord_y'] && $data['coord_x'] ){
+            $data['city'] = getCity( $data['coord_y'], $data['coord_x'] );
+        }
         $data['main_photo'] = 'posts/'.$main_photo;
         $data['user_id'] = Auth::id();
 
         $post = Post::create($data);
+        if( $user->can('vipPosting', $post ) ){
+            $post->update(['isVip' => 1]);
+        }
         
         Storage::move('temp/'.$main_photo, 'posts/'.$main_photo );
         foreach( $photos as $photo ){
@@ -92,7 +100,6 @@ class Post extends Model implements ViewableContract
 
         $city = $post->city;
         Post::addCity($city);
-
     }
 
     public function updateOne( $args )

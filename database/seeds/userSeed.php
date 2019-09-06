@@ -16,6 +16,7 @@ class userSeed extends Seeder
     public function run()
     {
         $password = Hash::make("123456789");
+        $password2 = Hash::make("987654321");
         
         $user = User::create([
             'name' => 'admin',
@@ -23,8 +24,18 @@ class userSeed extends Seeder
             'password' => $password,
         ]);
 
+        $user2 = User::create([
+            'name' => 'vip',
+            'email' => 'vip@crym.com',
+            'password' => $password2,
+        ]);
+
         Profile::create([
             'user_id' => $user->id
+        ]);
+
+        Profile::create([
+            'user_id' => $user2->id
         ]);
 
         Role::create([
@@ -36,9 +47,14 @@ class userSeed extends Seeder
         Role::create([
             'name' => 'vip'
         ]);
+
         RoleUser::create([
-            'user_id' => 1,
+            'user_id' => $user->id,
             'role_id' => 1
+        ]);
+        RoleUser::create([
+            'user_id' => $user2->id,
+            'role_id' => 3
         ]);
     }
 }

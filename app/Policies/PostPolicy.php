@@ -38,7 +38,7 @@ class PostPolicy
 
     public function vipPosting(User $user, Post $post)
     {
-        return $user->roles->where('id', 1)->count() == 3;
+        return $user->roles->where('id', 3)->count() == 1;
     }
 
 }

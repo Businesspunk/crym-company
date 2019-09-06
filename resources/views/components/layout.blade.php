@@ -135,7 +135,7 @@
                                             </span>
                                             <span class="menu_item">Помощь</span>
                                         </a>
-                                        <a href="#" class="item sight_out">
+                                        <a href="{{ route('logout') }}" class="item sight_out">
                                             <span class="icon">
                                                 <img src="{{ asset('img/icons/sign-out.png') }}" alt="">
                                             </span>

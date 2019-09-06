@@ -32,7 +32,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/support', "IndexController@support")->name('my-support');
     Route::get('/messages', "IndexController@messages")->name('my-messages');
     
-
+    Route::get('/logout', 'IndexController@logout')->name('logout');
 
     Route::get('/my-posts', "IndexController@myposts")->name('my-posts');
 

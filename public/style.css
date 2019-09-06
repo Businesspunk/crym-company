@@ -2100,10 +2100,10 @@ section.my-posts .wrap_g .photo img {
 }
 section.my-posts .wrap_g .photo .fa-heart {
   cursor: pointer;
-  font-size: 30px;
+  font-size: 20px;
   position: absolute;
-  bottom: 20px;
-  right: 20px;
+  bottom: 15px;
+  right: 15px;
   color: #fff;
 }
 section.my-posts .wrap_g .title a {

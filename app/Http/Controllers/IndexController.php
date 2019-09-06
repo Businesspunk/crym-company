@@ -8,6 +8,8 @@ use App\Models\Post;
 use App\Models\Promotion;
 use App\User;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
+
 
 
 
@@ -20,15 +22,15 @@ class IndexController extends Controller
         
         if( $request->ajax() ){
             if( $request->type == 'vip' ){
-                return Post::getPaginatedPosts( $request, $vipposts );
+                return Post::getPaginatedPosts( $request, $vipposts, 4 );
             }else if( $request->type == 'new' ){
-                return Post::getPaginatedPosts( $request, $newest );
+                return Post::getPaginatedPosts( $request, $newest, 8 );
             }
         }
 
         return view('index', [
-            'vipposts' => view('components/posts', [ 'posts' => $vipposts->paginate(10), 'type' => 'vip' ]),
-            'newest' => view('components/posts', [ 'posts' => $newest->paginate(10), 'type' => 'new' ]),
+            'vipposts' => view('components/posts', [ 'posts' => $vipposts->paginate(4), 'type' => 'vip' ]),
+            'newest' => view('components/posts', [ 'posts' => $newest->paginate(8), 'type' => 'new' ]),
         ]);
     }
 
@@ -94,20 +96,24 @@ class IndexController extends Controller
             'promotions' => Promotion::all()            
         ]);
     }
-
+    public function logout()
+    {
+        Auth::logout();
+        return redirect()->route('main');
+    }
     public function category( $slug, Request $request )
     {   
         $category = Category::where(['slug' => $slug])->firstOrFail();
         $posts = $category->getActivePosts();
 
         if( $request->ajax() ){
-            return Post::getPaginatedPosts( $request, $posts, 1 );
+            return Post::getPaginatedPosts( $request, $posts, 12 );
         }
 
         return view('category', [
             'category' => $category,
             'count' => $posts->count(),
-            'posts' => view('components/posts', [ 'posts' => $posts->paginate(1), 'type' => 'category' ]),
+            'posts' => view('components/posts', [ 'posts' => $posts->paginate(12), 'type' => 'category' ]),
         ]);
     }
 
