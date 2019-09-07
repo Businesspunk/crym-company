@@ -93,8 +93,8 @@
 								</div>
 							</div>
 							<a href="{{ route('posts') }}">Объявления</a>
-							<a href="#">Помощь</a>
-							<a href="#">Недвижимость на особых условиях</a>
+							<a href="{{ route('messageToSupport') }}">Помощь</a>
+							<a href="{{ route('goodOffers') }}">Недвижимость на особых условиях</a>
 						</div>
                         @auth
                             <div class="right">
@@ -155,9 +155,9 @@
 				<i class="fa fa-times" aria-hidden="true"></i>
 			</div>
 				<a href="{{ route('posts') }}">Объявления</a>
-				<a href="#">Помощь</a>
-				<a href="#">Недвижимость на особых условиях</a>
-				<a href="#" class="firm_btn btn_blue put">
+				<a href="{{ route('messageToSupport') }}">Помощь</a>
+				<a href="{{ route('goodOffers') }}">Недвижимость на особых условиях</a>
+				<a href="{{ route('addPost') }}" class="firm_btn btn_blue put">
 					Подать объявление
 				</a>
 				<a data-modal="#modal-entire" class="open-modal firm_btn btn_white sigh-in" href="#">

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 
 class Category extends Model
 {
@@ -20,6 +21,19 @@ class Category extends Model
     }
     public function getActivePosts()
     {
-        return $this->posts()->where('isClose', null);
+        return $this->posts()->where('isClose', null)->orderBy('created_at', 'DESC');
+    }
+
+    public function getVip()
+    {
+        return $this->getActivePosts()->where( 'isVip', 1 );
+    }
+
+    public static function getVipCategories()
+    {
+        $categories = Category::whereHas('posts', function (Builder $query) {
+            $query->where('isClose', null)->where('isVip', 1);
+        })->get();
+        return $categories;
     }
 }

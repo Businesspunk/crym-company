@@ -2,7 +2,7 @@
 
 @section('content')
 <main>
-	@include('components/sub-menu')
+	@include('components/sub-menu', ['title' => 'Помощь'])
 	<section class="message-to-support">
 		<div class="container">
 			<div class="h4">Написать в техподдержку </div>

@@ -38,6 +38,9 @@
 							<div class="number">{{ views($post)->unique()->count() }}</div>
 						</div>
 						<div class="big_photo">
+							<div class="wrap">
+								<img src="{{ getSavedPhoto($post->main_photo) }}" alt="">
+							</div>
 							<a href="{{ getSavedPhoto($post->main_photo) }}" data-toggle="lightbox" data-gallery="example-gallery">
 								<img class="img-fluid" src="{{ getSavedPhoto($post->main_photo) }}">
 							</a>
@@ -176,6 +179,7 @@
 @endsection
 
 @section('after_js')
+	<script>	</script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.min.js"></script>
 	<script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&amp;apikey={{ env('Yandex_API_Key') }}" type="text/javascript"></script>
 	@if( issetCoord($post) )	

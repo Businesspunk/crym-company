@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Builder;
+
 
 use CyrildeWit\EloquentViewable\Viewable;
 use CyrildeWit\EloquentViewable\Contracts\Viewable as ViewableContract;
@@ -163,13 +165,21 @@ class Post extends Model implements ViewableContract
 
     public static function getUnclosed()
     {
-        $posts = Post::where('isClose', null)->orderBy('created_at');
+        $posts = Post::where('isClose', null)->orderBy('created_at', 'DESC');
         return $posts;
     }
 
     public static function getVip()
     {
         $posts = Post::getUnclosed()->where( 'isVip', 1 );
+        return $posts;
+    }
+    public static function getVipPostsByCategory($slug)
+    {
+        $posts = Post::getVip()->whereHas('category', function (Builder $query ) use ($slug) {
+            $query->where('slug', $slug);
+        });
+
         return $posts;
     }
 

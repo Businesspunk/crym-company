@@ -148,5 +148,19 @@ class IndexController extends Controller
             'posts' => view('components/posts', [ 'posts' => $posts->paginate(1), 'type' => 'catalog' ]),
         ]);
     }
+    public function goodOffers( Request $request )
+    {
+        $postsPerPage = 1;
+        $categories = Category::getVipCategories();
+        if( $request->ajax() ){
+            $category = $request->type;
+            $posts = Post::getVipPostsByCategory($category);
+            return Post::getPaginatedPosts( $request, $posts, $postsPerPage );
+        }
+        return view('good-offers', [
+            'categories' => $categories,
+            'postsPerPage' => $postsPerPage
+        ]);
+    }
 
 }

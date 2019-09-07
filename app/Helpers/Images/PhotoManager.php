@@ -24,7 +24,10 @@ class PhotoManager
             })->save( $path );
         }
         else{
-            $image->fit(700, 500)->save( $path , 80 );
+            $image->resize(640, 480, function ($constraint) {
+                $constraint->aspectRatio();
+            })->save( $path, 90 );;
+
         }
         
         return $pathForDB;

@@ -21,6 +21,8 @@ Route::post('/login', 'Auth\LoginController@login')->name('loginPost');
 Route::get('/message-to-support', "IndexController@messageToSupport")->name('messageToSupport');
 Route::post('/message-to-support', "MailController@messageToAdmin");
 
+Route::get('/nedvizhimost-na-osobyh-usloviyah', "IndexController@goodOffers")->name('goodOffers');
+
 Route::middleware(['auth'])->group(function () {
 
     Route::post('/settings', "ProfileController@saveSettings");
