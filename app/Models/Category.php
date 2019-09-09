@@ -12,7 +12,7 @@ class Category extends Model
 
     public function maincategory()
     {
-        return $this->belongsTo('App\Models\MainCategory');
+        return $this->belongsTo('App\Models\MainCategory', 'maincategory_id');
     }
 
     public function posts()

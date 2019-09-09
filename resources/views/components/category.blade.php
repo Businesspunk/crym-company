@@ -9,28 +9,30 @@
 				</div>
 			</div>
 			<div class="right">
-				<form action="category.php" method="POST">
+				<form action="{{ route('search') }}">
+					@csrf
 					<div class="line_1">
-						<div>
+						<div class="widthDirect">
 							<select name="category" id="salutation">
-								<option selected>Все категории</option>
-								
+								<option value="0">Все категории</option>
 								@foreach($maincategories as $maincat)
-								@foreach($maincat->categories as $cat)									  	
-									<option value="{{ $cat->slug }}" >{{ $cat->name }}</option>
-								@endforeach
+								
+									<option disabled value="{{ $maincat->slug }}" >{{ $maincat->name }}</option>
+									@foreach($maincat->categories as $cat)									  	
+										<option @if( url()->current() == route('category', [ $maincat->slug ,$cat->slug] ) ) ) selected  @endif value="{{ json_encode([ $maincat->slug ,$cat->slug]) }}" >{{ $cat->name }}</option>
+									@endforeach
 								@endforeach
 
 							</select>
 						</div>
 						<div class="wrap_input">
-							<input placeholder="Поиск по объявлениям" type="text">
+							<input name="s" value="{{ request()->s }}" placeholder="Поиск по объявлениям" type="text">
 						</div>
-						<div>
-							<select name="geography" id="salutation_2">
-								<option selected>Крым</option>
+						<div class="widthCities">
+							<select name="city" id="salutation_2">
+								<option value="0">Все города</option>
 								@foreach($cities as $city)
-								<option value="{{ $city->slug }}" >{{ $city->name }}</option>
+								<option @if($city->slug == request()->city) selected @endif value="{{ $city->slug }}" >{{ $city->name }}</option>
 								@endforeach
 							</select>
 						</div>
@@ -38,6 +40,7 @@
 							<input type="submit" value="Поиск">
 						</div>
 					</div>
+					<!--
 					<div class="line_2">
 						<div class="part">
 							<label class="wrap_checkbox">
@@ -57,7 +60,7 @@
 								<span class="text">только с фото</span>
 							</label>
 						</div>
-					</div>
+					</div> -->
 				</form>
 			</div>
 		</div>

@@ -54,7 +54,9 @@ Route::get('/bookmarks', "IndexController@bookmarks")->name('my-bookmarks');
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::get('/category/{slug}', 'IndexController@category')->name('category');
+Route::get('/category/{maincategory}/{slug}', 'IndexController@category')->name('category');
+Route::get('/search', 'IndexController@searchCheck')->name('search');
+
 Route::get('/posts', 'IndexController@posts')->name('posts');
 
 Route::get('/posts/{id}', 'IndexController@post')->name('post');

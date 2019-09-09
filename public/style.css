@@ -255,7 +255,7 @@ section.second .objects.items .photo img{
 }
 header {
   top: 0px;
-  z-index: 100;
+  z-index: 200;
   background-color: #f9f9f9;
   position: sticky;
 }
@@ -659,6 +659,9 @@ section.first .first .right form .line_1 span.ui-selectmenu-button .ui-selectmen
   color: #686868;
   margin-right: 5px;
 }
+section.first .first .right form .line_1 span.ui-selectmenu-button .ui-selectmenu-text::first-letter{
+  text-transform: uppercase;
+}
 @media (max-width: 600px) {
   section.first .first .right form .line_1 span.ui-selectmenu-button {
     padding-left: 20px;
@@ -997,6 +1000,7 @@ footer .container .main .items {
 }
 footer .container .main .items .item {
   width: 31%;
+  margin-bottom: 40px;
 }
 @media (max-width: 900px) {
   footer .container .main .items .item {
@@ -2948,4 +2952,18 @@ section.goodOffers .desc ol{
   text-align:center;
   z-index: 10;
   position: relative;
+}
+.big_photo a img{
+  max-height: 480px;
+}
+.ui-state-disabled, .ui-widget-content .ui-state-disabled{
+  opacity: 1;
+  background: #e3e3e3;
+  font-weight: 600;
+}
+.widthDirect{
+  width: 190px;
+}
+form .widthCities{
+  width: 150px;
 }

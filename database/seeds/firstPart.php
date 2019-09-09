@@ -49,7 +49,7 @@ class firstPart extends Seeder
             foreach( $cat['categories'] as $c ){
                 Category::create([
                     'name' => $c,
-                    'maincategories_id' => $mainId,
+                    'maincategory_id' => $mainId,
                     'slug' => str_slug($c)
                 ]);
             }

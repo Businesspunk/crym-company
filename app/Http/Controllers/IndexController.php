@@ -9,7 +9,8 @@ use App\Models\Promotion;
 use App\User;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
-
+use App\Models\MainCategory;
+use Illuminate\Database\Eloquent\Builder;
 
 
 
@@ -101,19 +102,23 @@ class IndexController extends Controller
         Auth::logout();
         return redirect()->route('main');
     }
-    public function category( $slug, Request $request )
+    public function category( $maincategory, $slug, Request $request )
     {   
-        $category = Category::where(['slug' => $slug])->firstOrFail();
+        $postsPerPage = 12;
+
+        $category = Category::where('slug', $slug)->whereHas('maincategory', function (Builder $query ) use ($maincategory) {
+            $query->where('slug' , $maincategory);
+        })->firstOrFail();
         $posts = $category->getActivePosts();
 
         if( $request->ajax() ){
-            return Post::getPaginatedPosts( $request, $posts, 12 );
+            return Post::getPaginatedPosts( $request, $posts, $postsPerPage );
         }
 
         return view('category', [
             'category' => $category,
             'count' => $posts->count(),
-            'posts' => view('components/posts', [ 'posts' => $posts->paginate(12), 'type' => 'category' ]),
+            'posts' => view('components/posts', [ 'posts' => $posts->paginate($postsPerPage), 'type' => 'category' ]),
         ]);
     }
 
@@ -138,14 +143,15 @@ class IndexController extends Controller
     public function posts(Request $request)
     {
         $posts = Post::getUnclosed();
+        $postsPerPage = 1;
         
         if( $request->ajax() ){
-            return Post::getPaginatedPosts( $request, $posts, 1 );
+            return Post::getPaginatedPosts( $request, $posts, $postsPerPage );
         }
         return view('category', [
             'catalog' => true,
             'count' => $posts->count(),
-            'posts' => view('components/posts', [ 'posts' => $posts->paginate(1), 'type' => 'catalog' ]),
+            'posts' => view('components/posts', [ 'posts' => $posts->paginate($postsPerPage), 'type' => 'catalog' ]),
         ]);
     }
     public function goodOffers( Request $request )
@@ -161,6 +167,29 @@ class IndexController extends Controller
             'categories' => $categories,
             'postsPerPage' => $postsPerPage
         ]);
+    }
+
+    public function searchCheck( Request $request )
+    {
+        $category = $request->category;
+        $city = $request->city;
+        $search = $request->s;
+        $params = [];
+        if( $city != '0' && $city ){
+            $params['city'] = $city;
+        }
+        if( $search ){
+            $params['s'] = $search;
+        }
+        if( $category != '0' && $category  ){
+            $category = json_decode($category);
+            $params['maincategory'] = $category[0];
+            
+            $params['slug'] = $category[1];
+            return redirect()->route( 'category' , $params);
+        }else{
+            return redirect()->route( 'posts' , $params);
+        }
     }
 
 }

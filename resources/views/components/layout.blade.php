@@ -177,7 +177,7 @@
 							<div class="item">
 								<div class="title category">{{ $maincat->name }}</div>
 									@foreach( $maincat->categories as $cat )
-										<a class="category" href="{{ route('category', $cat->slug) }}">{{ $cat->name }}</a>
+										<a class="category" href="{{ route('category', [ 'maincategory' => $maincat->slug , 'slug' => $cat->slug]) }}">{{ $cat->name }}</a>
 									@endforeach
 							</div>
 						@endforeach
