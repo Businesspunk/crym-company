@@ -124,9 +124,12 @@ if (!function_exists('getFavorite')) {
 if (!function_exists('getPhotoNames')) {
     function getPhotoNames($arr){
         $result = [];
-        foreach ($arr as $item) {
-            $result[] = getImageName($item);
+        if( count($arr) ){
+            foreach ($arr as $item) {
+                $result[] = getImageName($item);
+            }
         }
+        
         return $result;
     }
 }

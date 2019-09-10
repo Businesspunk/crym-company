@@ -20,18 +20,20 @@ class IndexController extends Controller
     {
         $vipposts = Post::getVip();
         $newest = Post::getUnclosed();
-        
+        $postsPerPage1 = 4;
+        $postsPerPage2 = 12;
+
         if( $request->ajax() ){
             if( $request->type == 'vip' ){
-                return Post::getPaginatedPosts( $request, $vipposts, 4 );
+                return Post::getPaginatedPosts( $request, $vipposts, $postsPerPage1 );
             }else if( $request->type == 'new' ){
-                return Post::getPaginatedPosts( $request, $newest, 8 );
+                return Post::getPaginatedPosts( $request, $newest, $postsPerPage2 );
             }
         }
 
         return view('index', [
-            'vipposts' => view('components/posts', [ 'posts' => $vipposts->paginate(4), 'type' => 'vip' ]),
-            'newest' => view('components/posts', [ 'posts' => $newest->paginate(8), 'type' => 'new' ]),
+            'vipposts' => view('components/posts', [ 'posts' => $vipposts->paginate($postsPerPage1), 'type' => 'vip' ]),
+            'newest' => view('components/posts', [ 'posts' => $newest->paginate($postsPerPage2), 'type' => 'new' ]),
         ]);
     }
 
@@ -143,7 +145,7 @@ class IndexController extends Controller
     public function posts(Request $request)
     {
         $posts = Post::getUnclosed();
-        $postsPerPage = 1;
+        $postsPerPage = 12;
         
         if( $request->ajax() ){
             return Post::getPaginatedPosts( $request, $posts, $postsPerPage );
@@ -156,7 +158,7 @@ class IndexController extends Controller
     }
     public function goodOffers( Request $request )
     {
-        $postsPerPage = 1;
+        $postsPerPage = 12;
         $categories = Category::getVipCategories();
         if( $request->ajax() ){
             $category = $request->type;
@@ -174,6 +176,9 @@ class IndexController extends Controller
         $category = $request->category;
         $city = $request->city;
         $search = $request->s;
+        $min_price = $request->min_price;
+        $max_price = $request->max_price;
+        
         $params = [];
         if( $city != '0' && $city ){
             $params['city'] = $city;
@@ -181,6 +186,14 @@ class IndexController extends Controller
         if( $search ){
             $params['s'] = $search;
         }
+        if( $min_price ){
+            $params['min_price'] = $min_price;
+        }
+        if( $max_price ){
+            $params['max_price'] = $max_price;
+        }
+
+        
         if( $category != '0' && $category  ){
             $category = json_decode($category);
             $params['maincategory'] = $category[0];

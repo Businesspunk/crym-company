@@ -2,7 +2,7 @@
     @forelse( $posts as $post )
         @include('components/post')
     @empty
-        <p>Пока нет объявлений</p>
+        <p>Объявления не найдены</p>
     @endforelse
 </div>
 @if( $posts->hasMorePages() )

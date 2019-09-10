@@ -20,7 +20,9 @@
 
 @section('content')
 	<main>
-		@include('components/category')
+		<form action="{{ route('search') }}">
+			@include('components/category')
+		</form>
 		<section class="single_home">
 			<div class="container">
 				<div class="left">

@@ -619,31 +619,31 @@ section.first .first .right {
     width: 100%;
   }
 }
-section.first .first .right form .line_1 {
+section.first .first .right .form .line_1 {
   flex-wrap: nowrap;
   display: flex;
   justify-content: flex-end;
   flex-direction: row;
 }
 @media (max-width: 600px) {
-  section.first .first .right form .line_1 {
+  section.first .first .right .form .line_1 {
     flex-wrap: wrap;
   }
-  section.first .first .right form .line_1 div {
+  section.first .first .right .form .line_1 div {
     width: 100%;
     margin-bottom: 15px;
   }
-  section.first .first .right form .line_1 .search {
+  section.first .first .right .form .line_1 .search {
     text-align: center;
   }
 }
-section.first .first .right form .line_1 .ui-button .ui-icon {
+section.first .first .right .form .line_1 .ui-button .ui-icon {
   background: url(img/icons/angle.png) center center no-repeat / contain;
   width: 10px;
   height: 6px;
   margin-left: 2px;
 }
-section.first .first .right form .line_1 span.ui-selectmenu-button {
+section.first .first .right .form .line_1 span.ui-selectmenu-button {
   width: unset;
   display: flex;
   align-items: center;
@@ -655,41 +655,41 @@ section.first .first .right form .line_1 span.ui-selectmenu-button {
   font-size: 13px;
   border: 1px solid #cccccc;
 }
-section.first .first .right form .line_1 span.ui-selectmenu-button .ui-selectmenu-text {
+section.first .first .right .form .line_1 span.ui-selectmenu-button .ui-selectmenu-text {
   color: #686868;
   margin-right: 5px;
 }
-section.first .first .right form .line_1 span.ui-selectmenu-button .ui-selectmenu-text::first-letter{
+section.first .first .right .form .line_1 span.ui-selectmenu-button .ui-selectmenu-text::first-letter{
   text-transform: uppercase;
 }
 @media (max-width: 600px) {
-  section.first .first .right form .line_1 span.ui-selectmenu-button {
+  section.first .first .right .form .line_1 span.ui-selectmenu-button {
     padding-left: 20px;
   }
 }
-section.first .first .right form .line_1 span.ui-selectmenu-button,
-section.first .first .right form .line_1 input {
+section.first .first .right .form .line_1 span.ui-selectmenu-button,
+section.first .first .right .form .line_1 input {
   box-sizing: border-box;
   height: 35px;
 }
-section.first .first .right form .line_1 #salutation-button {
+section.first .first .right .form .line_1 #salutation-button {
   padding-left: 20px;
   border-radius: 50px 0 0 50px;
 }
 @media (max-width: 600px) {
-  section.first .first .right form .line_1 #salutation-button {
+  section.first .first .right .form .line_1 #salutation-button {
     border-radius: 0;
   }
 }
-section.first .first .right form .line_1 .wrap_input {
+section.first .first .right .form .line_1 .wrap_input {
   width: 50%;
 }
 @media (max-width: 600px) {
-  section.first .first .right form .line_1 .wrap_input {
+  section.first .first .right .form .line_1 .wrap_input {
     width: 100%;
   }
 }
-section.first .first .right form .line_1 input[type=text] {
+section.first .first .right .form .line_1 input[type=text] {
   color: #686868;
   margin: 0;
   width: 100%;
@@ -702,13 +702,13 @@ section.first .first .right form .line_1 input[type=text] {
   border-right: none;
 }
 @media (max-width: 600px) {
-  section.first .first .right form .line_1 input[type=text] {
+  section.first .first .right .form .line_1 input[type=text] {
     border: 1px solid #cccccc;
     padding-left: 20px;
     border-radius: 0;
   }
 }
-section.first .first .right form .line_1 input[type=submit] {
+section.first .first .right .form .line_1 input[type=submit] {
   margin: 0;
   border-radius: 0 50px 50px 0;
   background: none;
@@ -718,19 +718,19 @@ section.first .first .right form .line_1 input[type=submit] {
   color: #00ace5;
 }
 @media (max-width: 600px) {
-  section.first .first .right form .line_1 input[type=submit] {
+  section.first .first .right .form .line_1 input[type=submit] {
     box-sizing: content-box;
     padding: 0px 75px;
     border-radius: 20px;
   }
 }
-section.first .first .right form .line_2 {
+section.first .first .right .form .line_2 {
   margin-top: 10px;
   display: flex;
   justify-content: flex-start;
   align-items: center;
 }
-section.first .first .right form .line_2 .part {
+section.first .first .right .form .line_2 .part {
   margin-right: 5%;
 }
 section.first .second {
@@ -956,14 +956,14 @@ section.fourth .wrap_grid .left .filter .name {
   font-weight: 600;
   margin-bottom: 10px;
 }
-section.fourth .wrap_grid .left .filter form .wrap {
+section.fourth .wrap_grid .left .filter .form .wrap {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
 }
-section.fourth .wrap_grid .left .filter form input[type=text] {
+section.fourth .wrap_grid .left .filter .form input {
   background-color: #f4f4f4;
   border: none;
   font-size: 14px;
@@ -973,11 +973,17 @@ section.fourth .wrap_grid .left .filter form input[type=text] {
   padding: 8px 10px;
   box-sizing: border-box;
 }
-section.fourth .wrap_grid .left .filter form .tac {
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+section.fourth .wrap_grid .left .filter .form .tac {
   text-align: center;
   margin-top: 20px;
 }
-section.fourth .wrap_grid .left .filter form input[type=submit] {
+section.fourth .wrap_grid .left .filter .form input[type=submit] {
   color: #fff;
   font-size: 13px;
   font-weight: 600;
@@ -2966,4 +2972,7 @@ section.goodOffers .desc ol{
 }
 form .widthCities{
   width: 150px;
+}
+section.goodOffers .items.objects img{
+  height: 200px;
 }

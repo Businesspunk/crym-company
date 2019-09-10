@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Builder;
+use Nicolaslopezj\Searchable\SearchableTrait;
 
 
 use CyrildeWit\EloquentViewable\Viewable;
@@ -15,6 +16,14 @@ use CyrildeWit\EloquentViewable\Contracts\Viewable as ViewableContract;
 class Post extends Model implements ViewableContract
 {
     use Viewable;
+    use SearchableTrait;
+    
+    protected $searchable = [
+        'columns' => [
+            'posts.title' => 20,
+            'posts.description' => 10,
+        ],
+    ];
 
     public $fillable = ['title', 'cost', 'user_id', 'category_id', 'description', 'youtube', 'coord_x', 'coord_y', 'promotion_id', 'main_photo', 'isVip', 'isClose', 'city'];
 
@@ -123,7 +132,7 @@ class Post extends Model implements ViewableContract
         $data = $request->all();
         $data['city'] = getCity( $data['coord_y'], $data['coord_x'] );
         
-        $photos = json_decode( $data['images'] );        
+        $photos = json_decode( $data['images'] ) ?? [];        
 
         $main_photo = getImageName( $data['main_photo'] );
         $old_main_photo = getImageName( $post->main_photo );
@@ -163,10 +172,27 @@ class Post extends Model implements ViewableContract
         }
     }
 
-    public static function getUnclosed()
+    public static function getUnclosed( $query = null )
     {
-        $posts = Post::where('isClose', null)->orderBy('created_at', 'DESC');
-        return $posts;
+        if( $query ){
+            $posts = $query->where('isClose', null);
+        }else{
+            $posts = Post::where('isClose', null);
+        }
+        if( isset(request()->city) ){
+            $posts->where('city', request()->city);
+        }
+        if( isset(request()->s) ){
+            $posts->search( request()->s, null, true );
+        }
+
+        if( isset(request()->min_price) ){
+            $posts->where( 'cost', '>=', request()->min_price );
+        }
+        if( isset(request()->max_price) ){
+            $posts->where( 'cost', '<=', request()->max_price );
+        }
+        return $posts->orderBy('created_at', 'DESC');
     }
 
     public static function getVip()

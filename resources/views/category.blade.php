@@ -2,6 +2,7 @@
 
 @section('content')
 	<main>
+		<form action="{{ route('search') }}">
 		@include('components/category')
 		<section class="fourth section--margin-top">
 			<div class="container">
@@ -28,15 +29,15 @@
 						</div>
 						<div class="item filter">
 							<div class="name">Цена</div>
-							<form action="">
+							<div class="form">
 								<div class="wrap">
-									<input type="text" name="" placeholder="От" id="">
-									<input type="text" name="" placeholder="До" id="">
+									<input type="number" name="min_price" @if( request()->min_price ) value="{{ (request()->min_price) }}" @endif placeholder="От руб.">
+									<input type="number" name="max_price" @if( request()->max_price ) value="{{ (request()->max_price) }}" @endif  placeholder="До руб.">
 								</div>
 								<div class="tac">
-									<input type="submit" value="Показать 5000 объявлений">
+									<input type="submit" value="Поиск">
 								</div>
-							</form>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -45,5 +46,6 @@
 				</div>
 			</div>
 		</section>
+		</form>
 	</main>
 @endsection

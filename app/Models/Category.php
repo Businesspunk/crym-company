@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use App\Models\Post;
 
 class Category extends Model
 {
@@ -21,7 +22,9 @@ class Category extends Model
     }
     public function getActivePosts()
     {
-        return $this->posts()->where('isClose', null)->orderBy('created_at', 'DESC');
+        $posts = $this->posts();
+        Post::getUnclosed($posts);
+        return $posts;
     }
 
     public function getVip()

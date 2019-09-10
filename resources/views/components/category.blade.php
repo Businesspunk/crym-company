@@ -9,7 +9,7 @@
 				</div>
 			</div>
 			<div class="right">
-				<form action="{{ route('search') }}">
+				<div class="form">
 					@csrf
 					<div class="line_1">
 						<div class="widthDirect">
@@ -32,7 +32,7 @@
 							<select name="city" id="salutation_2">
 								<option value="0">Все города</option>
 								@foreach($cities as $city)
-								<option @if($city->slug == request()->city) selected @endif value="{{ $city->slug }}" >{{ $city->name }}</option>
+								<option @if($city->name == request()->city) selected @endif value="{{ $city->name }}" >{{ $city->name }}</option>
 								@endforeach
 							</select>
 						</div>
@@ -61,7 +61,7 @@
 							</label>
 						</div>
 					</div> -->
-				</form>
+				</div>				
 			</div>
 		</div>
 	</div>

@@ -2,8 +2,10 @@
 
 @section('content')
 	<main>
-		@include('components/category')
-		<section class="first">
+		<form action="{{ route('search') }}">
+			@include('components/category')
+		</form>
+			<section class="first">
 			<div class="container">
 				<div class="second">
 					<div class="item">
