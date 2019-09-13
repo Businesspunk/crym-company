@@ -9,7 +9,7 @@
 			<div class="container">
 				<div class="second">
 					<div class="item">
-						<a href="category.php">
+						<a href="{{ route('posts') }}">
 							<div class="all_item">
 								<span class="rise_1 rise"></span>
 								<span class="rise_1 rise"></span>

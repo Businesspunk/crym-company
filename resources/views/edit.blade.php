@@ -49,28 +49,36 @@
 					</div>
 					<div class="right">Редактировать объявление</div>
 				</div>
+
+				@if ($errors->any())
+					<div class="validation">
+						@foreach ($errors->all() as $error)
+							<div class="alert alert-danger">
+								{{ $error }}
+							</div>
+						@endforeach
+					</div>
+				@endif
+
 				<div class="choose_cat">
 					<div class="title_m">Изменить категорию</div>
-					<div class="second_container">
-						<div class="wrap left_s">
-							<div class="left ui_shadow">
-								@foreach( $maincategories as $maincat )
-								<ul>
-									<li class="title category">{{ $maincat->name }}</li>
-									@foreach( $maincat->categories as $cat )
-									<li class="select">
-										<label>
-											<input type="radio" @if( $cat->id == $post->category_id ) checked @endif name="category_id" value="{{ $cat->id }}">
-											<div class="text category">{{ $cat->name }}</div>
-										</label>
-									</li>
-									@endforeach
-								</ul>
+					<div class="wrap left_s">
+						<div class="left ui_shadow">
+							@foreach( $maincategories as $maincat )
+							<ul>
+								<li class="title category">{{ $maincat->name }}</li>
+								@foreach( $maincat->categories as $cat )
+								<li class="select">
+									<label>
+										<input type="radio" @if( $cat->id == $post->category_id ) checked @endif name="category_id" value="{{ $cat->id }}">
+										<div class="text category">{{ $cat->name }}</div>
+									</label>
+								</li>
 								@endforeach
+							</ul>
+							@endforeach
 
-							</div>
 						</div>
-						<div class="right_s"></div>
 					</div>
 				</div>
 		</div>

@@ -136,9 +136,14 @@ return [
     */
 
     'custom' => [
-        'attribute-name' => [
-            'rule-name' => 'custom-message',
+        'main_photo' => [
+            'required' => 'Загрузите главную фотографию',
+            'image' => 'Главная фотография должна быть изображением',
         ],
+        'category_id' => [
+            'required' => 'Выберите категорию'
+        ]
+
     ],
 
     /*

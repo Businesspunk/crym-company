@@ -21,14 +21,14 @@ class Second extends Migration
 
         Schema::create('categories', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('maincategories_id')->unsigned();
+            $table->bigInteger('maincategory_id')->unsigned();
             $table->string('name');
             $table->string('fullname')->default(2);
             $table->string('slug');
         });
 
         Schema::table('categories', function (Blueprint $table) { 
-            $table->foreign('maincategories_id')
+            $table->foreign('maincategory_id')
                 ->references('id')->on('maincategories')
                 ->onDelete('cascade');
         });

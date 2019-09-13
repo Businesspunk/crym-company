@@ -7,10 +7,11 @@ use Illuminate\Support\Facades\Validator;
 use App\Models\Post;
 use App\Models\Promotion;
 use App\Helpers\Images\PhotoManager;
+use App\Http\Requests\addAndEditPost;
 
 class PostController extends Controller
 {
-    public function post( Request $request )
+    public function post( addAndEditPost $request )
     {   
         Post::addOne($request);
         return redirect()->route('main');
@@ -68,7 +69,7 @@ class PostController extends Controller
 
     }
 
-    public function update($id, Request $request)
+    public function update($id, addAndEditPost $request)
     {
         $post = Post::findOrFail( $id );
         $this->authorize('edit', $post);

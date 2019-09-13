@@ -49,9 +49,17 @@
 					</div>
 					<div class="right">Новое объявление</div>
 				</div>
+				@if ($errors->any())
+					<div class="validation">
+						@foreach ($errors->all() as $error)
+							<div class="alert alert-danger">
+								{{ $error }}
+							</div>
+						@endforeach
+					</div>
+				@endif
 				<div class="choose_cat">
 					<div class="title_m">Выберите категорию</div>
-					<div class="second_container">
 						<div class="wrap left_s">
 							<div class="left ui_shadow">
 								@foreach( $maincategories as $maincat )
@@ -70,8 +78,6 @@
 
 							</div>
 						</div>
-						<div class="right_s"></div>
-					</div>
 				</div>
 		</div>
 	</section>
@@ -100,7 +106,7 @@
 					Название объявления
 				</div>
 				<div class="right">
-					<input name="title" type="text" placeholder="Название">
+					<input required name="title" type="text" placeholder="Название">
 				</div>
 			</div>
 			<div class="wrap desc">
@@ -108,13 +114,13 @@
 					Описание
 				</div>
 				<div class="right">
-					<textarea name="description" placeholder="Опишите объявление" rows="10"></textarea>
+					<textarea required name="description" placeholder="Опишите объявление" rows="10"></textarea>
 				</div>
 			</div>
 			<div class="wrap name">
 				<div class="left">Цена</div>
 				<div class="right">
-					<input name="cost" type="number" placeholder="руб.">
+					<input required name="cost" type="number" placeholder="руб.">
 				</div>
 			</div>
 		</div>
@@ -158,7 +164,6 @@
 					<input type="file" name="photos" multiple id="uploadPhotos">
 					<div class="desc">
 						Вы можете загрузить до 20 фотографий в формате JPG или PNG.
-						Максимальный размер всех фотографий — 20MB.
 					</div>
 				</div>
 			</div>

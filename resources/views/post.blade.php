@@ -43,13 +43,13 @@
 							<div class="wrap">
 								<img src="{{ getSavedPhoto($post->main_photo) }}" alt="">
 							</div>
-							<a href="{{ getSavedPhoto($post->main_photo) }}" data-toggle="lightbox" data-gallery="example-gallery">
+							<a href="{{ getSavedPhoto($post->main_photo) }}" data-max-height="600" data-gallery="example-gallery" data-toggle="lightbox" >
 								<img class="img-fluid" src="{{ getSavedPhoto($post->main_photo) }}">
 							</a>
 						</div>
 						<div class="small_photos">
 							@foreach( $post->photos as $photo )
-								<a href="{{ getSavedPhoto($photo->url) }}" data-toggle="lightbox" data-gallery="example-gallery">
+								<a href="{{ getSavedPhoto($photo->url) }}" data-max-height="600" data-toggle="lightbox" data-gallery="example-gallery">
 									<img data-toggle="lightbox" src="{{ getSavedPhoto($photo->url) }}" class="img-fluid">
 								</a>
 							@endforeach
@@ -100,7 +100,7 @@
 							<div class="phone hidden">
 								<a href="tel:{{ $post->user->profile->number }}">{{ $post->user->profile->number }}</a>	
 							</div>
-							<a href="#" class="gray_btn btn">Написать сообщение</a>
+							<a href="111" class="write_message gray_btn btn">Написать сообщение</a>
 							@include('components/people')
 						</div>
 					</div>
@@ -136,52 +136,67 @@
 				
 			</div>
 		</section>
-		<div class="modal fade" id="delete" tabindex="-1" role="dialog"  aria-hidden="true">
-			<div class="modal-dialog" role="document">
-				<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title">Удалить объявление?</h5>
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				<div class="modal-footer">
-					<form method="POST" action="{{ route('post.delete', $post->id) }}">
-						@csrf
-						<button type="submit" class="btn btn-danger">Удалить</button>	
-					</form>
+		@auth
+			@if( ( Auth::user() )->can('delete', $post) )
+			<div class="modal fade" id="delete" tabindex="-1" role="dialog"  aria-hidden="true">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">Удалить объявление?</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-footer">
+						<form method="POST" action="{{ route('post.delete', $post->id) }}">
+							@csrf
+							<button type="submit" class="btn btn-danger">Удалить</button>	
+						</form>
 
-					<button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
-				</div>
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+					</div>
+					</div>
 				</div>
 			</div>
-		</div>
+			@endif
 
-		<div class="modal fade" id="close" tabindex="-1" role="dialog"  aria-hidden="true">
-			<div class="modal-dialog" role="document">
-				<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title">Закрыть объявление?</h5>
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				<div class="modal-footer">
-					<form method="POST" action="{{ route('post.close', $post->id) }}">
-						@csrf
-						<button type="submit" class="btn btn-success">Закрыть</button>	
-					</form>
+			@if( ( Auth::user() )->can('close', $post) )
+			<div class="modal fade" id="close" tabindex="-1" role="dialog"  aria-hidden="true">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">Закрыть объявление?</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-footer">
+						<form method="POST" action="{{ route('post.close', $post->id) }}">
+							@csrf
+							<button type="submit" class="btn btn-success">Закрыть</button>	
+						</form>
 
-					<button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
-				</div>
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+					</div>
+					</div>
 				</div>
 			</div>
-		</div>
+			@endif
+		@endauth
 	</main>
 @endsection
 
 @section('after_js')
-	<script>	</script>
+	@guest
+	<script>
+		$(document).ready(function(){
+			$('.write_message').click(function(e){
+				e.preventDefault();
+				$('.sigh-in').click();
+			})
+		})
+	</script>
+	@endguest
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.min.js"></script>
 	<script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&amp;apikey={{ env('Yandex_API_Key') }}" type="text/javascript"></script>
 	@if( issetCoord($post) )	
