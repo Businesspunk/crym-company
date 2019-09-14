@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\User;
 use App\Models\Profile;
 use Auth;
+use Facebook\Facebook;
 
 class SocialAuthController extends Controller
 {
@@ -42,8 +43,10 @@ class SocialAuthController extends Controller
         return redirect()->route('main');
     }
 
-    public function test( Request $request ){
+    public function authByFB( Request $request )
+    {
         debug($request);
         return 1;
     }
+    
 }

@@ -163,3 +163,20 @@ if( !function_exists('getUrlForAuthVk') ){
         return sprintf( $link, env('VK_APP_ID'), env('VK_SECRET'), route('authByVk'), $code );
     }
 }
+
+if( !function_exists('getFBAuthLink') ){
+    function getFBAuthLink(){
+        $fb = new \Facebook\Facebook([
+            'app_id' => env('FACEBOOK_APP_ID'),
+            'app_secret' => env('FACEBOOK_APP_SECRET'),
+            'default_graph_version' => 'v2.10',
+        ]);
+
+        $helper = $fb->getRedirectLoginHelper();
+
+        $permissions = ['email']; // Optional permissions
+        $loginUrl = $helper->getLoginUrl( route('authByFacebook') , $permissions);
+
+        return ($loginUrl);
+    }
+}
