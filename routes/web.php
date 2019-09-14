@@ -54,6 +54,8 @@ Route::get('/bookmarks', "IndexController@bookmarks")->name('my-bookmarks');
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+Route::get('/auth/vk', 'SocialAuthController@authByVk')->name('authByVk');
+
 Route::get('/category/{maincategory}/{slug}', 'IndexController@category')->name('category');
 Route::get('/search', 'IndexController@searchCheck')->name('search');
 

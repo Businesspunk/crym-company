@@ -146,3 +146,20 @@ if (!function_exists('getCity')) {
         return mb_convert_case(json_decode($geocode)->response->GeoObjectCollection->featureMember[0]->GeoObject->name, MB_CASE_LOWER, "UTF-8");
     }
 }
+
+
+if (!function_exists('getVkAuthLink')) {
+    function getVkAuthLink()
+    {   
+        $link = "https://oauth.vk.com/authorize?client_id=%d&display=page&scope=friends&redirect_uri=%s&response_type=code&v=5.101";
+        
+        return sprintf($link, env('VK_APP_ID'), route('authByVk') );
+    }
+}
+
+if( !function_exists('getUrlForAuthVk') ){
+    function getUrlForAuthVk($code){
+        $link = "https://oauth.vk.com/access_token?client_id=%d&client_secret=%s&redirect_uri=%s&code=%s";
+        return sprintf( $link, env('VK_APP_ID'), env('VK_SECRET'), route('authByVk'), $code );
+    }
+}

@@ -1,7 +1,8 @@
 @extends('components/layout')
 
 @section('after_css')
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.css">
+	<link rel="stylesheet" href="{{ asset('css/lightbox.min.css') }}">
+	
 	<style>
 		#map{
 			height: 200px;
@@ -43,14 +44,14 @@
 							<div class="wrap">
 								<img src="{{ getSavedPhoto($post->main_photo) }}" alt="">
 							</div>
-							<a href="{{ getSavedPhoto($post->main_photo) }}" data-max-height="600" data-gallery="example-gallery" data-toggle="lightbox" >
+							<a href="{{ getSavedPhoto($post->main_photo) }}" data-lightbox="example-gallery">
 								<img class="img-fluid" src="{{ getSavedPhoto($post->main_photo) }}">
 							</a>
 						</div>
 						<div class="small_photos">
 							@foreach( $post->photos as $photo )
-								<a href="{{ getSavedPhoto($photo->url) }}" data-max-height="600" data-toggle="lightbox" data-gallery="example-gallery">
-									<img data-toggle="lightbox" src="{{ getSavedPhoto($photo->url) }}" class="img-fluid">
+								<a href="{{ getSavedPhoto($photo->url) }}" data-lightbox="example-gallery" >
+									<img src="{{ getSavedPhoto($photo->url) }}" class="img-fluid">
 								</a>
 							@endforeach
 						</div>
@@ -197,7 +198,14 @@
 		})
 	</script>
 	@endguest
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.min.js"></script>
+	<script src="{{ asset('js/lightbox.min.js') }}" ></script>
+	<script>
+		lightbox.option({
+		'resizeDuration': 200,
+		'wrapAround': true,
+		'albumLabel' : "Изображение %1 из %2"
+		})
+	</script>
 	<script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&amp;apikey={{ env('Yandex_API_Key') }}" type="text/javascript"></script>
 	@if( issetCoord($post) )	
 		<script>
@@ -226,10 +234,7 @@
 		</script>
 	@endif
 	<script>
-		$(document).on('click', '[data-toggle="lightbox"]', function(event) {
-			event.preventDefault();
-			$(this).ekkoLightbox();
-		});
+		
 		$('#showPhone').click(function(e){
 			e.preventDefault();
 			$(this).slideUp(200, function(){
