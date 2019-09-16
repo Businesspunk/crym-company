@@ -42,6 +42,18 @@ function removeA(arr) {
 	return arr;
   }
   
+function showErrors( messages ){
+	$errorModal = $('#errorModal');
+	$insertion = $errorModal.find('.insertion');
+	$insertion.empty();
+	$clone = $errorModal.find('.alert').clone().removeClass('d-none');
+
+	messages.forEach(function(el){
+		$insertion.append( $clone.text(el) );
+	});
+
+	$errorModal.modal();
+}
 $(document).ready(function(){
 
 	$('.like-link').click(function(e){

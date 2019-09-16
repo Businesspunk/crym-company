@@ -25,7 +25,7 @@ class Post extends Model implements ViewableContract
         ],
     ];
 
-    public $fillable = ['title', 'cost', 'user_id', 'category_id', 'description', 'youtube', 'coord_x', 'coord_y', 'promotion_id', 'main_photo', 'isVip', 'isClose', 'city'];
+    public $fillable = ['title', 'cost', 'user_id', 'category_id', 'description', 'youtube', 'coord_x', 'coord_y', 'main_photo', 'isClose', 'city'];
 
     public function photos()
     {
@@ -83,20 +83,24 @@ class Post extends Model implements ViewableContract
     {
         $user = $request->user();
         $data = $request->all();
-        $data['isVip'] = null;
-
+        $data['user_id'] = $user->id;
+        
         $photos = json_decode( $data['images'] ) ?? [];
         $main_photo = getImageName( $data['main_photo'] );
 
         if( $data['coord_y'] && $data['coord_x'] ){
             $data['city'] = getCity( $data['coord_y'], $data['coord_x'] );
         }
-        $data['main_photo'] = 'posts/'.$main_photo;
-        $data['user_id'] = Auth::id();
+        if( $data['youtube'] ){
+            $data['youtube'] = getYoutubeId($data['youtube']);
+        }
 
+        $data['main_photo'] = 'posts/'.$main_photo;
         $post = Post::create($data);
+
         if( $user->can('vipPosting', $post ) ){
-            $post->update(['isVip' => 1]);
+            $post->isVip = 1;
+            $post->save();
         }
         
         Storage::move('temp/'.$main_photo, 'posts/'.$main_photo );
@@ -130,8 +134,13 @@ class Post extends Model implements ViewableContract
     {
         $post = $this;
         $data = $request->all();
-        $data['city'] = getCity( $data['coord_y'], $data['coord_x'] );
         
+        if( $data['coord_y'] && $data['coord_x'] ){
+            $data['city'] = getCity( $data['coord_y'], $data['coord_x'] );
+        }
+        if( $data['youtube'] ){
+            $data['youtube'] = getYoutubeId($data['youtube']);
+        }
         $photos = json_decode( $data['images'] ) ?? [];        
 
         $main_photo = getImageName( $data['main_photo'] );
@@ -139,13 +148,10 @@ class Post extends Model implements ViewableContract
 
         if( $main_photo != $old_main_photo ){
             Storage::delete('posts/'.$old_main_photo);
-        }
-        if( isExistsPhoto('temp/'.$main_photo) ){
             Storage::move('temp/'.$main_photo, 'posts/'.$main_photo );
         }
-
         $data['main_photo'] = 'posts/'.$main_photo;
-        $data['user_id'] = Auth::id();
+        $data['user_id'] = $request->user()->id;
 
         $this->updateOne($data);
 

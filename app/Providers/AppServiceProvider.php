@@ -33,9 +33,7 @@ class AppServiceProvider extends ServiceProvider
     {
         if( Schema::hasTable('cities') ){
             
-            $mainCat = MainCategory::with('categories')->get()->sortBy(function($cat){
-                return $cat->categories->count() * -1;
-            });
+            $mainCat = MainCategory::with('categories')->get();
             
             View::share('maincategories', $mainCat );
             

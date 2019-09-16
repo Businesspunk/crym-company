@@ -30,7 +30,9 @@
 					])
 				</div>
 			@empty
-				Объявлений пока нет
+				<div class="alert alert-secondary nothing_found" role="alert">
+					Объявлений пока нет
+				</div>
 			@endforelse
 			
 		</div>

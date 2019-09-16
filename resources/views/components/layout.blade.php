@@ -69,7 +69,7 @@
 					Недвижимость и строительство республики Крым 
 				</div>
 				<div class="number th4">
-					<a href="+79616342146">+7 (961) 634-21-46</a>
+					<a href="tel:+79118486955">+7 (911) 848-69-55</a>
 				</div>
 				<div class="th5">
                     @auth
@@ -174,12 +174,12 @@
 				<div class="main">
 					<div class="items">
 						@foreach( $maincategories as $maincat )
-							<div class="item">
-								<div class="title category">{{ $maincat->name }}</div>
-									@foreach( $maincat->categories as $cat )
-										<a class="category" href="{{ route('category', [ 'maincategory' => $maincat->slug , 'slug' => $cat->slug]) }}">{{ $cat->name }}</a>
-									@endforeach
-							</div>
+                                <div class="item">
+                                    <div class="title category">{{ $maincat->name }}</div>
+                                        @foreach( $maincat->categories as $cat )
+                                            <a class="category" href="{{ route('category', [ 'maincategory' => $maincat->slug , 'slug' => $cat->slug]) }}">{{ $cat->name }}</a>
+                                        @endforeach
+                                </div>
 						@endforeach
 					</div>
 				</div>
@@ -333,6 +333,31 @@
 			</div>
 		</div>
     @endguest
+
+    @auth
+
+    <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">Ошибка</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="alert alert-danger d-none" role="alert"></div>
+            <div class="insertion">
+            
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+        </div>
+        </div>
+    </div>
+    </div>
+    @endauth
 
 	<script src="{{ asset('jquery-ui/external/jquery/jquery.js') }}"></script>
 	<script>

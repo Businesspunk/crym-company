@@ -39,14 +39,6 @@
 					<div class="h4">VIP-объявления</div>
 					{!! $vipposts !!}
 				</div>
-				<div class="right">
-					<div class="h4">Сервисы и услуги</div>
-					<div class="items">
-						<div class="item">
-							Сервисы и услуги
-						</div>
-					</div>
-				</div>
 			</div>
 		</section>
 		<section class="third section--margin-top">

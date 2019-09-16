@@ -42,16 +42,16 @@
 						</div>
 						<div class="big_photo">
 							<div class="wrap">
-								<img src="{{ getSavedPhoto($post->main_photo) }}" alt="">
+								<img src="{{ getPostPhotoSrc($post->main_photo) }}" alt="">
 							</div>
-							<a href="{{ getSavedPhoto($post->main_photo) }}" data-lightbox="example-gallery">
-								<img class="img-fluid" src="{{ getSavedPhoto($post->main_photo) }}">
+							<a href="{{ getPostPhotoSrc($post->main_photo) }}" data-lightbox="example-gallery">
+								<img class="img-fluid" src="{{ getPostPhotoSrc($post->main_photo) }}">
 							</a>
 						</div>
 						<div class="small_photos">
 							@foreach( $post->photos as $photo )
-								<a href="{{ getSavedPhoto($photo->url) }}" data-lightbox="example-gallery" >
-									<img src="{{ getSavedPhoto($photo->url) }}" class="img-fluid">
+								<a href="{{ getPostPhotoSrc($photo->url) }}" data-lightbox="example-gallery" >
+									<img src="{{ getPostPhotoSrc($photo->url) }}" class="img-fluid">
 								</a>
 							@endforeach
 						</div>
@@ -72,7 +72,7 @@
 						</div>
 						@if($post->youtube)
 							<div class="seven_line">
-								<iframe width="100%" height="300" src="https://www.youtube.com/embed/{{ getVideoId($post->youtube) }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+								<iframe width="100%" height="300" src="https://www.youtube.com/embed/{{ $post->youtube }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 							</div>
 						@endif
 						@auth

@@ -801,6 +801,11 @@ section.second .content,
 section.third .content {
   margin-top: 30px;
 }
+
+html section.second .wrap_grid{
+  grid-template-columns: 1fr;
+}
+
 section.second .wrap_grid,
 section.third .wrap_grid {
   display: grid;
@@ -1000,24 +1005,13 @@ footer {
   background-color: #eaeaea;
 }
 footer .container .main .items {
-  flex-wrap: wrap;
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  grid-column-gap: 20px;
+  grid-row-gap: 20px;
 }
-footer .container .main .items .item {
-  width: 31%;
-  margin-bottom: 40px;
-}
-@media (max-width: 900px) {
-  footer .container .main .items .item {
-    width: 45%;
-    margin-bottom: 20px;
-  }
-}
-@media (max-width: 500px) {
-  footer .container .main .items .item {
-    width: 100%;
-  }
+footer .container .main .item{
+  margin-top: 20px
 }
 footer .container .main .items .title {
   margin-bottom: 15px;
@@ -1501,7 +1495,7 @@ section.add .choose_cat .wrap .left {
   width: 100%;
   grid-column-gap: 10px;
   grid-row-gap: 10px;
-  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
 }
 
 section.add .validation{
@@ -1856,6 +1850,7 @@ section.add_choose .photo .item img{
 section.add_choose .wrap_for_photos .item img{
   height: 110px;
   object-fit: cover;
+  width: 100%;
 }
 
 section.add_choose .photo div.item i {
@@ -2980,4 +2975,8 @@ form .widthCities{
 }
 section.goodOffers .items.objects img{
   height: 200px;
+}
+.nothing_found{
+  margin-top: 20px;
+  font-size: 15px;
 }

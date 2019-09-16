@@ -44,7 +44,6 @@ class CreateUsersTable extends Migration
             $table->string('title');
             $table->string('main_photo');
             $table->integer('isVip')->nullable();
-            $table->integer('views')->nullable();
             $table->bigInteger('cost')->nullable();
             $table->bigInteger('user_id')->unsigned();
             $table->bigInteger('category_id')->unsigned();

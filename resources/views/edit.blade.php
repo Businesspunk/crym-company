@@ -65,19 +65,24 @@
 					<div class="wrap left_s">
 						<div class="left ui_shadow">
 							@foreach( $maincategories as $maincat )
-							<ul>
-								<li class="title category">{{ $maincat->name }}</li>
-								@foreach( $maincat->categories as $cat )
-								<li class="select">
-									<label>
-										<input type="radio" @if( $cat->id == $post->category_id ) checked @endif name="category_id" value="{{ $cat->id }}">
-										<div class="text category">{{ $cat->name }}</div>
-									</label>
-								</li>
-								@endforeach
-							</ul>
+								@if( $loop->iteration % 2 == 1 )
+									<div class="col">
+								@endif
+									<ul>
+										<li class="title category">{{ $maincat->name }}</li>
+										@foreach( $maincat->categories as $cat )
+										<li class="select">
+											<label>
+												<input type="radio" @if( $cat->id == $post->category_id ) checked @endif name="category_id" value="{{ $cat->id }}">
+												<div class="text category">{{ $cat->name }}</div>
+											</label>
+										</li>
+										@endforeach
+									</ul>
+								@if( $loop->iteration % 2 == 0 )
+									</div>
+								@endif
 							@endforeach
-
 						</div>
 					</div>
 				</div>

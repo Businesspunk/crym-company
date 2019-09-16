@@ -63,17 +63,23 @@
 						<div class="wrap left_s">
 							<div class="left ui_shadow">
 								@foreach( $maincategories as $maincat )
-								<ul>
-									<li class="title category">{{ $maincat->name }}</li>
-									@foreach( $maincat->categories as $cat )
-									<li class="select">
-										<label>
-											<input type="radio" name="category_id" value="{{ $cat->id }}">
-											<div class="text category">{{ $cat->name }}</div>
-										</label>
-									</li>
-									@endforeach
-								</ul>
+									@if( $loop->iteration % 2 == 1 )
+										<div class="col">
+									@endif
+										<ul>
+											<li class="title category">{{ $maincat->name }}</li>
+											@foreach( $maincat->categories as $cat )
+											<li class="select">
+												<label>
+													<input type="radio" name="category_id" value="{{ $cat->id }}">
+													<div class="text category">{{ $cat->name }}</div>
+												</label>
+											</li>
+											@endforeach
+										</ul>
+									@if( $loop->iteration % 2 == 0 )
+										</div>
+									@endif
 								@endforeach
 
 							</div>
@@ -248,6 +254,11 @@
 							processData: false, 
 							contentType: false,
 							success: function (data) {
+								$preloader.fadeOut();
+								if( data.error ){
+									showErrors( data.messages );
+									return;
+								}
 								$input = $('.wrap_for_photos').find('[name=images]');
 								if( !$input.val() ){
 									$input.val( JSON.stringify([]) );
@@ -256,7 +267,6 @@
 								$res.push(data.paths);
 								$input.val( JSON.stringify( $res ) );
 
-								$preloader.fadeOut();
 								$elem = $(data.block);
 								$elem.appendTo( $('.wrap_for_photos') );
 								$elem.removeClass('hidden');
@@ -280,8 +290,12 @@
 						processData: false, 
 						contentType: false,
 						success: function (data) {
-							$uploadMainWrap.find('[name=main_photo]').val( data.paths );
 							$preloader.fadeOut();
+							if( data.error ){
+								showErrors(data.messages);
+								return;
+							}
+							$uploadMainWrap.find('[name=main_photo]').val( data.paths );
 							$uploadMainWrap.fadeOut(300, function(){
 								$elem = $(data.block);
 								$elem.appendTo( $('.main_photo') );

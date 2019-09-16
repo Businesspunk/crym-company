@@ -6,6 +6,16 @@ if(!function_exists('getSavedPhoto')){
     }
 }
 
+if(!function_exists('getPostPhotoSrc')){
+    function getPostPhotoSrc($dbPath){
+        $path = 'storage/'. $dbPath;
+        if( !Storage::exists($dbPath) ){
+            $path = 'img/image-notfound.jpg';
+        }
+        return asset( $path );
+    }
+}
+
 if (!function_exists('getAvatarSrc')) {
     function getAvatarSrc( $user )
     {   
@@ -133,12 +143,6 @@ if (!function_exists('getPhotoNames')) {
         return $result;
     }
 }
-if (!function_exists('getVideoId')) {
-    function getVideoId( $link ){
-        $r = explode('?v=', $link);
-        return $r[ count($r) - 1 ];
-    }
-}
 
 if (!function_exists('getCity')) {
     function getCity($y, $x){
@@ -178,5 +182,13 @@ if( !function_exists('getFBAuthLink') ){
         $loginUrl = $helper->getLoginUrl( route('authByFacebook') , $permissions);
 
         return ($loginUrl);
+    }
+}
+
+if( !function_exists('getYoutubeId') ){
+    function getYoutubeId($url){
+        parse_str( parse_url( $url, PHP_URL_QUERY ), $result );
+        $res = $result['v'] ?? null;
+        return $res;    
     }
 }
