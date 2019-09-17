@@ -248,7 +248,6 @@
                                 <div class="orGo">или продолжить через</div>
                                 <div class="social">
                                     <a href="{{ getFBAuthLink() }}"><img src="{{ asset('img/icons/facebook.png') }}" alt=""></a>
-                                    <a href="#"><img src="{{ asset('img/icons/ok.png') }}" alt=""></a>
                                     <a href="{{ getVkAuthLink() }}"><img src="{{ asset('img/icons/vk.png') }}" alt=""></a>
                                 </div>
                             </div>

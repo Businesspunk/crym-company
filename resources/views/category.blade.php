@@ -27,6 +27,11 @@
 							{{ $category->name }}
 						@endif
 						</div>
+						@isset($category)
+							@foreach( $category->maincategory->attributes as $attrib )
+								@include('components.attribute', ['attribute' => $attrib])
+							@endforeach
+						@endisset
 						<div class="item filter">
 							<div class="name">Цена</div>
 							<div class="form">

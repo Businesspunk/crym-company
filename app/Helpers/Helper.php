@@ -170,6 +170,9 @@ if( !function_exists('getUrlForAuthVk') ){
 
 if( !function_exists('getFBAuthLink') ){
     function getFBAuthLink(){
+        if( !session_id() ){
+            session_start();
+        }
         $fb = new \Facebook\Facebook([
             'app_id' => env('FACEBOOK_APP_ID'),
             'app_secret' => env('FACEBOOK_APP_SECRET'),

@@ -1,0 +1,81 @@
+<?php
+
+use Illuminate\Database\Seeder;
+use App\Models\Attribute;
+use App\Models\AttributeValue;
+use App\Models\MainCategory_Attribute;
+
+
+class attributes extends Seeder
+{
+    /**
+     * Run the database seeds.
+     *
+     * @return void
+     */
+    public function run()
+    {
+        $attributes = ['квартиры', 'комнаты', 'дома, дачи, коттеджи', 'замельный участок', 'гаражи и машиноместа'];
+
+        $attributes_values = [
+            [
+                1,
+                [ '1', '2', '3', '4 и более' ]
+            ],
+            [
+                2,
+                [ '1', '2', '3 и более' ]
+            ],
+
+        ];
+
+        $mainCategory_Attributes = [
+            [
+                'attrib_id' => 1,
+                'main_cat_id' => 1
+            ],
+            [
+                'attrib_id' => 2,
+                'main_cat_id' => 1
+            ],
+            [
+                'attrib_id' => 3,
+                'main_cat_id' => 1
+            ],
+            [
+                'attrib_id' => 4,
+                'main_cat_id' => 1
+            ],
+            [
+                'attrib_id' => 5,
+                'main_cat_id' => 1
+            ],
+            
+        ];
+
+        foreach ($attributes as $attribute) {
+            Attribute::create([
+                'name' => $attribute,
+                'slug' => str_slug($attribute)
+            ]);
+        }
+
+        foreach ($attributes_values as $values) {
+            
+            foreach ($values[1] as $value) {
+                AttributeValue::create([
+                    'attribute_id' => $values[0],
+                    'slug' => str_slug($value),
+                    'name' => $value
+                ]);
+            }
+        }
+
+        foreach( $mainCategory_Attributes as $relation ){
+            MainCategory_Attribute::create([
+                'maincategory_id' => $relation['main_cat_id'],
+                'attribute_id' => $relation['attrib_id']
+            ]);
+        }
+    }
+}

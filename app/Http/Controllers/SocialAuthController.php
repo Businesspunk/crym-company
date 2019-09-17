@@ -10,6 +10,18 @@ use Facebook\Facebook;
 
 class SocialAuthController extends Controller
 {
+    protected function auth( $uid, $firstName ){
+        
+        $user = User::firstOrNew([ 'email' => $uid, 'password' => $uid ]);
+        $user->name = $firstName;
+        $user->save();
+
+        $proile = Profile::firstOrCreate([ 'user_id' => $user->id ]);
+        
+        Auth::login($user);
+        return redirect()->route('main');
+    }
+
     public function authByVk( Request $rq )
     {
         $code = $rq->code;
@@ -29,22 +41,18 @@ class SocialAuthController extends Controller
         $result = json_decode(file_get_contents('https://api.vk.com/method/users.get?'. $get_params));
         $data = $result->response[0];
 
-        $login = "vk_".$data->id; $password = $login;
+        $uid = "vk_".$data->id;
         $firstName = $data->first_name;
         
-        $user = User::firstOrNew([ 'email' => $login, 'password' => $password ]);
-        $user->name = $firstName;
-        $user->save();
-
-        $proile = Profile::firstOrNew([ 'user_id' => $user->id ]);
-        $proile->save();
-        
-        Auth::login($user);
-        return redirect()->route('main');
+        return $this->auth($uid, $firstName);
     }
 
     public function authByFB( Request $request )
     {
+            if( !session_id() ){
+                session_start();
+            }
+
             $fb = new Facebook([
                 'app_id' => env('FACEBOOK_APP_ID'),
                 'app_secret' => env('FACEBOOK_APP_SECRET'),
@@ -56,49 +64,33 @@ class SocialAuthController extends Controller
             try {
             $accessToken = $helper->getAccessToken();
             } catch(Facebook\Exceptions\FacebookResponseException $e) {
-            // When Graph returns an error
-            echo 'Graph returned an error: ' . $e->getMessage();
+                echo 'Graph returned an error: ' . $e->getMessage();
             exit;
             } catch(Facebook\Exceptions\FacebookSDKException $e) {
-            // When validation fails or other local issues
-            echo 'Facebook SDK returned an error: ' . $e->getMessage();
+                echo 'Facebook SDK returned an error: ' . $e->getMessage();
             exit;
             }
 
             if (! isset($accessToken)) {
-            if ($helper->getError()) {
-                header('HTTP/1.0 401 Unauthorized');
-                echo "Error: " . $helper->getError() . "\n";
-                echo "Error Code: " . $helper->getErrorCode() . "\n";
-                echo "Error Reason: " . $helper->getErrorReason() . "\n";
-                echo "Error Description: " . $helper->getErrorDescription() . "\n";
-            } else {
-                header('HTTP/1.0 400 Bad Request');
-                echo 'Bad request';
+                if ($helper->getError()) {
+                    header('HTTP/1.0 401 Unauthorized');
+                    echo "Error: " . $helper->getError() . "\n";
+                    echo "Error Code: " . $helper->getErrorCode() . "\n";
+                    echo "Error Reason: " . $helper->getErrorReason() . "\n";
+                    echo "Error Description: " . $helper->getErrorDescription() . "\n";
+                } else {
+                    header('HTTP/1.0 400 Bad Request');
+                    echo 'Bad request';
+                }
+                exit;
             }
-            exit;
-            }
 
-            // Logged in
-            echo '<h3>Access Token</h3>';
-            debug($accessToken->getValue());
+            $response = $fb->get('/me?fields=id,first_name', $accessToken);
+            $user = $response->getGraphUser();
+            $uid = "fb_".$user->getId();
+            $firstName = $user->getFirstName();
 
-            // The OAuth 2.0 client handler helps us manage access tokens
-            $oAuth2Client = $fb->getOAuth2Client();
-            debug($oAuth2Client);
-            return 1;
-            // Get the access token metadata from /debug_token
-            $tokenMetadata = $oAuth2Client->debugToken($accessToken);
-            echo '<h3>Metadata</h3>';
-            var_dump($tokenMetadata);
-
-            // Validation (these will throw FacebookSDKException's when they fail)
-            $tokenMetadata->validateAppId('{app-id}'); // Replace {app-id} with your app id
-            // If you know the user ID this access token belongs to, you can validate it here
-            //$tokenMetadata->validateUserId('123');
-            $tokenMetadata->validateExpiration();
-
-            return redirect()->route('main');
+            return $this->auth($uid, $firstName);
     }
     
 }

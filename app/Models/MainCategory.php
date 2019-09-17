@@ -15,4 +15,8 @@ class MainCategory extends Model
         return $this->hasMany('App\Models\Category', 'maincategory_id');
     }    
 
+    public function attributes(){
+        return $this->belongsToMany('App\Models\Attribute', 'maincategory_attributes', 'maincategory_id', 'attribute_id');
+    }
+
 }

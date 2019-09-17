@@ -52,12 +52,14 @@
 						<input value="{{ $user->profile->number }}" name="number" placeholder="Введите телефон" type="text">
 					</div>
 				</div>
-				<div class="wrap int">
-					<div class="left">Электронная почта</div>
-					<div class="right">
-						<input value="{{ $user->email }}" name="email" placeholder="@" type="text">
+				<?php if ( filter_var($user->email, FILTER_VALIDATE_EMAIL) ):?>
+					<div class="wrap int">
+						<div class="left">Электронная почта</div>
+						<div class="right">
+							<input value="{{ $user->email }}" name="email" placeholder="@" type="text">
+						</div>
 					</div>
-				</div>
+				<?php endif; ?>
 				<div class="divider">
 					<div class="line"></div>
 				</div>
