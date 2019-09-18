@@ -154,7 +154,7 @@ class IndexController extends Controller
         return view('category', [
             'catalog' => true,
             'count' => $posts->count(),
-            'posts' => view('components/posts', [ 'posts' => $posts->paginate($postsPerPage), 'type' => 'catalog' ]),
+            'posts' => $posts->paginate($postsPerPage),
         ]);
     }
     public function goodOffers( Request $request )
