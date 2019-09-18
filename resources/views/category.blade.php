@@ -47,7 +47,7 @@
 					</div>
 				</div>
 				<div class="right">
-					@include('components/posts', ['type' => 'category' ]),
+					@include('components/posts', ['type' => 'category' ])
 				</div>
 			</div>
 		</section>
