@@ -15,7 +15,7 @@ class attributes extends Seeder
      */
     public function run()
     {
-        $attributes = ['квартиры', 'комнаты', 'дома, дачи, коттеджи', 'замельный участок', 'гаражи и машиноместа'];
+        $attributes = ['квартиры', 'комнаты', 'дома, дачи, коттеджи', 'земельный участок', 'гаражи и машиноместа'];
 
         $attributes_values = [
             [
@@ -25,6 +25,18 @@ class attributes extends Seeder
             [
                 2,
                 [ '1', '2', '3 и более' ]
+            ],
+            [
+                3,
+                [ null ]
+            ],
+            [
+                4,
+                [ null ]
+            ],
+            [
+                5,
+                [ null ]
             ],
 
         ];
@@ -56,18 +68,24 @@ class attributes extends Seeder
         foreach ($attributes as $attribute) {
             Attribute::create([
                 'name' => $attribute,
-                'slug' => str_slug($attribute)
+                'slug' => str_slug($attribute)."_attribute"
             ]);
         }
 
         foreach ($attributes_values as $values) {
             
             foreach ($values[1] as $value) {
-                AttributeValue::create([
-                    'attribute_id' => $values[0],
-                    'slug' => str_slug($value),
-                    'name' => $value
-                ]);
+                if( $value ){
+                    AttributeValue::create([
+                        'attribute_id' => $values[0],
+                        'value_slug' => str_slug($value),
+                        'value' => $value
+                    ]);
+                }else{
+                    AttributeValue::create([
+                        'attribute_id' => $values[0],
+                    ]);
+                }
             }
         }
 

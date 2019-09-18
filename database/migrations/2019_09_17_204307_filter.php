@@ -22,8 +22,8 @@ class Filter extends Migration
         Schema::create('attribute_value', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('attribute_id')->unsigned();
-            $table->string('name');
-            $table->string('slug');
+            $table->string('value')->nullable();
+            $table->string('value_slug')->nullable();
         });
 
         Schema::table('attribute_value', function (Blueprint $table) {
@@ -45,6 +45,22 @@ class Filter extends Migration
             
             $table->foreign('maincategory_id')
                 ->references('id')->on('maincategories')
+                ->onDelete('cascade');
+        });
+
+        Schema::create('post_attribute_value', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->bigInteger('post_id')->unsigned();
+            $table->bigInteger('attribute_value_id')->unsigned();
+        });
+
+        Schema::table('post_attribute_value', function (Blueprint $table) {
+            $table->foreign('attribute_value_id')
+                ->references('id')->on('attribute_value')
+                ->onDelete('cascade');
+            
+            $table->foreign('post_id')
+                ->references('id')->on('posts')
                 ->onDelete('cascade');
         });
 

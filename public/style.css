@@ -16,11 +16,42 @@ input[name=cost]::-webkit-inner-spin-button {
 html a:hover{
   text-decoration: none;
 }
+.attributes{
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+}
+.attributes .item{
+  display: none;
+  margin-bottom: 10px;
+}
+.attributes{
+  display: none;
+}
+.attribute_values{
+  margin-top: 5px;
+}
 
 section.my-posts .close{
   float: unset;
   opacity: unset;
 
+}
+.attribute_value .ui_radio{
+  margin: 2px;
+}
+
+.attribute_name{
+  font-weight: 600;
+}
+
+.attribute_name::first-letter{
+  text-transform: uppercase;
+}
+.attribute_value{
+  display: inline-flex;
+  align-items: center;
+  padding: 3px;
 }
 
 sub,
@@ -87,13 +118,13 @@ label.wrap_checkbox input[type=checkbox] {
 label.wrap_checkbox input:checked + .icon .fa-check {
   opacity: 1;
 }
-label.ui_radio input[type=radio] {
+label.ui_radio input[type=radio], label.ui_radio input[type=checkbox] {
   display: none;
 }
-label.ui_radio input[type=radio]:checked + .ch {
+label.ui_radio input[type=radio]:checked + .ch, label.ui_radio input[type=checkbox]:checked + .ch {
   border-color: #00ace5;
 }
-label.ui_radio input[type=radio]:checked + .ch .active {
+label.ui_radio input[type=radio]:checked + .ch .active, label.ui_radio input[type=checkbox]:checked + .ch .active {
   opacity: 1;
 }
 label.ui_radio .ch {
@@ -947,7 +978,6 @@ section.fourth .wrap_grid .left .items {
   margin-top: 0;
 }
 section.fourth .wrap_grid .left .item {
-  margin-bottom: 30px;
   background-color: #fff;
   border-radius: 5px;
   padding: 25px 20px;
@@ -955,6 +985,7 @@ section.fourth .wrap_grid .left .item {
 section.fourth .wrap_grid .left .named {
   font-weight: 600;
   color: #00ace5;
+  margin-bottom: 20px;
 }
 section.fourth .wrap_grid .left .filter .name {
   color: #000;
@@ -1471,7 +1502,7 @@ section.add .header .right {
     justify-content: center;
   }
 }
-section.add .choose_cat .title_m {
+section.add .choose_cat .title_m, section.add .title_m {
   padding-top: 30px;
   padding-bottom: 20px;
   font-size: 20px;

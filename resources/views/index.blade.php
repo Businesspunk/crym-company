@@ -37,7 +37,7 @@
 			<div class="container wrap_grid">
 				<div class="left">
 					<div class="h4">VIP-объявления</div>
-					{!! $vipposts !!}
+					@include('components/posts', [ 'posts' => $vipposts, 'type' => 'vip' ])
 				</div>
 			</div>
 		</section>
@@ -45,7 +45,7 @@
 			<div class="container wrap_grid">
 				<div class="left">
 					<div class="h4">Новые объявления</div>
-					{!! $newest !!}
+					@include('components/posts', [ 'posts' => $newest, 'type' => 'new' ])
 				</div>
 				<div class="right">
 					<div class="items">

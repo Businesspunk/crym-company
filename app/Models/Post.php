@@ -8,10 +8,14 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Builder;
 use Nicolaslopezj\Searchable\SearchableTrait;
+use App\Models\AttributeValue;
+use App\Models\Attribute;
+
 
 
 use CyrildeWit\EloquentViewable\Viewable;
 use CyrildeWit\EloquentViewable\Contracts\Viewable as ViewableContract;
+use App\Models\postAttributeValue;
 
 class Post extends Model implements ViewableContract
 {
@@ -37,11 +41,29 @@ class Post extends Model implements ViewableContract
         return $this->belongsTo('App\Models\Category');
     }
 
+    public function attribute_value()
+    {
+        return $this->belongsToMany('App\Models\AttributeValue', 'post_attribute_value', 'post_id', 'attribute_value_id');
+    }
+
     public function user()
     {
         return $this->belongsTo('App\User');
     }
     
+    public function isHaveValue( $attribute, $value ){
+        $attribute_values = $this->attribute_value ?? [];
+
+        foreach( $attribute_values as $attribute_value ){
+            if( $attribute_value->attribute->slug == $attribute 
+                && $attribute_value->value_slug == $value ){
+                    return true;
+            }
+        }
+
+        return false;
+    }
+
     protected static function addCity( $city )
     {
         $statement = City::where('name', $city)->count();
@@ -62,10 +84,40 @@ class Post extends Model implements ViewableContract
         }
     }
 
+    protected static function addAttributes($id, $request)
+    {
+        $attributes = Attribute::all();
+        foreach( $attributes as $attribute ){
+            $slug = $attribute->slug;
+            if( $request->$slug ){
+                $request_value = $request->$slug;
+                if( $request_value == 'null' ){
+                    $request_value = null;
+                }
+                $value = $attribute->values()->where('value_slug', $request_value)->first();
+                if( $value ){
+                    $value = $value->id;
+                    postAttributeValue::create([
+                        'post_id' => $id,
+                        'attribute_value_id' => $value
+                    ]);
+                }
+            }
+        }
+
+    }
+
+    protected static function removeAttributes($id)
+    {
+        postAttributeValue::where([
+            'post_id' => $id,
+        ])->delete();
+    }
+
     public function deleteOne()
     {   
         $post = $this;
-
+        Post::removeAttributes( $post->id );
         $city = $post->city;
         $result = [];
         $photos = $post->photos;
@@ -97,6 +149,8 @@ class Post extends Model implements ViewableContract
 
         $data['main_photo'] = 'posts/'.$main_photo;
         $post = Post::create($data);
+
+        Post::addAttributes( $post->id ,$request);
 
         if( $user->can('vipPosting', $post ) ){
             $post->isVip = 1;
@@ -133,6 +187,10 @@ class Post extends Model implements ViewableContract
     public function editOne( Request $request )
     {
         $post = $this;
+
+        Post::removeAttributes($post->id);
+        Post::addAttributes( $post->id, $request );
+
         $data = $request->all();
         
         if( $data['coord_y'] && $data['coord_x'] ){
@@ -185,19 +243,49 @@ class Post extends Model implements ViewableContract
         }else{
             $posts = Post::where('isClose', null);
         }
+
         if( isset(request()->city) ){
             $posts->where('city', request()->city);
         }
+
         if( isset(request()->s) ){
             $posts->search( request()->s, null, true );
         }
-
         if( isset(request()->min_price) ){
             $posts->where( 'cost', '>=', request()->min_price );
         }
         if( isset(request()->max_price) ){
             $posts->where( 'cost', '<=', request()->max_price );
         }
+
+        $counter = 0;
+        foreach( request()->all() as $key => $param ){
+            if ( strpos($key, '_attribute') !== false ) {
+                $where_func = $counter > 0 ? 'orWhere' : 'where';
+                if( is_array($param) ){
+                    $posts->$where_func( function (Builder $query) use ($param, $key) {
+                        $query->whereHas( 'attribute_value', function (Builder $query) use ($param, $key) {
+                            foreach( $param as $elem ){
+                                $query->whereHas( 'attribute', function (Builder $query) use ($param, $key) {
+                                    $query->where('slug', $key);
+                                } )->where('value_slug', $elem );
+                            }
+                        });
+                    } );
+
+                }elseif( $param == "null" ){
+                    $posts->$where_func( function (Builder $query) use ($param, $key) {
+                        $query->whereHas( 'attribute_value', function (Builder $query) use ($param, $key) {
+                            $query->whereHas( 'attribute', function (Builder $query) use ($param, $key) {
+                                $query->where('slug', $key);
+                            } )->where('value_slug', null );
+                        });
+                    } );
+                }
+                $counter++;
+            }
+        }
+
         return $posts->orderBy('created_at', 'DESC');
     }
 

@@ -10,4 +10,8 @@ class AttributeValue extends Model
     public $timestamps = false;
     protected $table = 'attribute_value';
 
+    public function attribute(){
+        return $this->belongsTo('App\Models\Attribute');
+    }
+
 }

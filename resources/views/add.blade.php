@@ -71,7 +71,7 @@
 											@foreach( $maincat->categories as $cat )
 											<li class="select">
 												<label>
-													<input type="radio" name="category_id" value="{{ $cat->id }}">
+													<input type="radio" data-maincat="{{ $maincat->slug }}"  name="category_id" value="{{ $cat->id }}">
 													<div class="text category">{{ $cat->name }}</div>
 												</label>
 											</li>
@@ -84,6 +84,19 @@
 
 							</div>
 						</div>
+				</div>
+				<div>
+					<div class="title_m">Укажите атрибуты объекта</div>	
+					<div class="attributes">
+							@foreach( $maincategories as $maincat )
+								@foreach( $maincat->attributes as $attribute )
+									@include('components.attribute', 
+										['attribute' => $attribute, 
+										'maincat' => $maincat->slug, 
+										'radio' => true ])
+								@endforeach
+							@endforeach
+					</div>
 				</div>
 		</div>
 	</section>

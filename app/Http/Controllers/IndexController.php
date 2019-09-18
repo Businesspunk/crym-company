@@ -30,10 +30,10 @@ class IndexController extends Controller
                 return Post::getPaginatedPosts( $request, $newest, $postsPerPage2 );
             }
         }
-
+        
         return view('index', [
-            'vipposts' => view('components/posts', [ 'posts' => $vipposts->paginate($postsPerPage1), 'type' => 'vip' ]),
-            'newest' => view('components/posts', [ 'posts' => $newest->paginate($postsPerPage2), 'type' => 'new' ]),
+            'vipposts' =>  $vipposts->paginate($postsPerPage1),
+            'newest' =>  $newest->paginate($postsPerPage2)
         ]);
     }
 
@@ -111,6 +111,7 @@ class IndexController extends Controller
         $category = Category::where('slug', $slug)->whereHas('maincategory', function (Builder $query ) use ($maincategory) {
             $query->where('slug' , $maincategory);
         })->firstOrFail();
+
         $posts = $category->getActivePosts();
 
         if( $request->ajax() ){
@@ -120,7 +121,7 @@ class IndexController extends Controller
         return view('category', [
             'category' => $category,
             'count' => $posts->count(),
-            'posts' => view('components/posts', [ 'posts' => $posts->paginate($postsPerPage), 'type' => 'category' ]),
+            'posts' => $posts->paginate($postsPerPage)
         ]);
     }
 
@@ -175,29 +176,17 @@ class IndexController extends Controller
     {
         $category = $request->category;
         $city = $request->city;
-        $search = $request->s;
-        $min_price = $request->min_price;
-        $max_price = $request->max_price;
-        
-        $params = [];
-        if( $city != '0' && $city ){
-            $params['city'] = $city;
-        }
-        if( $search ){
-            $params['s'] = $search;
-        }
-        if( $min_price ){
-            $params['min_price'] = $min_price;
-        }
-        if( $max_price ){
-            $params['max_price'] = $max_price;
+        $params = $request->all();
+
+        foreach( $params as $key => $param ){
+            if( $param == null || $param == "0" || $key == "_token" || $key == 'category' ){
+                unset($params[$key]);
+            }
         }
 
-        
         if( $category != '0' && $category  ){
             $category = json_decode($category);
             $params['maincategory'] = $category[0];
-            
             $params['slug'] = $category[1];
             return redirect()->route( 'category' , $params);
         }else{

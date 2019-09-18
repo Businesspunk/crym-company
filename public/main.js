@@ -56,6 +56,39 @@ function showErrors( messages ){
 }
 $(document).ready(function(){
 
+	(function(){
+		$input = $('input[name=category_id]:checked');
+		if( $input.length ){
+			var value = $input.data('maincat');
+			$('.attributes').fadeOut();
+			$items = $('.attributes .item[data-maincat='+value+']');
+			if( $items.length ){
+				$('.attributes').fadeIn(100, function(){
+					$items.fadeIn();
+				});
+			}
+		}
+	}());
+
+	$(' .attributes input[type=radio]').on('click', function(){     
+        if($(this).attr("checked") == 'checked') {  
+            $(this).removeAttr('checked');
+        } else {
+            $(this).attr('checked', 'checked')
+        }
+	});
+	
+	$('[name="category_id"]').click(function(e){
+		$('.attributes').fadeOut();
+		var maincat = $(this).data('maincat');
+		$items = $('.attributes .item[data-maincat='+maincat+']');
+		if( $items.length ){
+			$('.attributes').fadeIn(100, function(){
+				$items.fadeIn();
+			});
+		}
+	})
+
 	$('.like-link').click(function(e){
 		$btn = $(this);
 		e.preventDefault();

@@ -9,5 +9,7 @@ class Attribute extends Model
     protected $guarder = [];
     public $timestamps = false;
     
-
+    public function values(){
+        return $this->hasMany('App\Models\AttributeValue');
+    }
 }

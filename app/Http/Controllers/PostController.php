@@ -12,7 +12,7 @@ use App\Http\Requests\addAndEditPost;
 class PostController extends Controller
 {
     public function post( addAndEditPost $request )
-    {   
+    {
         Post::addOne($request);
         return redirect()->route('main');
     }
