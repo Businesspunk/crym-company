@@ -20,11 +20,19 @@ class ProfileController extends Controller
 
     public function permanentUpload( Request $request ){
         $val = Validator::make( $request->all(), [
-            'avatar' => 'mimes:jpeg,png'
+            'avatar' => 'image'
         ]);
-
+            
         if( $val->fails() ){
-            return response()->json([ 'error'=> true ]);
+            $messages = $val->messages()->get('*');
+            $result = [];
+            foreach( $messages as $message ){
+                foreach( $message as $error ){
+                    $result[] = $error;
+                }
+            }
+
+            return response()->json([ 'error'=> true, 'messages' => $result ]);
         }
 
         $path = PhotoManager::savePhoto( $request->file('avatar'), 'temp', 'avatarPermanent' );

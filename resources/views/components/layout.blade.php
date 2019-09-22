@@ -109,14 +109,14 @@
                                             </span>
                                             <span class="menu_item">Мои объявления</span>
                                         </a>
-                                        <a href="{{ route('my-messages') }}" class="item ">
+                                        <!-- <a href="" class="item ">
                                             <span class="icon">
                                                 <img src="{{ asset('img/icons/message.png') }}" alt="">
                                             </span>
                                             <span class="menu_item">
                                                 Мои сообщения
                                             </span>
-                                        </a>
+                                        </a> -->
                                         <a href="{{ route('my-bookmarks') }}" class="item ">
                                             <span class="icon">
                                             <img src="{{ asset('img/icons/love.png') }}" alt="">
@@ -233,7 +233,7 @@
                                             </label>
                                         </div>
                                         <div class="reset_pas">
-                                            <a href="#" class="open-modal" data-modal="#reset-password-by-email">Забыли пароль?</a>
+                                            <a href="{{ route('password.request') }}" >Забыли пароль?</a>
                                         </div>
                                     </div>
                                 </div>
@@ -336,25 +336,25 @@
     @auth
 
     <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-        <div class="modal-header">
-            <h5 class="modal-title">Ошибка</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        <div class="modal-body">
-            <div class="alert alert-danger d-none" role="alert"></div>
-            <div class="insertion">
-            
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Ошибка</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-danger d-none" role="alert"></div>
+                <div class="insertion">
+                
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+            </div>
             </div>
         </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
-        </div>
-        </div>
-    </div>
     </div>
     @endauth
 

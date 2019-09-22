@@ -3,11 +3,12 @@
 namespace App;
 
 use Illuminate\Support\Facades\Storage;
-use App\Models\PhotoManager;
+use App\Helpers\Images\PhotoManager;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use App\Notifications\ResetPassword;
 
 class User extends Authenticatable
 {
@@ -30,6 +31,11 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new ResetPassword($token));
+    }
 
     /**
      * The attributes that should be cast to native types.
@@ -69,7 +75,7 @@ class User extends Authenticatable
         
         $user->delete();
     }
-    public function updateOne( Request $request )
+    public function updateOne( $request )
     {
         $user = $this;
         $profile = $user->profile;
@@ -78,7 +84,7 @@ class User extends Authenticatable
         
     }
 
-    public function updateAvatar( Request $request )
+    public function updateAvatar( $request )
     {
         $user = $this;
         $profile = $user->profile;

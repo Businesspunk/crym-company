@@ -23,7 +23,7 @@
 		border-radius: 50%;
 		}
 
-		.modal-open .modal{
+		.modal.show{
 			z-index: 1050;
 			opacity: 1;
 		}
@@ -52,14 +52,6 @@
 						<input value="{{ $user->profile->number }}" name="number" placeholder="Введите телефон" type="text">
 					</div>
 				</div>
-				<?php if ( filter_var($user->email, FILTER_VALIDATE_EMAIL) ):?>
-					<div class="wrap int">
-						<div class="left">Электронная почта</div>
-						<div class="right">
-							<input value="{{ $user->email }}" name="email" placeholder="@" type="text">
-						</div>
-					</div>
-				<?php endif; ?>
 				<div class="divider">
 					<div class="line"></div>
 				</div>
@@ -96,27 +88,27 @@
 
 	<!-- Modal -->
 	<div class="modal fade" id="avatarModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-	<div class="modal-dialog" role="document">
-		<div class="modal-content">
-		<div class="modal-header">
-			<h5 class="modal-title" id="exampleModalLabel">Выберите миниатюру</h5>
-			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-			<span aria-hidden="true">&times;</span>
-			</button>
-		</div>
-		<div class="modal-body">
-			<div>
-		      <img id="image" src="" alt="Picture">
-		    </div>
-		</div>
-		<div class="modal-footer">
-			<div id="preloader2" class="spinner-border text-primary" role="status">
-				<span class="sr-only">Loading...</span>
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Выберите миниатюру</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+				</button>
 			</div>
-			<button id="saveImage" type="button" class="btn btn-primary">Сохранить</button>
+			<div class="modal-body">
+				<div>
+				<img id="image" src="" alt="Picture">
+				</div>
+			</div>
+			<div class="modal-footer">
+				<div id="preloader2" class="spinner-border text-primary" role="status">
+					<span class="sr-only">Loading...</span>
+				</div>
+				<button id="saveImage" type="button" class="btn btn-primary">Сохранить</button>
+			</div>
+			</div>
 		</div>
-		</div>
-	</div>
 	</div>
 
 </main>
@@ -144,7 +136,10 @@
 					contentType: false, 
 					success: function (data) {
 						$('#preloader').fadeOut(200);
-						if( data.error ){ return }
+						if( data.error ){ 
+							showErrors(data.messages);
+							return;
+						}
 						
 						$imageInRedactor.attr('src', data.src );
 
@@ -155,8 +150,8 @@
 								croppable = true;
 							},
 						});
-
-						$('#avatarModal').modal();
+						
+						$('#avatarModal').modal('show');
 					}
 				});
 			})

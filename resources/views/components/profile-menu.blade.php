@@ -8,7 +8,6 @@
 		<div class="right">
 			<div class="links">
 				<a href="{{ route('my-posts') }}">Мои объявления</a>
-				<a href="{{ route('my-messages') }}">Мои сообщения</a>
 				<a href="{{ route('my-bookmarks') }}">Закладки</a>
 				<a href="{{ route('my-settings') }}">Настройки</a>
 				<a href="{{ route('my-support') }}">Помощь</a>
