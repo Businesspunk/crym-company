@@ -101,7 +101,7 @@
 							<div class="phone hidden">
 								<a href="tel:{{ $post->user->profile->number }}">{{ $post->user->profile->number }}</a>	
 							</div>
-							<a href="111" class="write_message gray_btn btn">Написать сообщение</a>
+							<!-- <a href="111" class="write_message gray_btn btn">Написать сообщение</a> -->
 							@include('components/people')
 						</div>
 					</div>

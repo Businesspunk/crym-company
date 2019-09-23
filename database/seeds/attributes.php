@@ -54,10 +54,6 @@ class attributes extends Seeder
                 'attrib_id' => 4,
                 'main_cat_id' => 1
             ],
-            [
-                'attrib_id' => 5,
-                'main_cat_id' => 1
-            ],
             
         ];
 

@@ -50,7 +50,7 @@
 				<div class="right">
 					<div class="items">
 						<div class="item">
-							Реклама
+							Здесь может быть Ваша реклама
 						</div>
 					</div>
 				</div>
