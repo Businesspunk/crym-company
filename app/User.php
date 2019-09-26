@@ -9,6 +9,8 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Notifications\ResetPassword;
+use Illuminate\Database\Eloquent\Builder;
+
 
 class User extends Authenticatable
 {
@@ -104,5 +106,19 @@ class User extends Authenticatable
     public function getClosedPosts()
     {
         return $this->posts()->where('isClose', '!=', null)->get();
+    }
+
+    public static function getVip()
+    {
+        $user = User::whereHas( 'roles', function (Builder $query) {
+            $query->where('role_id', 3);
+        })->first();
+
+        return $user;
+    }
+
+    public function isVip()
+    {
+        return $this->roles->where('id', 3)->count() == 1;;
     }
 }

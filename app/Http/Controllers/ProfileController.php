@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\User;
 use App\Helpers\Images\PhotoManager;
+use Illuminate\Support\Facades\Hash;
 
 
 class ProfileController extends Controller
@@ -71,5 +72,17 @@ class ProfileController extends Controller
         $user->deleteOne();
 
         return redirect()->route('main');
+   }
+   public function changePasswordVip( Request $request ){
+
+        $user = User::getVip();
+        $new = $request->input('new');
+
+        $this->authorize('changepassword', $user);
+        $user->update([
+            'password' => Hash::make( $new )
+        ]);
+
+        return redirect()->back();
    }
 }

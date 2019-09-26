@@ -83,6 +83,24 @@
 					</div>
 				</div>
 			</form>
+			@can('changepassword', App\User::getVip() )
+			<div class="card" style="width: 18rem;">
+				<div class="card-body">
+					<form method="POST" action="{{ route('vip.changepassword') }}">
+						@csrf
+						<div class="alert alert-dark" role="alert">
+							Изменить пароль Vip-аккаунта
+						</div>
+						<div class="form-group">
+							<label for="exampleInputPassword1">Пароль</label>
+							<input type="text" class="form-control" name="new" id="exampleInputPassword1" placeholder="Пароль">
+						</div>
+						<button type="submit" class="btn btn-primary">Изменить</button>
+					</form>
+				</div>
+			</div>
+			
+			@endcan
 		</div>
 	</section>
 

@@ -2946,6 +2946,9 @@ section.fourth .wrap_grid .left .named:first-letter{
 .choose_cat label{
   width: 100%;
 }
+.choose_cat .attribute_value label{
+  width: unset;
+}
 .like-link{
   cursor: pointer;
 }

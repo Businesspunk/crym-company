@@ -48,6 +48,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/posts/{id}/close', 'PostController@close')->name('post.close');
 
     Route::post('/profiles/{id}/delete', 'ProfileController@deleteUser')->name('user.delete');
+
+    Route::post('/changepassword', 'ProfileController@changePasswordVip')->name('vip.changepassword');
 });
 
 Route::get('/bookmarks', "IndexController@bookmarks")->name('my-bookmarks');

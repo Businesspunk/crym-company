@@ -62,6 +62,12 @@
 					<div class="title_m">Выберите категорию</div>
 						<div class="wrap left_s">
 							<div class="left ui_shadow">
+								<?php 
+									if( (Auth::user())->isVip() ){
+										$maincategories = $maincategories->where('id', 1);
+									}
+								?>
+								
 								@foreach( $maincategories as $maincat )
 									@if( $loop->iteration % 2 == 1 )
 										<div class="col">
@@ -82,6 +88,7 @@
 									@endif
 								@endforeach
 
+								
 							</div>
 						</div>
 				</div>

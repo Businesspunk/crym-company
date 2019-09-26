@@ -17,5 +17,14 @@ class UserPolicy
         }
         return false;
     }
+
+    public function changepassword(User $user, User $model)
+    {   
+        $isAdmin = $user->roles->where('id', 1)->count() == 1;
+        if( $isAdmin ){
+            return true;
+        }
+        return false;
+    }
     
 }
