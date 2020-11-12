@@ -39,12 +39,15 @@
 								<i data-favorite-id="{{ $post->id }}" class="fa like-link fa-heart @if( in_array($post->id, $favorites) ) active @endif" aria-hidden="true"></i>
 						</div>
 						<div class="second_line">
-							Размещено {{ $post->created_at->diffForHumans() }}
+							Размещено {{ $post->created_at->format('d.m.Y') }}
 						</div>
 						<div class="third_line cost">{{ get_price($post->cost) }}</div>
 						<div class="fourth_line views">
 							<i class="fa fa-eye"></i>
 							<div class="number">{{ views($post)->unique()->count() }}</div>
+
+							<i class="fa fa-heart"></i>
+							<div class="number">{{ $post->follovers }}</div>
 						</div>
 						<div class="big_photo">
 							<div class="wrap">

@@ -90,25 +90,25 @@ $(document).ready(function(){
 	})
 
 	$('.like-link').click(function(e){
-		$btn = $(this);
 		e.preventDefault();
 
 		var id = $(this).data('favorite-id');
-		
+		$symbol = $('[data-favorite-id='+id+']');
+
 		var res = Cookies.getJSON('favorite');
 		res = res ? res : [];
-	
-		if( res.includes(id) ){
-			removeA(res, id);
-		}else{
-			res.push(id);
-		}
+		console.log(res.includes(id));
+		$.post(routes_variable[0], {id: id, isAdded: res.includes(id) ? 1 : 0 }, function(){
 		
-		Cookies.set('favorite', res, { expires: 180 });
-		var count = res.length;
+			if( res.includes(id) ){
+				removeA(res, id);
+			}else{
+				res.push(id);
+			}
 		
-		$('[data-favorite-id='+id+']').toggleClass('active');
-	
+			Cookies.set('favorite', res, { expires: 180 });
+			$symbol.toggleClass('active');
+		});
 	})
 
 		$('.showMorePosts').click(function(e){

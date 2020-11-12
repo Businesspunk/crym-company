@@ -7,5 +7,5 @@
 		<a href="{{ route('post', $post->id) }}">{{ $post->title }}</a>
 	</div>
 	<div class="cost">{{ get_price($post->cost) }}</div>
-	<div class="time">{{ $post->created_at->diffForHumans() }}</div>
+	<div class="time">{{ $post->created_at->format('d.m.Y') }}</div>
 </div>

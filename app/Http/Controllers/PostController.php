@@ -97,4 +97,19 @@ class PostController extends Controller
         return redirect()->route('main');
     }
 
+    public function addFollowing(Request $request)
+    {
+        $id = $request->input('id');
+        $isAdded = $request->input('isAdded');
+
+        $post = Post::findOrFail($id);
+        
+        if( $isAdded ){
+            $post->follovers--;
+        }else{
+            $post->follovers++;
+        }
+        
+        $post->save();
+    }
 }

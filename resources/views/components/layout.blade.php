@@ -444,7 +444,12 @@
 	<script src="{{ asset('js/cookie.js') }}"></script>
 	<script src="{{ asset('scrolly/dist/jquery.scroolly.min.js') }}"></script>
 	<script src="{{ asset('slick/slick.min.js') }}"></script>
-	<script src="{{ asset('main.js?s='). (time() + 9) }}"></script>
+    <script src="{{ asset('main.js?s='). (time() + 9) }}"></script>
+    
+    <script>    
+        var routes_variable = [ "{!! route( 'post.addFollowing' ) !!}" ]
+    </script>
+
     @yield('after_js')
     <script>
         $(window).on('load',function() {

@@ -78,12 +78,12 @@
 										<div class="col">
 									@endif
 										<ul>
-											<li class="title category">{{ $maincat->name }}</li>
+											<li class="title category first_uppercase">{{ $maincat->name }}</li>
 											@foreach( $maincat->categories as $cat )
 											<li class="select">
 												<label>
 													<input type="radio" data-maincat="{{ $maincat->slug }}"  name="category_id" value="{{ $cat->id }}">
-													<div class="text category">{{ $cat->name }}</div>
+													<div class="text category first_uppercase">{{ $cat->name }}</div>
 												</label>
 											</li>
 											@endforeach
@@ -92,8 +92,6 @@
 										</div>
 									@endif
 								@endforeach
-
-								
 							</div>
 						</div>
 				</div>
@@ -101,7 +99,7 @@
 					<div class="attributes">
 					<div class="title_m">Укажите атрибуты объекта</div>	
 							@foreach( $maincategories as $maincat )
-								@foreach( $maincat->attributes as $attribute )
+								@foreach( $maincat->getAttributes() as $attribute )
 									@include('components.attribute', 
 										['attribute' => $attribute, 
 										'maincat' => $maincat->slug, 

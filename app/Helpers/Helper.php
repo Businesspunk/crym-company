@@ -12,6 +12,12 @@ if( !function_exists('upFirstLetter') ){
     }
 }
 
+if( !function_exists('lowerFirstLetter') ){
+    function lowerFirstLetter($str, $encoding = 'UTF-8'){
+        return mb_strtolower(mb_substr($str, 0, 1, $encoding), $encoding).mb_substr($str, 1, null, $encoding);
+    }
+}
+
 if(!function_exists('getPostPhotoSrc')){
     function getPostPhotoSrc($dbPath){
         $path = 'storage/'. $dbPath;

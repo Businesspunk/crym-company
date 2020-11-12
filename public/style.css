@@ -6,6 +6,10 @@ footer .container .main .items .title a::first-letter{
   text-transform: uppercase;
 }
 
+html body .first_uppercase::first-letter{
+  text-transform: uppercase;
+}
+
 footer .container .main .items a::first-letter{
   text-transform: uppercase;
 }
@@ -3224,4 +3228,7 @@ section.goodOffers .items.objects img{
 .nothing_found{
   margin-top: 20px;
   font-size: 15px;
+}
+body main div.fourth_line.views i.fa.fa-heart{
+  margin-left: 10px;
 }

@@ -93,7 +93,9 @@ Route::get('/search', 'IndexController@searchCheck')->name('search');
 Route::get('/posts', 'IndexController@posts')->name('posts');
 
 Route::get('/posts/{id}', 'IndexController@post')->name('post');
-
+Route::post('/posts/add-following', 'PostController@addFollowing')->name('post.addFollowing');
 
 
 Route::get('/profile/{id}', 'IndexController@profile')->name('profile.other');
+
+

@@ -28,7 +28,7 @@ class Post extends Model implements ViewableContract
         ],
     ];
 
-    public $fillable = ['title', 'cost', 'user_id', 'category_id', 'description', 'youtube', 'coord_x', 'coord_y', 'main_photo', 'isClose', 'city', 'phone_number'];
+    public $fillable = ['title', 'cost', 'user_id', 'category_id', 'description', 'youtube', 'coord_x', 'coord_y', 'main_photo', 'isClose', 'city', 'phone_number', 'follovers'];
 
     public function photos()
     {
