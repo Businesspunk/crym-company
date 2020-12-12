@@ -64,7 +64,7 @@
 					</div>
 				@endisset
 			</div>
-			<div class="container wrap_grid">
+			<div class="container wrap_grid ads_added">
 				<div class="left">
 					<div class="items">
 						<div class="item named">
@@ -95,6 +95,13 @@
 				</div>
 				<div class="right">
 					@include('components/posts', ['type' => 'category' ])
+				</div>
+				<div class="right ads_placed">
+					<div class="items">
+						<div class="item">
+							Здесь может быть Ваша реклама
+						</div>
+					</div>
 				</div>
 			</div>
 		</section>

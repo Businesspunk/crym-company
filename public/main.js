@@ -13,6 +13,52 @@ function removeA(arr) {
 	return arr;
 }
 
+function removeFromArray( array, item )
+{
+	var data = [];
+	console.log(array, item);
+
+	for (let i = 0; i < array.length; i++) {
+		if( array[i].id != item.id || array[i].type != item.type ){
+			data.push(array[i]);
+		}
+	}
+
+	return data;
+}
+
+function setGetParametr(parameterName, value) {
+	var items = location.search.substr(1).split("&");
+	items = items[0] == "" ? [] : items; 
+	var result = "", query = "", isFind = false;
+
+	console.log(items);
+	
+	// find
+	for (var index = 0; index < items.length; index++) {
+        let tmp = items[index].split("=");
+        if (tmp[0] === parameterName){ 
+			isFind = true;
+		};
+	}
+	
+	//increase
+	if( isFind ){
+		for (var index = 0; index < items.length; index++) {
+			let tmp = items[index].split("=");
+			if (tmp[0] === parameterName){ 
+				tmp[1] = value;
+			};
+			query += tmp.join('=');
+		}
+	}else{
+		items.push( parameterName + "=" + value);
+		query = items.join('&');
+	}
+
+	return window.location.protocol + "//" + window.location.host + window.location.pathname + "?" + query;
+}
+
 function getPosts(page, type, place, btn){
 	var res;
 	$.ajax({
@@ -117,6 +163,11 @@ $(document).ready(function(){
 			var page = $btn.data('page');
 			var type = $btn.data('type');
 			getPosts( page, type, $btn.prev('.items.objects'), $btn);
+
+			type = "page_" + type;
+			var newurl = setGetParametr( type, page );
+			window.history.pushState({ path: newurl }, '', newurl);
+
 			++$btn.data().page;
 		})
 	

@@ -20,6 +20,7 @@ class Category extends Model
     {
         return $this->hasMany('App\Models\Post');
     }
+    
     public function getActivePosts()
     {
         $posts = $this->posts();

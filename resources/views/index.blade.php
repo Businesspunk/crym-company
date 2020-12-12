@@ -27,6 +27,9 @@
 
 					@foreach( $maincategories as $maincat )
 						@foreach( $maincat->categories as $cat )
+							@if ($cat->isOnMainPage == 0)
+								@continue
+							@endif
 							<div class="item">
 								<a href="{{ route('category', [ 'maincategory' => $maincat->slug , 'slug' => $cat->slug]) }}">
 									<img src="{{ asset( 'img/'. $cat->icon ) }}" alt="">

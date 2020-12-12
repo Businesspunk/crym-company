@@ -34,10 +34,10 @@ class Promotion extends Model
     public static function getPromotions( $type_own, $isRealty = false, $isAdded = false )
     {
         $promotions = Promotion::where('type_own', $type_own)->where('isRealty', $isRealty);
-        
-        if( !$isAdded ){
+
+        /*if( !$isAdded ){
             $promotions->where('days', '!=', null);
-        }
+        }*/
 
         $promotions = $promotions->get();
 

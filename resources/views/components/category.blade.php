@@ -15,10 +15,10 @@
 						<div class="widthDirect">
 							<select name="category" id="salutation">
 								<option value="0">Все категории</option>
-								@foreach($maincategories as $maincat)
+								@foreach($maincategories->sortBy('weightSort') as $maincat)
 								
 									<option @if( url()->current() == route('maincategory', $maincat->slug ) ) ) selected  @endif value="{{ json_encode([ $maincat->slug ]) }}" >{{ $maincat->name }}</option>
-									@foreach($maincat->categories as $cat)									  	
+									@foreach($maincat->categories->sortBy('weightSort') as $cat)									  	
 										<option @if( url()->current() == route('category', [ $maincat->slug ,$cat->slug] ) ) ) selected  @endif value="{{ json_encode([ $maincat->slug ,$cat->slug]) }}" >{{ $cat->name }}</option>
 									@endforeach
 								@endforeach
@@ -30,9 +30,9 @@
 						</div>
 						<div class="widthCities">
 							<select name="city" id="salutation_2">
-								<option value="0">Все города</option>
+								<option value="0">Весь Крым</option>
 								@foreach($cities as $city)
-								<option @if($city->name == request()->city) selected @endif value="{{ $city->name }}" >{{ $city->name }}</option>
+								<option @if($city->id == request()->city) selected @endif value="{{ $city->id }}" >{{ $city->name }}</option>
 								@endforeach
 							</select>
 						</div>

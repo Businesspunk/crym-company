@@ -12,15 +12,15 @@ use App\User;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use App\Models\MainCategory;
+use App\Models\City;
 use Breadcrumbs;
 use Illuminate\Database\Eloquent\Builder;
-
 
 
 class IndexController extends Controller
 {
     public function mainPage( Request $request )
-    {
+    {   
         $vipposts = Post::getVip();
         $newest = Post::getUnclosed();
         $postsPerPage1 = 4;
@@ -34,9 +34,13 @@ class IndexController extends Controller
             }
         }
 
+        $vippage = $request->input('page_vip') ? (int) $request->input('page_vip') : 1;
+        $newpage = $request->input('page_new') ? (int) $request->input('page_new') : 1;
+
+
         return view('index', [
-            'vipposts' =>  $vipposts->paginate($postsPerPage1),
-            'newest' =>  $newest->paginate($postsPerPage2),
+            'vipposts' =>  $vipposts->paginate($postsPerPage1*$vippage),
+            'newest' =>  $newest->paginate($postsPerPage2*$newpage),
             'breadcrumbs' => Breadcrumbs::render('home')
         ]);
     }
@@ -100,7 +104,8 @@ class IndexController extends Controller
         return view('add', [
             'promotions' => Promotion::getPromotions( $request->user()->type_of_account ),
             'breadcrumbs' => Breadcrumbs::render('add_post'),
-            'costOne' => Promotion::getCostOnePublication( $request->user() )          
+            'costOne' => Promotion::getCostOnePublication( $request->user() ),
+            'cities' => City::all()          
         ]);
     }
     public function logout()
@@ -128,13 +133,14 @@ class IndexController extends Controller
 
         $title = sprintf('%s - %s', $category->maincategory->name, $category->name );
 
+        $page = $request->input('page_category') ? (int) $request->input('page_category') : 1;
         return view('category', [
             'title' => $title,
             'category' => $category,
             'attributes_links' => $attributes_links,
             'attributes' => $attributes,
             'count' => $posts->count(),
-            'posts' => $posts->paginate($postsPerPage),
+            'posts' => $posts->paginate($postsPerPage*$page),
             'breadcrumbs' => Breadcrumbs::render('category', $category->maincategory, $category),
             'header' => [
                 'title' => upFirstLetter( $title ),
@@ -179,11 +185,12 @@ class IndexController extends Controller
 
         $attributes = Attribute::orderBy('order', 'desc')->get();
 
+        $page = $request->input('page_category') ? (int) $request->input('page_category') : 1;
         return view('category', [
             'title' => "Объявления",
             'count' => $posts->count(),
             'attributes' => $attributes,
-            'posts' => $posts->paginate($postsPerPage),
+            'posts' => $posts->paginate($postsPerPage*$page),
             'breadcrumbs' => Breadcrumbs::render('all_posts')
         ]);
     }
@@ -209,13 +216,14 @@ class IndexController extends Controller
         $attributes = $maincat->getAttributes();
         $attributes_links = $attributes;
 
+        $page = $request->input('page_category') ? (int) $request->input('page_category') : 1;
         
         return view('category', [
             'title' => $maincat->name,
             'count' => $posts->count(),
             'attributes' => $attributes,
             'attributes_links' => $attributes_links,
-            'posts' => $posts->paginate($postsPerPage),
+            'posts' => $posts->paginate($postsPerPage*$page),
             'maincategory' => $maincat,
             'breadcrumbs' => Breadcrumbs::render('maincategory', $maincat),
             'header' => [
@@ -230,6 +238,7 @@ class IndexController extends Controller
     {
         $postsPerPage = 12;
         $categories = Category::getVipCategories();
+        
         if( $request->ajax() ){
             $category = $request->type;
             $posts = Post::getVipPostsByCategory($category);
@@ -315,12 +324,13 @@ class IndexController extends Controller
         $title = sprintf( '%s - %s - %s %s', $category->maincategory->name, $category_name, $attribute_value_name, $attribute_name);
         $attributes_links = $category->maincategory->getAttributes();
 
+        $page = $request->input('page_category') ? (int) $request->input('page_category') : 1;
         return view('category', [
             'title' => $title,
             'category' => $category,
             'attributes_links' => $attributes_links,
             'count' => $posts->count(),
-            'posts' => $posts->paginate($postsPerPage),
+            'posts' => $posts->paginate($postsPerPage*$page),
             'breadcrumbs' => Breadcrumbs::render('categoryByAttribute', $category->maincategory, $category, $attribute_value, $attribute)
         ]);
         
@@ -364,12 +374,13 @@ class IndexController extends Controller
 
         $attributes_links = $category->getAttributes();
 
+        $page = $request->input('page_category') ? (int) $request->input('page_category') : 1;
         return view('category', [
             'title' => $title,
             'maincategory' => $category,
             'attributes_links' => $attributes_links,
             'count' => $posts->count(),
-            'posts' => $posts->paginate($postsPerPage),
+            'posts' => $posts->paginate($postsPerPage*$page),
             'breadcrumbs' => Breadcrumbs::render('maincategoryByAttribute', $category, $attribute_value, $attribute)
         ]);
     }

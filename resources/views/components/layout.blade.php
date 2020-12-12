@@ -66,7 +66,7 @@
 	<link rel="stylesheet" href="{{ asset('styles/reset.css') }}">
 	<link rel="stylesheet" href="{{ asset('slick/slick-theme.css') }}">
 	<link rel="stylesheet" href="{{ asset('slick/slick.css') }}">
-	<link rel="stylesheet" href="{{ asset('style.css?v='. (18)) }}">
+	<link rel="stylesheet" href="{{ asset('style.css?v='. (21)) }}">
 	
     @yield('after_css')
     
@@ -84,8 +84,9 @@
                     @endguest
 				</div>
 				<div class="nd2">
-					<a href="{{ route('my-bookmarks') }}">
+					<a class="favar_link" href="{{ route('my-bookmarks') }}">
 						<i class="fa fa-heart" aria-hidden="true"></i>
+                        <span class="favor">Избранное</span>
 					</a>
 				</div>
 				<div class="title rd3">
@@ -93,7 +94,7 @@
                     <p>Недвижимость и строительство республики Крым </p>
 				</div>
 				<div class="number th4">
-                    <a class="firm_btn btn_white sigh-in" href="{{ route('messageToSupport') }}">
+                    <a class="firm_btn btn_white sigh-in">
                         Помощь
                     </a>
 				</div>
@@ -215,13 +216,27 @@
     <footer>
 			<div class="container">
 				<div class="main">
+
+                @if( isset($count) )
+                    <div class="main_title">
+                        <h1>
+                            @if( isset( $title ) )
+                                {{ upFirstLetter( $title ) }}
+                            @else
+                                {{ upFirstLetter( $category->name) }}
+                            @endif
+                        </h1>
+                        <span class="number">{{ $count }}</span>
+                    </div>
+                @endif
+
 					<div class="items">
-						@foreach( $maincategories as $maincat )
+						@foreach( $maincategories->sortBy('weightSort') as $maincat )
                                 <div class="item">
                                     <div class="title category">
                                         <a href="{{ route('maincategory', $maincat->slug ) }}">{{ $maincat->name }}</a>
                                     </div>
-                                        @foreach( $maincat->categories as $cat )
+                                        @foreach( $maincat->categories->sortBy('weightSort') as $cat )
                                             <a class="category" href="{{ route('category', [ 'maincategory' => $maincat->slug , 'slug' => $cat->slug]) }}">{{ $cat->name }}</a>
                                         @endforeach
                                 </div>
@@ -387,13 +402,15 @@
                             <div class="body">
                                 <div class="sm_c" >
                                     <div class="wrap_inp wrap_choose">
-                                        <label>
+                                        <label >
                                             <input type="radio" required name="type" value="1">
                                             <span class="firm_btn2">Физическое лицо</span>
+                                            <p>6 бесплатных объявлений</p>
                                         </label>
                                         <label>
                                             <input type="radio" required name="type" value="2">
                                             <span class="firm_btn2">Юридическое лицо</span>
+                                            <p>10 беплатных объявлений</p>
                                         </label>
                                     </div>
                                     <input type="submit" class="firm_btn" value="Продолжить">
@@ -444,7 +461,7 @@
 	<script src="{{ asset('js/cookie.js') }}"></script>
 	<script src="{{ asset('scrolly/dist/jquery.scroolly.min.js') }}"></script>
 	<script src="{{ asset('slick/slick.min.js') }}"></script>
-    <script src="{{ asset('main.js?s='). (time() + 9) }}"></script>
+    <script src="{{ asset('main.js?v='). (20) }}"></script>
     
     <script>    
         var routes_variable = [ "{!! route( 'post.addFollowing' ) !!}" ]

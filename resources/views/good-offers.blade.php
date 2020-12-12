@@ -29,8 +29,10 @@
 			@forelse( $categories as $category )
 				<div class="block">
 					<div class="h4">{{ $category->name }}</div>
+					<?php $input = 'page_'.$category->slug; $page = request()->input($input) ? (int) request()->input($input) : 1;
+					  ?>
 					@include('components/posts', [	
-						'posts' => $category->getVip()->paginate($postsPerPage),
+						'posts' => $category->getVip()->paginate($postsPerPage*$page),
 						'type' => $category->slug
 					])
 				</div>

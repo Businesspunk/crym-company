@@ -51,15 +51,15 @@
 						</div>
 						<div class="big_photo">
 							<div class="wrap">
-								<img src="{{ getPostPhotoSrc($post->main_photo) }}" alt="">
+								<img src="{{ getPostPhotoSrc($post->getMainPhotoUrl() ) }}" alt="">
 							</div>
-							<a href="{{ getPostPhotoSrc($post->main_photo) }}" data-lightbox="example-gallery">
-								<img class="img-fluid" src="{{ getPostPhotoSrc($post->main_photo) }}">
+							<a href="{{ getPostPhotoSrc($post->getMainLagerPhotoUrl() ) }}" data-lightbox="example-gallery">
+								<img class="img-fluid" src="{{ getPostPhotoSrc($post->getMainPhotoUrl() ) }}">
 							</a>
 						</div>
 						<div class="small_photos">
-							@foreach( $post->photos as $photo )
-								<a href="{{ getPostPhotoSrc($photo->url) }}" data-lightbox="example-gallery" >
+							@foreach( $post->getAdditionalPhotos() as $photo )
+								<a href="{{ getPostPhotoSrc( $photo->getLagerPhotoUrl() ) }}" data-lightbox="example-gallery" >
 									<img src="{{ getPostPhotoSrc($photo->url) }}" class="img-fluid">
 								</a>
 							@endforeach

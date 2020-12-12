@@ -79,21 +79,26 @@ section.first .logo span{
 
 .ui-selectmenu-menu #ui-id-2,
 .ui-selectmenu-menu #ui-id-7,
-.ui-selectmenu-menu #ui-id-11,
-.ui-selectmenu-menu #ui-id-19,
-.ui-selectmenu-menu #ui-id-24,
-.ui-selectmenu-menu #ui-id-28
+.ui-selectmenu-menu #ui-id-15,
+.ui-selectmenu-menu #ui-id-21,
+.ui-selectmenu-menu #ui-id-27,
+.ui-selectmenu-menu #ui-id-35,
+.ui-selectmenu-menu #ui-id-39,
+.ui-selectmenu-menu #ui-id-47
 {
   background: #e3e3e3;
   font-weight: 600;
 }
 
+
 .ui-selectmenu-menu #ui-id-2.ui-state-active,
 .ui-selectmenu-menu #ui-id-7.ui-state-active,
-.ui-selectmenu-menu #ui-id-11.ui-state-active,
-.ui-selectmenu-menu #ui-id-19.ui-state-active,
-.ui-selectmenu-menu #ui-id-24.ui-state-active
-.ui-selectmenu-menu #ui-id-28.ui-state-active
+.ui-selectmenu-menu #ui-id-15.ui-state-active,
+.ui-selectmenu-menu #ui-id-21.ui-state-active,
+.ui-selectmenu-menu #ui-id-27.ui-state-active,
+.ui-selectmenu-menu #ui-id-35.ui-state-active,
+.ui-selectmenu-menu #ui-id-39.ui-state-active,
+.ui-selectmenu-menu #ui-id-47.ui-state-active
 {
   border: 1px solid #003eff;
   background: #007fff;
@@ -158,6 +163,16 @@ html body .attrib_links a:active{
   background-color: #00ace5;
   color: #fff;
 }
+
+.choose_account .wrap_choose label{
+  margin-bottom: 15px;
+}
+.choose_account .wrap_choose label p{
+  margin-top: 5px;
+ color: #555555;
+ font-size: 14px;
+}
+
 
 .firm_btn2{
   font-weight: 700;
@@ -544,7 +559,20 @@ header .first .nd2 {
 }
 @media (max-width: 700px) {
   header .first .nd2 {
-    display: none;
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  header .first .nd2 .favar_link {
+    color: #535353;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+  }
+
+  header .first .nd2 .favar_link span{
+    margin-top: 0;
+    margin-left: 5px;
   }
 }
 header .first .rd3 {
@@ -578,6 +606,7 @@ header .first .th4 {
   header .first .th4 {
     width: 100%;
     text-align: left;
+    display: none;
   }
 }
 header .first .th5 {
@@ -1098,31 +1127,29 @@ section.fourth {
 section.fourth .content {
   margin-top: 30px;
 }
-section.fourth .main_title {
-  padding: 0 20px;
+section.fourth .main_title, footer .main_title {
+  padding: 0 0px;
   font-size: 25px;
   color: #000;
   padding-bottom: 15px;
-  border-bottom: 1px solid #cccccc;
+  /* border-bottom: 1px solid #cccccc; */
   font-weight: 700;
   margin-bottom: 15px;
 }
 
-section.fourth .main_title h1{
+section.fourth .main_title h1, footer .main_title h1{
   display: inline-block;
 }
 
-section.fourth .main_title span {
+section.fourth .main_title span, footer .main_title span {
   display: inline-block;
 }
-section.fourth .main_title .number {
+section.fourth .main_title .number, footer .main_title .number{
   margin-left: 10px;
   color: #bababa;
 }
 section.fourth .wrap_grid {
   display: grid;
-  grid-template-columns: 1fr 2.5fr;
-  grid-column-gap: 20px;
 }
 @media (max-width: 700px) {
   section.fourth .wrap_grid {
@@ -3231,4 +3258,60 @@ section.goodOffers .items.objects img{
 }
 body main div.fourth_line.views i.fa.fa-heart{
   margin-left: 10px;
+}
+
+body .cities_choose{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  margin-bottom: 20px;
+}
+
+.cities_choose .button{
+  margin: 5px 0;
+}
+
+.cities_choose .button label{
+  display: flex;
+  align-items: center;
+}
+
+.cities_choose .button label .name{
+  margin-left: 5px;
+}
+
+body main section.fourth div.wrap_grid div.left{
+  display: none;
+}
+
+html body .attrib_links{
+  display: none;
+}
+
+body header div.number.th4 > a{
+  opacity: 0;
+}
+
+.favar_link{
+  color: #535353;
+  text-decoration: none;
+  text-align: center;
+  display: block;
+}
+
+.favar_link span{
+  display: block;
+  margin-top: 5px;
+}
+
+.ads_added{
+  display: grid;
+  grid-template-columns: 4fr 1fr;
+  grid-column-gap: 10px;
+}
+
+.ads_added .ads_placed{
+  background-color: #fff;
+  text-align: center;
+  display: flex;
+  align-items: center;
 }

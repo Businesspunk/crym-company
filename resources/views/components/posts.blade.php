@@ -10,5 +10,9 @@
     </div>
 @endif
 @if( $posts->hasMorePages() )
-<div data-type="{{ $type }}" data-page="2" class="btn showMorePosts">Показать еще объявления</div>
+<?php $page_type = 'page_'.$type; 
+    $page = request()->input($page_type);
+    $page = $page ? (int) $page + 1 : 2;
+    ?>
+<div data-type="{{ $type }}" data-page="{{ $page }}" class="btn showMorePosts">Показать еще объявления</div>
 @endif

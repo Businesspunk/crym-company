@@ -28,7 +28,7 @@ class Post extends Model implements ViewableContract
         ],
     ];
 
-    public $fillable = ['title', 'cost', 'user_id', 'category_id', 'description', 'youtube', 'coord_x', 'coord_y', 'main_photo', 'isClose', 'city', 'phone_number', 'follovers'];
+    public $fillable = ['title', 'cost', 'user_id', 'category_id', 'description', 'youtube', 'coord_x', 'coord_y', 'isClose', 'city_id', 'phone_number', 'follovers'];
 
     public function photos()
     {
@@ -38,6 +38,11 @@ class Post extends Model implements ViewableContract
     public function category()
     {
         return $this->belongsTo('App\Models\Category');
+    }
+
+    public function city()
+    {
+        return $this->hasOne('App\Models\City');
     }
 
     public function attribute_value()
@@ -69,26 +74,6 @@ class Post extends Model implements ViewableContract
             return true;
         }
         return false;
-    }
-
-    protected static function addCity( $city )
-    {
-        $statement = City::where('name', $city)->count();
-        if( $statement == 0 && $city ){
-            City::create([
-                'name' => $city,
-                'slug' => str_slug($city)
-            ]);
-        }
-    }
-
-    protected static function deleteCity( $city )
-    {
-        $statement = Post::getUnclosed()->where('city', $city)->count();
-
-        if( $statement == 0 ){
-            City::where('name', $city )->delete();
-        }
     }
 
     protected static function addAttributes($id, $request)
@@ -126,14 +111,11 @@ class Post extends Model implements ViewableContract
         $post = $this;
         Post::removeAttributes( $post->id );
         $city = $post->city;
-        $result = [];
-        $photos = $post->photos;
-
-        foreach ($photos as $photo) {
-            $result[] = $photo['url'];
+        
+        foreach( $post->photos as $photo){
+            $photo->deletePhoto();
         }
-        $result[] = $post->main_photo;
-        Storage::delete( $result );
+
         $post->delete();
         Post::deleteCity($city);
     }
@@ -144,17 +126,10 @@ class Post extends Model implements ViewableContract
         $data = $request->all();
         $data['user_id'] = $user->id;
         $data['phone_number'] = $request->phone_number;
+        $data['city_id'] = $data['city_id'] == 0 ? null : $data['city_id'];
 
         $photos = json_decode( $data['images'] ) ?? [];
 
-        if( $data['main_photo'] ){
-            $main_photo = getImageName( $data['main_photo'] );
-            $data['main_photo'] = 'posts/'.$main_photo;
-        }
-
-        if( $data['coord_y'] && $data['coord_x'] ){
-            $data['city'] = getCity( $data['coord_y'], $data['coord_x'] );
-        }
         if( $data['youtube'] ){
             $data['youtube'] = getYoutubeId($data['youtube']);
         }
@@ -163,9 +138,10 @@ class Post extends Model implements ViewableContract
 
         $now = Carbon::now();
         $post->promotionUnder = $now->toDateTimeString();
-
+        
         if( $data['main_photo'] ){
-            Storage::move('temp/'.$main_photo, 'posts/'.$main_photo );
+            $main_photo = json_decode($data['main_photo'])->id;
+            PhotoTemp::findOrFail( $main_photo )->moveToPosts($post->id, true);
         }
 
         Post::addAttributes( $post->id ,$request);
@@ -175,16 +151,8 @@ class Post extends Model implements ViewableContract
         }
         
         foreach( $photos as $photo ){
-            $img = getImageName( $photo );
-            Storage::move('temp/'.$img, 'posts/'.$img );
-            PostsPhoto::create([
-                'post_id' => $post->id,
-                'url' => 'posts/'.$img
-            ]);
+            PhotoTemp::findOrFail( $photo->id )->moveToPosts($post->id);
         }
-
-        $city = $post->city;
-        Post::addCity($city);
 
         $promoInfo = Promotion::calculateCost( $request->category_id, $request->promotion_id, $user );
         
@@ -201,19 +169,6 @@ class Post extends Model implements ViewableContract
         return $promoInfo;
     }
 
-    public function updateOne( $args )
-    {
-        $oldCity = $this->city;
-        $this->update($args);
-        $newCity = $this->city;
-        if( $oldCity != $newCity ){
-            Post::deleteCity($oldCity);
-            Post::addCity($newCity);
-        }elseif( isset($args['isClose']) ){
-            Post::deleteCity( $oldCity );
-        }
-    }
-
     public function editOne( Request $request )
     {
         $post = $this;
@@ -222,53 +177,51 @@ class Post extends Model implements ViewableContract
         Post::addAttributes( $post->id, $request );
 
         $data = $request->all();
+        $data['city_id'] = $data['city_id'] == 0 ? null : $data['city_id'];
         
-        if( $data['coord_y'] && $data['coord_x'] ){
-            $data['city'] = getCity( $data['coord_y'], $data['coord_x'] );
-        }
         if( $data['youtube'] ){
             $data['youtube'] = getYoutubeId($data['youtube']);
         }
 
-        $photos = json_decode( $data['images'] ) ?? [];        
+        $main_photo = $data['main_photo'] == null ? null : json_decode( $data['main_photo'], true );
+        $old_main_photo = $post->getMainPhoto() == null ? null : json_decode($post->getMainPhoto()->getPhotoJson(), true);
 
-        $main_photo = getImageName( $data['main_photo'] );
-        $old_main_photo = getImageName( $post->main_photo );
-
-        if( $main_photo != $old_main_photo ){
-            Storage::delete('posts/'.$old_main_photo);
-            if( $main_photo != null ){
-                Storage::move('temp/'.$main_photo, 'posts/'.$main_photo );                
+        if( $old_main_photo != $main_photo )
+        {
+            if( !is_null( $old_main_photo) ){
+                PostsPhoto::findOrFail( $old_main_photo['id'] )->deletePhoto();
             }
-        }
 
-        if( $data['main_photo'] ){
-            $data['main_photo'] = 'posts/'.$main_photo;
+            if( !is_null( $main_photo ) ){
+                PhotoTemp::findOrFail( $main_photo['id'] )->moveToPosts($post->id, true);
+            }
         }
 
         $data['user_id'] = $request->user()->id;
 
-        $this->updateOne($data);
+        $this->update($data);
 
-        $old_images_name = $post->photos;
-        $new_images_name = getPhotoNames($photos);
+        $old_photos = json_decode( $post->getAdditionalPhotosJson(), true) ?? [];
+        $new_photos = json_decode( $data['images'], true ) ?? [];
 
-        foreach($old_images_name as $old_img){
-            if( !in_array( getImageName($old_img->url) , $new_images_name) ){
-                Storage::delete($old_img->url);
-                $old_img->delete();
+        foreach($old_photos as $old_photo){
+
+            $willBeDeleted = true;
+            foreach( $new_photos as $new_photo ){
+                if( $old_photo == $new_photo ){
+                    $willBeDeleted = false;
+                }
+            }
+
+            if( $willBeDeleted ){
+                PostsPhoto::findOrFail( $old_photo['id'] )->deletePhoto();
             }
         }
         
-        foreach( $photos as $photo ){
-            $img = getImageName( $photo );
-            if( isExistsPhoto('temp/'.$img) ){
-                Storage::move('temp/'.$img, 'posts/'.$img );
-                PostsPhoto::create([
-                    'post_id' => $post->id,
-                    'url' => 'posts/'.$img
-                ]);
-            }     
+        foreach( $new_photos as $new_photo ){
+            if( $new_photo['type'] == "temp" ){
+                PhotoTemp::findOrFail( $new_photo['id'] )->moveToPosts($post->id);
+            }
         }
 
         $promoInfo = Promotion::calculateCost( $request->category_id, $request->promotion_id, $request->user(), true );
@@ -288,7 +241,7 @@ class Post extends Model implements ViewableContract
         $posts->where('isPaid', true);
 
         if( isset(request()->city) ){
-            $posts->where('city', request()->city);
+            $posts->where('city_id', request()->city);
         }
 
         if( isset(request()->s) ){
@@ -402,6 +355,50 @@ class Post extends Model implements ViewableContract
     public function getMetaTitle()
     {
         return $this->title;
+    }
+
+    public function getMainPhoto()
+    {
+        $query = $this->photos()->where('is_main', true);
+        $model = $query->count() ? $query->first() : null;
+        
+        return $model;
+    }
+
+    public function getMainPhotoUrl()
+    {
+        $query = $this->photos()->where('is_main', true);
+        $url = $query->count() ? $query->first()->url : null;
+
+        return $url;
+    }
+
+    public function getMainLagerPhotoUrl()
+    {
+        $query = $this->photos()->where('is_main', true);
+        $url = $query->count() ? $query->first()->getLagerPhotoUrl() : null;
+        return $url;
+    }
+
+    public function getAdditionalPhotos()
+    {
+        return $this->photos()->where('is_main', false)->get();
+    }
+
+    public function getAdditionalPhotosJson()
+    {
+        $photos = $this->getAdditionalPhotos();
+        $data = [];
+
+        foreach( $photos as $photo )
+        {
+            $data[] = [
+                "id" => $photo->id,
+                "type" => "posts"
+            ];
+        }
+
+        return json_encode($data);
     }
 
     public function getPhone()

@@ -94,9 +94,9 @@ class ProfileController extends Controller
         if( $user->type_of_account == null ){
 
             if( $type == 1 ){
-                $free_public = 8;
+                $free_public = 10;
             }elseif( $type == 2 ){
-                $free_public = 5;
+                $free_public = 6;
             }else{
                 return redirect()->back();
             }

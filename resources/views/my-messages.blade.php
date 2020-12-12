@@ -45,7 +45,7 @@
 							@endif
 							@if( $dialog->post )
 								<div class="img">
-									<img src="{{ getPostPhotoSrc( $dialog->post->main_photo ) }}" alt="">
+									<img src="{{ getPostPhotoSrc( $dialog->post->getMainPhotoUrl() ) }}" alt="">
 								</div>	
 							@endif
 						</a>
@@ -62,7 +62,7 @@
 
 											@if( $dialog->post )
 												<div class="photo">
-													<img src="{{ getPostPhotoSrc( $dialog->post->main_photo ) }}" alt="">
+													<img src="{{ getPostPhotoSrc( $dialog->post->getMainPhotoUrl() ) }}" alt="">
 												</div>
 												<div class="info">
 													<div class="title"> {{ $dialog->post->title }} </div>

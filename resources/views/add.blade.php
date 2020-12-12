@@ -118,6 +118,30 @@
 				</div>
 				<div class="right">
 					<div class="second_wr">
+						<div class="alert alert-warning" role="alert">
+							Укажите город из нижеперечисленных
+						</div>
+						<div class="cities_choose">
+						@foreach( $cities as $city )
+							<div class="button">
+								<label class="ui_radio">
+									<input require name="city_id" value="{{ $city->id }}" type="radio">
+									<span class="ch"><span class="active"></span></span>
+
+									<span class="first_uppercase name">{{ $city->name }}</span>
+								</label>
+							</div>
+						@endforeach
+
+						<div class="button">
+								<label class="ui_radio">
+									<input require name="city_id" value="0" type="radio">
+									<span class="ch"><span class="active"></span></span>
+
+									<span class="first_uppercase name">Другой</span>
+								</label>
+							</div>
+						</div>
 						<div class="alert alert_find alert-warning" role="alert">
 							Найдите свой объект
 						</div>
@@ -307,7 +331,7 @@
 									$input.val( JSON.stringify([]) );
 								}
 								$res = JSON.parse( $input.val() );
-								$res.push(data.paths);
+								$res.push( JSON.parse( data.photo_serialize) );
 								$input.val( JSON.stringify( $res ) );
 
 								$elem = $(data.block);
@@ -338,7 +362,7 @@
 								showErrors(data.messages);
 								return;
 							}
-							$uploadMainWrap.find('[name=main_photo]').val( data.paths );
+							$uploadMainWrap.find('[name=main_photo]').val( data.photo_serialize );
 							$uploadMainWrap.fadeOut(300, function(){
 								$elem = $(data.block);
 								$elem.appendTo( $('.main_photo') );
@@ -360,7 +384,9 @@
 						if( $item.closest('.wrap_for_photos').length ){
 							$inputImages = $('[name="images"]');
 							var array = JSON.parse( $inputImages.val() );
-							array = removeA( array, $t.data('path') );
+							
+							array = removeFromArray(array, $t.data('photo-serialize') );
+
 							var result = array.length > 0 ? JSON.stringify(array) : '';
 							$inputImages.val( result );
 						}

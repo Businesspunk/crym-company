@@ -80,12 +80,12 @@
 									<div class="col">
 								@endif
 									<ul>
-										<li class="title category">{{ $maincat->name }}</li>
+										<li class="title first_uppercase category">{{ $maincat->name }}</li>
 										@foreach( $maincat->categories as $cat )
 										<li class="select">
 											<label>
 												<input type="radio" data-maincat="{{ $maincat->slug }}" @if( $cat->id == $post->category_id ) checked @endif name="category_id" value="{{ $cat->id }}">
-												<div class="text category">{{ $cat->name }}</div>
+												<div class="text first_uppercase category">{{ $cat->name }}</div>
 											</label>
 										</li>
 										@endforeach
@@ -122,6 +122,31 @@
 				</div>
 				<div class="right">
 					<div class="second_wr">
+						<div class="alert alert-warning" role="alert">
+							Укажите город из нижеперечисленных
+						</div>
+						<div class="cities_choose">
+						@foreach( $cities as $city )
+							<div class="button">
+								<label class="ui_radio">
+									<input @if($post->city_id == $city->id) checked @endif require name="city_id" value="{{ $city->id }}" type="radio">
+									<span class="ch"><span class="active"></span></span>
+
+									<span class="first_uppercase name">{{ $city->name }}</span>
+								</label>
+							</div>
+						@endforeach
+
+						<div class="button">
+								<label class="ui_radio">
+									<input @if( empty($post->city_id) ) checked @endif require name="city_id" value="0" type="radio">
+									<span class="ch"><span class="active"></span></span>
+
+									<span class="first_uppercase name">Другой</span>
+								</label>
+							</div>
+						</div>
+
                         @if( issetCoord($post) )
                             <div class="alert alert_find alert-success" role="alert">
                                 {{ getNameByGeo($post) }}
@@ -181,8 +206,8 @@
 					<div class="notice">Загрузите главную фотографию объявления. </div>
 					<div class="wrap_main_photo">
 						<div class="wrap_m">
-							<label for="uploadMainPhoto" class="item uploadMainPhotoWrap" @if( isExistsPhoto($post->main_photo) ) style="display: none;" @endif>
-								<input type="hidden" name="main_photo" value="{{ $post->main_photo }}">
+							<label for="uploadMainPhoto" class="item uploadMainPhotoWrap" @if( !is_null($post->getMainPhotoUrl()) ) style="display: none;" @endif>
+								<input type="hidden" name="main_photo" value="@if( !is_null( $post->getMainPhotoUrl() ) && isExistsPhoto( $post->getMainPhotoUrl() ) ) {{ $post->getMainPhoto()->getPhotoJson() }} @endif">
 								<div class="spinner-border preloader_main_photo text-primary" role="status">
 									<span class="sr-only">Loading...</span>
 								</div>
@@ -192,20 +217,20 @@
 							<input type="file" id="uploadMainPhoto">
 						</div>
 						<div id="main_photo" class="main_photo">
-                            @if( isExistsPhoto($post->main_photo) )
-                            {!! view('components/newPhoto', [
-                                    'src' => getPhotoSrc( $post->main_photo ),
-                                    'deletePath' => $post->main_photo,
-                                    'show' => 1,
-                                ])->render() !!}
+                            @if( isExistsPhoto($post->getMainPhotoUrl()) )
+								{!! view('components/newPhoto', [
+										'src' => getPhotoSrc( $post->getMainPhotoUrl() ),
+										'show' => 1,
+										'photo_serialize' => $post->getMainPhoto()->getPhotoJson()
+									])->render() !!}
                             @endif
 						</div>
 					</div>
 					<div class="notice notice_second">Загрузите дополнительные фотографии объявления</span></div>
 						<div class="wrap_m wrap_for_photos">
 							<input type="hidden" name="images"
-                                @if( $post->photos->count() > 0 )
-                                    value={{ json_encode( $post->photos->pluck('url')->toArray() ) }}
+                                @if( $post->getAdditionalPhotos()->count() > 0 )
+                                    value={{ $post->getAdditionalPhotosJson() }}
                                 @endif
                             >
 							<label for="uploadPhotos" class="item">
@@ -215,11 +240,11 @@
 								<i class="fa fa-camera" aria-hidden="true"></i>
 								<div class="text">Добавить</div>
 							</label>
-                            @foreach( $post->photos as $photo )
+                            @foreach( $post->getAdditionalPhotos() as $photo )
                                 {!! view('components/newPhoto', [
                                     'src' => getPhotoSrc( $photo->url ),
-                                    'deletePath' => $photo->url,
-                                    'show' => 1,
+									'show' => 1,
+									'photo_serialize' => $photo->getPhotoJson()
                                 ])->render() !!}
                             @endforeach
 						</div>
@@ -260,6 +285,7 @@
 @section('after_js')
 	<script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&amp;apikey={{ env('Yandex_API_Key') }}" type="text/javascript"></script>
 	<script>
+
 		function init() {
             @if( issetCoord($post) )
                 var myMap = new ymaps.Map('map', {
@@ -340,7 +366,7 @@
 									$input.val( JSON.stringify([]) );
 								}
 								$res = JSON.parse( $input.val() );
-								$res.push(data.paths);
+								$res.push( JSON.parse( data.photo_serialize) );
 								$input.val( JSON.stringify( $res ) );
 
 								$preloader.fadeOut();
@@ -367,7 +393,7 @@
 						processData: false, 
 						contentType: false,
 						success: function (data) {
-							$uploadMainWrap.find('[name=main_photo]').val( data.paths );
+							$uploadMainWrap.find('[name=main_photo]').val( data.photo_serialize );
 							$preloader.fadeOut();
 							$uploadMainWrap.fadeOut(300, function(){
 								$elem = $(data.block);
@@ -390,7 +416,9 @@
 						if( $item.closest('.wrap_for_photos').length ){
 							$inputImages = $('[name="images"]');
 							var array = JSON.parse( $inputImages.val() );
-							array = removeA( array, $t.data('path') );
+
+							array = removeFromArray(array, $t.data('photo-serialize') );
+
 							var result = array.length > 0 ? JSON.stringify(array) : '';
 							$inputImages.val( result );
 						}
